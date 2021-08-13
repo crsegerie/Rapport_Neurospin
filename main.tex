@@ -1,0 +1,34 @@
+\documentclass[12pt,twoside]{report}
+
+\usepackage[a4paper,top=25mm,bottom=25mm,inner=35mm,outer=25mm]{geometry}
+
+\include{includes}
+
+\newcommand{\thetitle}{Titre}
+\newcommand{\theauthor}{Charbel-Raphaël Segerie}
+
+
+\begin{document}
+\pagenumbering{roman}
+
+% preliminaries
+\input{preliminaries/title}
+\input{preliminaries/prelude}
+\tableofcontents
+\listoffigures
+\listoftables
+\input{preliminaries/presentations}
+
+\pagenumbering{arabic}
+
+% chapters
+\input{chapters/tutorial}
+\input{chapters/time-complexity}
+
+
+\input{preliminaries/conclusion}
+\printbibliography[title=References]
+
+\input{preliminaries/annexes}
+
+\end{document}
