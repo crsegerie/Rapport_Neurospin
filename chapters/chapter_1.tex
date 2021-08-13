@@ -28,10 +28,31 @@ Le second chapitre est une exposition de mon travail. J'y expose en détail la r
 Ici mettre tout ce que l'on pouvait deviner avant de faire le stage
 
 \section{Lire la feuille de stage}
+This internship combines two aims: to extract the neural signatures of time stored
+in working memory from existing MEG data, and to contribute to ongoing efforts of
+establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging
+data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE
+Python developers at Inria (Alexandre Gramfort), with the aim to push the use of BIDS for
+more transparent and open MEEG research practices.
 
-Why this stage
-Mes connaissances préalables: MVA cours imagerie fonctionnelel cerebrale + Neuroscience + imagerie médiacle
-L'environnement : les différentes équipes
+As shown by a large number of studies, humans (and animals) can perceive
+temporal intervals (durations in the range of seconds), judge or compare them with other
+intervals, and recognize or reproduce them later on. Hence, durations can be stored in
+memory, like sensory stimuli. It is however not known yet how the brain achieves this, for
+instance in which format (continuous or symbolic) durations are stored and which brain
+mechanisms support this crucial ability \cite{polti2018effect}, \cite{teki2014working}. In this internship, you will join the team in the
+ongoing analysis of the previously collected MEG based on a working memory paradigm,
+with the aim to reconstruct source time courses of brain activity from the cortex, and
+possibly the hippocampus and cerebellum \cite{gauthier2020hippocampal}(using volume source models in MNE-Python.
+
+The pipeline developed during the project will contribute to ongoing open-science
+efforts by the team to establish a robust and publicly available pipeline for source
+reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
+
+
+% Why this stage
+% Mes connaissances préalables: MVA cours imagerie fonctionnelel cerebrale + Neuroscience + imagerie médiacle
+% L'environnement : les différentes équipes
 
 % Les equipes
 % - Inria Parietal 
@@ -61,14 +82,17 @@ Theorie
 
 \section{Preprocessing}
 
-- Bids Pipeline
+\subsection{Bids Pipeline}
+- Dataset description
+- Raconter la pipeline BIDS, utilité
 - Premiereres PR necessité pourquoi ?
     premiere contri open source
     avec une utilité
-- Dataset description
-- Tableau des proprocessing
-- Cheat Cheet
-- Raconter la pipeline BIDS, utilité
+
+
+Tableau des proprocessing
+
+Cheat Cheet
 - Limites:
     - Nombre de participants
 
