@@ -58,13 +58,54 @@ reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
 % - Inria Parietal 
 % - Neurospin, Cognition and Brain dynamics.
 
-Les librairies
-- L'écosysteme MNE
-    - mne-python, bids, mne-bids-pipeline
+\section{EEG, MEG}
+
+EEG (electroencephalography) end MEG measures the electrical activity of our brain via electrodes that are placed on the scalp. It tells us, from the surface measurements, how active the brain is.
+
+Pour notre paradigme, il est bien plus important d'avoir une grande precesion temporelle, nous avons donc choisi d'utiliser les MEG de neurospin [image neurospin MEG], qui sont parmis les seuls MEG en France.
+
+
+% http://meg-france.in2p3.fr/_lesCentres/Neurospin_en.php
+The MEG lab is part of NeuroSpin, a neuroimaging center located on the campus of Saclay. We are part of the Comissariat à l'Energie Atomique (CEA), the Division of Life Sciences (DSV) and the Institute of BioImaging (I2BM) as well as the INSERM Cognitive Neuroimaging Unit.
+
+Equipment
+The MEG at Neurospin is an Elekta Neuromag 306 sensors whole-head device (details). The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer).
+
+
+
+How does EEG work?
+The brain is an electrical system – all of our thoughts (conscious or otherwise) are generated through a network of neurons, that send signals to each other with the help of electrical currents. The more electrical signals, the more neuronal communication, which corresponds to more brain activity.
+
+The electrodes of an EEG headset can’t detect changes in single neurons, but instead detect the electrical changes of thousands of neurons signalling at the same time.
+
+The signal from the electrodes is then sent to an amplifier, that (no surprises here) amplifies the signal. A computer then receives this signal, and can generate various maps of brain activity, with a rapid temporal resolution.
+
+A drawback for EEG is the spatial resolution – as the electrodes measure electrical activity at the surface of the brain, it is difficult to know whether the signal was produced near the surface (in the cortex) or from a deeper region.
+
+There are calculations that can be applied that attempt to get around this limitation (e.g. [2]), but it remains a challenge for EEG research.
+
+
+\subsection{Generalities about MEG data and their preprocessing}
+
+With magnetoencaphalography we can capture the magnetic field created by the electrical cur-
+rents in our brain. The MEG data are collected through two types of sensors : the gradiometers and
+
+the magnetometers. The MEG data I am manipulating during the internship are composed of 204
+gradiometer channels and 102 magnetometer channels (Figure 1). These MEG data were recorded
+trhough three sessions per subjects : one at rest with closed eyes, one passive with separately visual
+and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with manual response)
+([Taylor et al., 2017]).
+
+
+\section{L'écosysteme MNE}
+
+
+mne-python, bids, mne-bids-pipeline
+mne python est une librairie python open-source permettant d'analyser les données cérébrales venant d'EEG ou de MEG. Le format BIds
+
 
 Theorie
-- Les modèles de clocks cerebrales
-- EEG
+- Les modèles de clocks cerebrales??
 - Paradigme de la Pilot study
 - Pourquoi EEG plutot que FMRI
 - Donner le but du Stage : 
