@@ -15,7 +15,7 @@
 % \subsection{mne-bids}
 % \end{comment}
 
-\section{Prélude}
+\section*{Prélude}
 
 J'ai séparé ce rapport en deux parties qui suivent grossièremetnt l'ordre chronologiqe de mon stage.
 
@@ -163,14 +163,31 @@ In the case of time in working memory parafdigm, it is very useful to employ thi
     \item La pipeline permet de process les différents participants en paralleles, ce qui permet de considérablement accellerer les temps de calculs.
 \end{itemize}
 
-\subsection{Theorie}
-- Les modèles de clocks cerebrales??
-- Paradigme de la Pilot study
-- Pourquoi EEG plutot que FMRI
-- Donner le but du Stage :
-Reproduire cette study mais avec la MEG
+\section{Theorie}
+\subsection{Paradigme de la Pilot study: Abstracting Time in Working Memory}
 
-Glossaire
+Planning the future relies on the ability to remember how long events last, yet, how durations  are  stored  in  memory  is  unknown.  Here,  we  developed  a  novel n-item delayed duration reproduction taskto assess whether elapsed time is stored as a continuous feature or as an abstract item in memory. In three experiments (N = 58), participants listened to non-rhythmic sequences composed of empty time intervals (durations), which they had to reproduce as precisely as possible following a delay period.  We  manipulated  the  number  of  time  intervals  (n-item)  and  the  overall sequenceduration  to separate  their effects  on  recall  precision.  The  precision  of temporal reproduction systematically decreased with an increasing number of items. Our results suggest that the number of time intervals, not their duration, determines recall precision.We interpret this as evidence towardsan abstract representation of duration in working memory.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
+    \caption[n-item delayed reproduction task]%
+{n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
+    
+    \label{paradigm}
+\end{figure}
+
+In Experiment 2 (Fig. 1B), the number of items and the duration of the sequence were orthogonalized. Three sequence durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. Wit
+
+- Les modèles de clocks cerebrales??
+- Pourquoi EEG plutot que FMRI
+
+\subsection{Donner le but du Stage :}
+
+Reproduire cette study mais avec la MEG. Nous ne smme interessé que par l'experiment 2 puisqu'il faut que l'on garde constant la durée du signal.
+D'autre part, afin de maximiser la significativité du signal , nous n'utilions uniquement des event  comportant 1 ou 3 items, cela afin de maximiser la puissance de la statistique étant donné que la pilot study à montré que la relation est linéaire.
+
+\subsection{Glossaire}
 
 \begin{table}[ht]
     \caption{Glossary of the Neural Oscillation and of the Theory of the working memory. \cite{roux2014working}}
