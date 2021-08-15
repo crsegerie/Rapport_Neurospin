@@ -25,9 +25,8 @@ Le second chapitre est une exposition de mon travail. J'y expose en détail la r
 
 
 \chapter{Scientific Context}
-Ici mettre tout ce que l'on pouvait deviner avant de faire le stage
 
-\section{Lire la feuille de stage}
+\section{Sujet de stage}
 This internship combines two aims: to extract the neural signatures of time stored
 in working memory from existing MEG data, and to contribute to ongoing efforts of
 establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging
@@ -60,6 +59,8 @@ reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
 
 \section{EEG, MEG}
 
+
+
 EEG (electroencephalography) end MEG measures the electrical activity of our brain via electrodes that are placed on the scalp. It tells us, from the surface measurements, how active the brain is.
 
 Pour notre paradigme, il est bien plus important d'avoir une grande precesion temporelle, nous avons donc choisi d'utiliser les MEG de neurospin [image neurospin MEG], qui sont parmis les seuls MEG en France.
@@ -72,8 +73,8 @@ Equipment
 The MEG at Neurospin is an Elekta Neuromag 306 sensors whole-head device (details). The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer).
 
 
+\subsection{How does EEG work?} 
 
-How does EEG work?
 The brain is an electrical system – all of our thoughts (conscious or otherwise) are generated through a network of neurons, that send signals to each other with the help of electrical currents. The more electrical signals, the more neuronal communication, which corresponds to more brain activity.
 
 The electrodes of an EEG headset can’t detect changes in single neurons, but instead detect the electrical changes of thousands of neurons signalling at the same time.
@@ -99,10 +100,69 @@ and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with 
 
 \section{L'écosysteme MNE}
 
-
-mne-python, bids, mne-bids-pipeline
 mne python est une librairie python open-source permettant d'analyser les données cérébrales venant d'EEG ou de MEG. Le format BIds
 
+\subsection{mne-python}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{images_report/workflow_of_the_mne_software.png}
+    \caption{Workflow of the MNE software \cite{GramfortEtAl2013a}}
+\end{figure}
+
+
+\subsection{the Brain Imaging Data Structure (BIDS) format}
+
+The main objective of my internship was to extend the age prediction method I presented pre-
+viously in order to apply it on new and diverse datasets. To begin with, I implemented the usage
+of a standard electrophysiological data format called Brain Imaging Data Structure or BIDS. As
+a second step, I made modifications in the script of the method to include the extraction of new
+features and to ease the multimodal handling of the stacking regressor.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/bids_example.png}
+    \caption{Example of a modification made to use the script with BIDS-compatible
+    datasets.}
+    \label{bids_example}
+\end{figure}
+
+The Brain Imaging Data Structure was created to provide a simple way to organize neuroimaging data. The aim of this structure is to be a standard format to make the data accessible to every-one and avoid confusion. Thanks to a Python package called MNE-BIDS \cite{appelhoff2019mne}, datasets can easily be converted in the BIDS format. So, if datasets can be transformed in BIDS-compatible datasets, there is only need for the method to support datasets in this format.
+
+Figure \ref{bids_example} illustrates one of the modifications I made to allow support of datatsets in BIDS format. Without any standard format, to access a file you need to write the whole path. One path is specific to one file so if you want to access another file or even another dataset you will need to change the whole path. If the dataset is in the BIDS format, it is possible to use the function BIDSPath of MNE-BIDS to call a file. In this case, if you want to call another file or another BIDS-compatible dataset you only need to change a few arguments of this function like the subject name or the file root and you do not have to think about the whole path. It also allows to use EEG data easily just by changing the parameter "datatype".
+
+Thus, by implementing the support of BIDS format in the age-prediction model it is possible to switch between BIDS-compatible datasets by only modifying a few elements of the scripts even
+if the datasets contain EEG instead of MEG data. We can now perform the analysis made in
+\cite{herbst2021abstracting} on new datasets.
+
+
+\subsection{Automatic preprocessing with the MNE-BIDS-Pipeline}
+
+Using BIDS-compatible datasets enables us to apply the MNE-BIDS-Pipeline to the preprocessing part of the model. The MNE-BIDS-Pipeline is an automatic preprocessing and processing pipeline for MEG and EEG data stored following the BIDS format \cite{gorgolewski2016brain}. To apply the preprocessing steps wanted, the MNE-BIDS-Pipeline only requires to set the corresponding parameter in a configuration file. Once it is done for one dataset it can be used on other datasets just by changing one line in the configuration file.
+
+The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. 
+
+\begin{itemize}
+    \item I Added the possibility to exclude runs from the analysis.
+    \item Files docstrings in the preprocessing steps were updated.
+    \item Warn if using ICA and no EOG- or ECG-related ICs were detected.
+    \item Added the possibility to have different runs for different subjects.
+    \item Check that the baseline interval falls into the epoch interval.
+    \item Massive PR
+    \item The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data.
+    \item Some variables were named incorrectly in some test config files.
+\end{itemize}
+
+(\url{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}).
+In the case of time in working memory parafdigm, it is very useful to employ this pipeline because:
+\begin{itemize}
+    \item it will be exactly the same steps for all the datasets.
+    \item It enhances reproducibility, because we now only nned a simple configuration file to reproduce every figure.
+    \item The most classical steps of preprocessing and analysis of MEEG studies are common to all studies, and it is enough to change one or two scripts to obtain a complete study.
+    \item De nombreux meta parammetres sont dur à calibrer, notemment pour le nettoyage et lors du passage dans l'espace des source, et sans expertise, il vaut mieux utiliser les parametres par défaults utilisés dans la pipeline
+    \item La pipeline permet de process les différents participants en paralleles, ce qui permet de considérablement accellerer les temps de calculs.
+\end{itemize}
 
 Theorie
 - Les modèles de clocks cerebrales??
