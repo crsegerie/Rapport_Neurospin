@@ -73,7 +73,7 @@ Equipment
 The MEG at Neurospin is an Elekta Neuromag 306 sensors whole-head device (details). The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer).
 
 
-\subsection{How does EEG work?} 
+\subsection{How does EEG work?}
 
 The brain is an electrical system – all of our thoughts (conscious or otherwise) are generated through a network of neurons, that send signals to each other with the help of electrical currents. The more electrical signals, the more neuronal communication, which corresponds to more brain activity.
 
@@ -123,8 +123,7 @@ features and to ease the multimodal handling of the stacking regressor.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/bids_example.png}
-    \caption{Example of a modification made to use the script with BIDS-compatible
-    datasets.}
+    \caption{Example of a modification made to use the script with BIDS-compatible datasets.}
     \label{bids_example}
 \end{figure}
 
@@ -141,7 +140,7 @@ if the datasets contain EEG instead of MEG data. We can now perform the analysis
 
 Using BIDS-compatible datasets enables us to apply the MNE-BIDS-Pipeline to the preprocessing part of the model. The MNE-BIDS-Pipeline is an automatic preprocessing and processing pipeline for MEG and EEG data stored following the BIDS format \cite{gorgolewski2016brain}. To apply the preprocessing steps wanted, the MNE-BIDS-Pipeline only requires to set the corresponding parameter in a configuration file. Once it is done for one dataset it can be used on other datasets just by changing one line in the configuration file.
 
-The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. 
+The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed.
 
 \begin{itemize}
     \item I Added the possibility to exclude runs from the analysis.
@@ -164,13 +163,49 @@ In the case of time in working memory parafdigm, it is very useful to employ thi
     \item La pipeline permet de process les différents participants en paralleles, ce qui permet de considérablement accellerer les temps de calculs.
 \end{itemize}
 
-Theorie
+\subsection{Theorie}
 - Les modèles de clocks cerebrales??
 - Paradigme de la Pilot study
 - Pourquoi EEG plutot que FMRI
-- Donner le but du Stage : 
-    Reproduire cette study mais avec la MEG
-- Glossaire
+- Donner le but du Stage :
+Reproduire cette study mais avec la MEG
+
+Glossaire
+
+\begin{table}[ht]
+    \caption{Glossary of the Neural Oscillation and of the Theory of the working memory. \cite{roux2014working}}
+    \centering
+    \begin{tabular}{@{}| p{4cm}|p{9cm}| @{}}
+        \hline
+        EEG-MEG                     & The Electro-magnetoencephalography is a non-invasive methods for studying brain function that reflect the electrical activity of neuronal populations with millisecond temporal resolution.                                                                                                                                                             \\
+
+        Local field potential (LFP) & electric potential in the extracellular space around neurons. LFP is a widely available signal in many recording configurations, ranging from single-electrode recordings to multi-electrode arrays                                                                                                                                                     \\
+        Neuronal oscillations       & prominent feature of spontaneous and task-related brain activity that occur at the level of single units, local field potentials (LFPs), and EEG/MEG recordings. The traditional view is that neuronal oscillations reflect inhibition-based fluctuations of neuronal activity that emerge from the synchronous activation of large neuronal ensembles. \\
+        Spectral power              & reflects the amplitude of neural oscillations computed through a time–frequency transformation (TFT).                                                                                                                                                                                                                                                   \\
+        \hline
+    \end{tabular}
+    \label{Tab:Glossary_theory}
+\end{table}
+
+\begin{table}[ht]
+    \caption{Glossary of MEEG terminology commonly used to describe stimulation and task parameters and protocols as defined in \cite{pernet2018best}}
+    \centering
+    \begin{tabular}{@{}| p{3cm}|p{10cm}| @{}}
+        \hline
+        Session      & A logical grouping of neuroimaging and behavioural data collected consistently across participants. A session includes the time involved in completing all experimental tasks. This begins when a participant enters the research environment until he/she leaves it.                                                    \\
+        Run          & An uninterrupted period of continuous data acquisition without operator involvement.                                                                                                                                                                                                                                     \\
+        Event        & An isolated occurrence of a presented stimulus, or a subject response recorded during a task                                                                                                                                                                                                                             \\
+        Epoch        & In the MEEG literature, the term epoch designates the outcome of a data segmentation process. Typically, epochs in event-related designs (for analysis of event related potentials or event related spectral perturbations) are time-locked to a particular event (such as a stimulus or a response)                     \\
+        Evoked data  & Evoked objects typically store an EEG or MEG signal that has been averaged over multiple epochs, which is a common technique for estimating stimulus-evoked activity.                                                                                                                                                    \\
+        Sensors      & Sensors are the physical objects or transducers that are used to perform the analogue recording, i.e., EEG electrodes and MEG magnetometers/ gradiometers. Sensors are connected to amplifiers, which not only amplify, but also filter the MEEG activity.                                                               \\
+        Channels     & Channels refer to the digital signals that have been recorded by the amplifiers. It is thus important to distinguish them from sensors. A ‘bad channel’ refers to a channel that is producing a consistently artifactual or low-quality signal.                                                                          \\
+        Sensor space & Sensor space refers to a representation of the MEEG data at the level of the original sensors, where each of the signals maps onto the spatial location of one of the sensors.                                                                                                                                           \\
+        Source space & Source space refers to MEEG data reconstructed at the level of potential neural sources that presumably gave rise to the measured signals (according to an assumed biophysical model). Each signal maps onto a spatial location that is readily interpretable in relation to individual or template-based brain anatomy. \\
+        \hline
+    \end{tabular}
+
+    \label{Tab:Glossary_protocol}
+\end{table}
 
 \chapter{Ma contribution: replication mais avec MEG}
 
@@ -187,51 +222,51 @@ Theorie
 - Dataset description
 - Raconter la pipeline BIDS, utilité
 - Premiereres PR necessité pourquoi ?
-    premiere contri open source
-    avec une utilité
+premiere contri open source
+avec une utilité
 
 
 Tableau des proprocessing
 
 Cheat Cheet
 - Limites:
-    - Nombre de participants
+- Nombre de participants
 
 \section{Sensor Space}
 
 - Pipeline classique raconter les steps
 - Motivation : Insuffisance de la pipeline automatique: beoin d'une nouvelle step
 - Theorie algo:
-    - CSP
-    - Permutation tests
-    - subtilités mathématiques
-    - Ingénieurie logicielle et recherche ?
+- CSP
+- Permutation tests
+- subtilités mathématiques
+- Ingénieurie logicielle et recherche ?
 - Anexes : Implémentation et choix d'architecte logiciel
-    - optimisation du temps
-        reduction dimensionalité
-        reduction du nombre de channels
-    - CV, decimation, niquist
-    - Interaface avec le reste de la pipeline, openscience, reproductibilité
+- optimisation du temps
+reduction dimensionalité
+reduction du nombre de channels
+- CV, decimation, niquist
+- Interaface avec le reste de la pipeline, openscience, reproductibilité
 - Results:
-    - Images
+- Images
 - Discussion
-    - resultats significatifs alors que dans la tête
+- resultats significatifs alors que dans la tête
 - Limites + Discu
 
 \section{Source Space}
 
 - Generalités source space
 Nouveau script: Contrast in source space
-    - Motivation : Insuffiscance de pipeline classique
-    - faire le Schéma
+- Motivation : Insuffiscance de pipeline classique
+- faire le Schéma
 - Results:
-    - Interpretation sur Freeview
+- Interpretation sur Freeview
 - Discussion
-- Annexes : Subtilité : 
-    Neuroscience : quest ce qui constitue du bruit ? Quel choix de la matrice de covariance
-    Subtilités mathématiques :  commutativité Log + moyenne
+- Annexes : Subtilité :
+Neuroscience : quest ce qui constitue du bruit ? Quel choix de la matrice de covariance
+Subtilités mathématiques :  commutativité Log + moyenne
 Limites:
-    - 
+-
 
 
 
