@@ -381,11 +381,57 @@ Cet ordre des opération est très bien pour la majorité des études. Mais dans
 
 
 \subsection{Theorie algo}
+My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions.
+
+There are two main steps in this script:
+
+\begin{itemize}
+    \item 1. Decoding: for each time-frequency bin: For each time-frequency bin, we use a csp classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
+    \item 2. Permutation statistics at the group level: We try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
+\end{itemize}
 
 
-\subsubsection{Common Spatial Patterns (CSP)}
+\subsubsection{Decoding with Common Spatial Patterns (CSP)}
+
+The time-frequency decomposition is estimated by iterating over raw data that
+has been band-passed at different frequencies. This is used to compute a
+covariance matrix over each epoch or a rolling time-window and extract the CSP
+filtered signals. A linear discriminant classifier is then applied to these
+signals.
 
 
+\subsubsection{Finding the significant time-frequency bins with Permutation statistics}
+
+We try to answer the following question: is the difference between
+the two conditions statistically significant? We use the classic permutations
+cluster tests on the time-frequency roc-auc map.
+More details are available here:
+% https://mne.tools/stable/auto_tutorials/stats-sensor-space/10_background_stats.html
+The user has only to specify the list of frequency and the list of timings.
+
+
+\subsubsection{Annexe}
+
+\paragraph{Why not aiming for the best classifier?}
+Mathetically we do not seek here to create the best classifier,
+and to optimize the rocauc score, we only seek
+to obtain unbiased scores usable afterwards in the permutation test.
+This is why it is not a big deal to optimize the running time
+by making some approximations, such as:
+- Decimation
+- Selection of the mag channels, which contain a very large part of
+    the information contained in (mag+grad)
+- PCA, which is very useful to reduce the dimension for eeg
+    where there is only one channel type.
+
+
+\paragraph{Iterations levels}
+
+Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit ici plus un probleme d'ingénieurie que de la recherche pure.
+
+- contrasts
+    - We iterate through subjects and sessions
+        - If there are multiple runs, runs are concatenated into one session.
 
 Permutation tests
 
