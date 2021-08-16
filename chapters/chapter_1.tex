@@ -93,14 +93,19 @@ Scalp EEG is sensitive to extracellular volume currents produced by postsynaptic
 
 \subsection{Generalities about MEG data and their preprocessing}
 
-With magnetoencaphalography we can capture the magnetic field created by the electrical cur-
-rents in our brain. The MEG data are collected through two types of sensors : the gradiometers and
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/preprocessing/raw_data/Example_of_MEG_recording_reduced.png}
+    \caption{Example of an MEG recording of a passive session. Here 20 of the 306 channels are represented.}
+\end{figure}
 
-the magnetometers. The MEG data I am manipulating during the internship are composed of 204
-gradiometer channels and 102 magnetometer channels (Figure 1). These MEG data were recorded
+With magnetoencaphalography we can capture the magnetic field created by the electrical currents in our brain. The MEG data are collected through two types of sensors : the gradiometers and the magnetometers. The MEG data I am manipulating during the internship are composed of 204 gradiometer channels and 102 magnetometer channels (Figure 1). These MEG data were recorded
 trhough three sessions per subjects : one at rest with closed eyes, one passive with separately visual
 and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with manual response)
 ([Taylor et al., 2017]).
+
+
+
 
 
 \section{L'écosysteme MNE}
@@ -209,8 +214,8 @@ Planning the future relies on the ability to remember how long events last, yet,
     \centering
     \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
     \caption[n-item delayed reproduction task]%
-{n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
-    
+    {n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
+
     \label{paradigm}
 \end{figure}
 
