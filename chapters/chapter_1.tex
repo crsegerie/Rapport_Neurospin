@@ -105,6 +105,38 @@ and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with 
 
 \section{L'écosysteme MNE}
 
+To realize analysis on MEG recordings I used the MNE-Python library \cite{GramfortEtAl2013a}.
+The common preprocessing steps of raw MEG data are the following:
+• Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to
+be identified and marked as bad so they are not taking into account during the analysis;
+• Applying Maxwell filter : help to remove part of the sensors noise;
+• Frequency filter: to remove non desired frequency bands;
+• Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG
+signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds
+before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and
+overlapping frames of the MEG signal.
+• Computing evoked data: they are created by averaging MEG signal over several epochs. It is
+useful to study stimulus-evoked brain activity.
+Raw MEG data, epochs or evoked response can also be studied in the frequency domain. Nine
+frequency bands are commonly used and are defined in Table 1.
+
+\begin{table}[ht]
+    \caption{Comparison of EEG bands for a typical adult}
+    \centering
+    \begin{tabular}{@{}| p{1.2cm}|p{2.5cm}| p{4.5cm}|p{4.5cm}| @{}}
+        \hline
+        Band  & Frequency (Hz) & Location                                       & Normally                                                                \\
+        Delta & $\leq  4$            & frontally in adults, high-amplitude waves      & slow-wave sleep                                                         \\
+        Theta & 4–8            & Found in locations not related to task at hand & Drowsiness or idling. Associated with inhibition of elicited responses. \\
+        Alpha & 8–14           & posterior regions of head                      & relaxed, inhibition control                                             \\
+        Beta  & 14–30          & mainly frontaly, low-amplitude waves           & active thinking, focus                                                  \\
+        Gamma & $\geq 30$           & Somatosensory cortex                           & Cross-modal sensory processing or short-term memory                     \\
+        \hline
+    \end{tabular}
+    \label{Tab:neural_freq_band}
+\end{table}
+
+
 mne python est une librairie python open-source permettant d'analyser les données cérébrales venant d'EEG ou de MEG. Le format BIds
 
 \subsection{mne-python}
