@@ -399,6 +399,99 @@ covariance matrix over each epoch or a rolling time-window and extract the CSP
 filtered signals. A linear discriminant classifier is then applied to these
 signals.
 
+CSP is a technique to analyze multichannel data based on recordings from two classes.
+
+\paragraph{Intuitive explanation}
+
+% Why CSP better than ...
+
+I took the figure from \cite{blankertz2007optimizing} which also contains a conprehensive tutorial on CSP.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/before_csp_filtering.png}
+        \caption{Before CSP filtering}
+        \label{fig:before_csp}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/after_csp_filtering.png}
+        \caption{After CSP filtering}
+        \label{fig:after_csp}
+    \end{subfigure}
+    \caption{Toy example showing the functioning of the CSP transformation.}
+    \label{fig:csp_intuitive}
+\end{figure}
+[je peux faire un shema mieux]
+
+Si on a deux signaux gaussiens, tous les deux centrés en zeros, mais avec des directions principales différentes, on peut tenter de transformer les deux nuages de points de telle manière à ce que les diretions principales des deux nuages de points dans l'espaces des CSP soient orthogonales de façon à maximiser le rapport des variances suivants les directions principales.
+
+On part de deux nuage de points, rouge et bleu, très corrélées, que l'on transforme en des nuages de points rouges' et bleu' découplées.
+
+Par example sur la figure \ref{fig:csp_intuitive}, le vecteur principal du nuage rouge' est aligné sur l'axe des absices, tandis que le vecteur principal du nuage blueu' est aligné sur l'axe des ordonnées.
+
+Par ce procédé, on maximise alors le rapport de variance suivant l'axe des abscices entre le nuage rouge' et le nuage bleu'.
+
+
+Les nuages de pooints correpondent à un event, et chaque couleur correpond à une condition différente. Si l'on essaye de deviner la couleur/condition d'un nuage de point, il suffit par la suite de transformer le nuage de point avec la même transformation que prescedement, et de prendre la projection sur l'axe des abcices du nuage de point transformé dans l'espace des CSP. On peut alors calculer la variance suivant l'axe des abcises et suivant l'axe des abscice, puis entrainer un classifieru linéaire à disciminer parmis les différentes variances ce qui permet de classifier entre les deux conditions.
+
+
+Par la suite, on peut entrainer un classifieur linéaire qui prend en entré
+
+\paragraph{Technical Description}
+
+L'explication prescedente ne fait qu'expliquer intuitivement l'algorithme pour la première composante du CSP. Mais la manière la plus efficace d'implementer les CSP est de formaliser le problème sous la forme d'un problme de vecteur propres generalisé.
+
+Let $X \in \mathbb{R}^{C * T}$ be a matrix containing  $C$ channels and $T$ time points. The data at a single time point is denoted by $x(t) \in  \mathbb{R}^{C}$. Common spatial pattern (CSP) finds a decomposition that projects the signal in the original sensor space to CSP space using the following transformation:
+
+\begin{equation}
+    x_{\text{CSP}}(t) = W^{T}x(t)
+\end{equation}
+
+where each column of $W \in \mathbb{R}^{C*C}$ is a spatial filter and each row of $x_{\text{CSP}}(t)$ is a CSP component. Let $\Sigma^{+} \in \mathbb{R}^{C * C}$ and $\Sigma^{-} \in \mathbb{R}^{C * C}$ be the respective covariance matrices of the two differnet  conditions. CSP analysis is given by the simultaneous diagonalization of the two covariance matrices.
+
+
+\begin{equation}
+     W^{T} \Sigma^{+} W = \lambda^{+}
+     \label{eq:lambda_plus}
+\end{equation}
+\begin{equation}
+    W^{T} \Sigma^{-} W = \lambda^{-}
+    \label{eq:lambda_minus}
+\end{equation}
+
+Where the two $\lambda$ are diagonal matrices whose entries are the eigenvalues of the following generalized eigenvalue problem in $(w, \lambda) \in (\mathbb{R}^{C}, \mathbb{R})$:
+
+\begin{equation}
+    \Sigma^{+} w = \lambda \Sigma^{-} w
+    \label{eq:general_eigenvalue}
+\end{equation}
+
+Large entries in the diagonal matrix corresponds to a spatial filter which gives high variance in one class but low variance in the other. Thus, the filter facilitates discrimination between the two classes.
+
+
+Une autre manière de lire les deux equations \ref{eq:lambda_plus} et \ref{eq:lambda_minus} est de se rappeller que $w^{T}\Sigma w$ calcule la variance de la covariance $\Sigma$ suivant la direction $w$. Ainsi, $W^{T} \Sigma^{+} W$ et $W^{T} \Sigma^{-} W$ ne font que calculer des matrices diagonales, dont les elements diagonaux sont les variances des covariances suivant les différentes colonnes de $W$, à savoir les variances suivant les difféntes filtres spatiaux.
+
+En trouvant tous les $w$ qui satisfont l'équation \ref{eq:general_eigenvalue}, on construit ainsi la matrice $W$ aussi appellée \textit{unmixing matrix}.
+
+Apres avoir trouvé tous les couples $(w_i, \lambda_i)$ qui satisfont l'équation aux valeurs propres généralisées \ref{eq:general_eigenvalue}, on peut ordonner les solutions par valeurs propres décroissantes. Le premier filtre correspond à la direction maximisant le rapport des variances entre les deux nuages de points. En effet, si l'on remplace dans l'équaqtion \ref{eq:lambda_plus}, \ref{eq:lambda_minus}, on obtient:
+
+\begin{equation}
+    w^{T}_{i} \Sigma^{+} w_{i} = \lambda^{+}_{i}
+    \label{eq:lambda_plus_first_component}
+\end{equation}
+\begin{equation}
+    w^{T}_{i} \Sigma^{-} w_{i} = \lambda^{-}_{i}
+   \label{eq:lambda_minus_first_component}
+\end{equation}
+
+Et il suffit alors de remplacer dans \ref{eq:general_eigenvalue} puis de multiplier à gauche par $w^{T}$ pour obtenir
+
+\begin{equation}
+    \lambda_1 = \lambda^{+}_1 / \lambda^{-}_1
+\end{equation}
 
 \subsubsection{Finding the significant time-frequency bins with Permutation statistics}
 
@@ -423,6 +516,12 @@ by making some approximations, such as:
     the information contained in (mag+grad)
 - PCA, which is very useful to reduce the dimension for eeg
     where there is only one channel type.
+
+\paragraph{Regularization}
+
+\paragraph{Variance vs Second order moment}
+
+\paragraph{Solving}
 
 
 \paragraph{Iterations levels}
@@ -452,7 +551,11 @@ Annexes - subtilités mathématiques
 \subsection{Results}
 - Discussion
 - resultats significatifs alors que dans la tête
-- Limites + Discu
+
+
+\subsection{Limites + Discu}
+
+- Seuelemnt 2 classes
 
 \section{Source Space}
 
