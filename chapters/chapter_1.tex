@@ -31,7 +31,7 @@ This internship combines two aims: to extract the neural signatures of time stor
 in working memory from existing MEG data, and to contribute to ongoing efforts of
 establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging
 data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE
-Python developers at Inria (Alexandre Gramfort), with the aim to push the use of BIDS for
+Python developers at Inria, with the aim to push the use of BIDS for
 more transparent and open MEEG research practices.
 
 As shown by a large number of studies, humans (and animals) can perceive
@@ -111,19 +111,21 @@ and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with 
 \section{L'écosysteme MNE}
 
 To realize analysis on MEG recordings I used the MNE-Python library \cite{GramfortEtAl2013a}.
+
 The common preprocessing steps of raw MEG data are the following:
-• Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to
-be identified and marked as bad so they are not taking into account during the analysis;
-• Applying Maxwell filter : help to remove part of the sensors noise;
-• Frequency filter: to remove non desired frequency bands;
-• Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG
-signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds
-before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and
-overlapping frames of the MEG signal.
-• Computing evoked data: they are created by averaging MEG signal over several epochs. It is
-useful to study stimulus-evoked brain activity.
+\begin{itemize}
+    \item Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to be identified and marked as bad so they are not taking into account during the analysis;
+    \item Applying Maxwell filter : help to remove part of the sensors noise;
+    \item Frequency filter: to remove non desired frequency bands;
+    \item Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG
+    signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds
+    before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and
+    overlapping frames of the MEG signal.
+    \item Computing evoked data: they are created by averaging MEG signal over several epochs. It is useful to study stimulus-evoked brain activity.
+\end{itemize}
+
 Raw MEG data, epochs or evoked response can also be studied in the frequency domain. Nine
-frequency bands are commonly used and are defined in Table 1.
+frequency bands are commonly used and are defined in Table \ref{Tab:neural_freq_band}.
 
 \begin{table}[ht]
     \caption{Comparison of EEG bands for a typical adult}
@@ -240,7 +242,7 @@ D'autre part, afin de maximiser la significativité du signal , nous n'utilions 
 
         Local field potential (LFP) & electric potential in the extracellular space around neurons. LFP is a widely available signal in many recording configurations, ranging from single-electrode recordings to multi-electrode arrays                                                                                                                                                     \\
         Neuronal oscillations       & prominent feature of spontaneous and task-related brain activity that occur at the level of single units, local field potentials (LFPs), and EEG/MEG recordings. The traditional view is that neuronal oscillations reflect inhibition-based fluctuations of neuronal activity that emerge from the synchronous activation of large neuronal ensembles. \\
-        Spectral power              & reflects the amplitude of neural oscillations computed through a time–frequency transformation (TFT).                                                                                                                                                                                                                                                   \\
+        Spectral power              & reflects the amplitude of neural oscillations computed through a time–frequency transformation (TFT).                                                                                                                                                                                                                                                    \\
         \hline
     \end{tabular}
     \label{Tab:Glossary_theory}
