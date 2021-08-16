@@ -333,7 +333,7 @@ Voici le détail de la procédure:
     \item Au début le signal contient des artefacts à la fois biologiques (clignement d'oeil, battement de coeur), et non biologiques. Ces derniers sont d'un ordre de grandeur d'amplitude plus grands que les artefacts biologiques.
     \item On peut commencer par filtrer les différentes epoches en utilisant rejetant les epochs dnt l'amplitude peak-to-peak dépasse l'amplitude specifiée par le parametre "ica\_reject". Ce parametre permet de filtrer des signaux qui en ordre de grandeur sont 50 fois plus grand qu'une amplitude nominale et permet donc de faire un premier tris.
     \item Le signal resultant ne contient plus d'artefact non biologique redhibitoire, ce qui peremt d'améliorer la convergence de l'ICA, qui permet de séparer les sources pour les artefacts oculaires et cardiques.
-    \item La séparation de source par ICA ne fonctionne pas parfaitement, et il faut donc prevoir une étape supplémentaire afin de rejeter les derniers artefacts à l'aide du parametere "reject", qui permet de filter les signaux avec une amplitude peak-to-peak 10 fois supérieure à l'amplitude nominale.
+    \item La séparation de source par ICA ne fonctionne pas parfaitement, et il faut donc prevoir une étape supplémentaire afin de rejeter les derniers artefacts à l'aide du parametere "reject", qui permet de filter les signaux avec une amplitude peak-to-peak 10 fois supérieure à l'amplitude nominale. On obtient alors le signal preprocessed.
 \end{itemize}
 
 Même si la méthode globale de rejection de la pipeline était déjà établie avznt mon arivée, les donées experiementales ont revelées des problemes dans l'ordre des opération de filtrage, et nous avons aisi amélioré de beaucoup le preprocessing automatique de la donnée notemment pour de la donnée difficile qui contient simulanément des artifacts biologique et des artifacts non-biologiques telles que des inversion de champs de phase. La figure \ref{fig:PR_ica} montre un example d'amélioration des ICA.
@@ -367,21 +367,43 @@ Même si la méthode globale de rejection de la pipeline était déjà établie 
 
 \section{Sensor Space}
 
-- Pipeline classique raconter les steps
-- Motivation : Insuffisance de la pipeline automatique: beoin d'une nouvelle step
-- Theorie algo:
-- CSP
-- Permutation tests
-- subtilités mathématiques
-- Ingénieurie logicielle et recherche ?
-- Anexes : Implémentation et choix d'architecte logiciel
-- optimisation du temps
+\subsection{Insuffisance de la pipeline: besoin d'une nouvelle step}
+
+Une fois la data nettoyée, on peut passer au sensor steps qui permet d'analyser la donnée dans l'espace des sensors.
+
+Classiqueemnt l'espace des sensor se décompose en les étapes suivantes : 
+- creation of the evoked data sets are created by averaging different conditions.
+- Using a sliding estimator with a logistic regression model for every time point.
+- Time frequency decomposition: The epoched data is transformed to time-frequency domain using morlet wavelets.
+- Computation of the group average results.
+
+Cet ordre des opération est très bien pour la majorité des études. Mais dans le cas de notre étude il est crutial d'obtenir des résultats dans l'espace du time-frequzncy. Il nous faut donc combiner les fonctionalités du script "slifing estimator" permettant d'étudier un contraste entre deux conditions ainsi que du scipt "time frequency decomposition" qui permet d'étudier le signal dans l'espace du temps et de la frequence. C'est pour combler cette lacune que j'ai donc implementé un nouveau script dans la pipeline permettant de de visualiser quelles sont les time-frequency bin qui différenet significativement entre les deux conditions.
+
+
+\subsection{Theorie algo}
+
+
+\subsubsection{Common Spatial Patterns (CSP)}
+
+
+
+Permutation tests
+
+
+\subsection{Implementation}
+
+le challenge de l'optimisation du temps
 reduction dimensionalité
 reduction du nombre de channels
+
+- Anexes : Implémentation et choix d'architecte logiciel
+- Ingénieurie logicielle et recherche ?
 - CV, decimation, niquist
 - Interaface avec le reste de la pipeline, openscience, reproductibilité
-- Results:
-- Images
+
+Annexes - subtilités mathématiques
+
+\subsection{Results}
 - Discussion
 - resultats significatifs alors que dans la tête
 - Limites + Discu
