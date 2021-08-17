@@ -1,2 +1,81 @@
-\chapter*{Annexes}
 
+\chapter{Sensor}
+
+[metre le détail des methodes ICA si pas assez de maths]
+\section{CSP algorithm}
+
+\subsection{Why not aiming for the best classifier?}
+Mathetically we do not seek here to create the best classifier,
+and to optimize the rocauc score, we only seek
+to obtain unbiased scores usable afterwards in the permutation test.
+This is why it is not a big deal to optimize the running time
+by making some approximations, such as:
+- Decimation
+- Selection of the mag channels, which contain a very large part of
+the information contained in (mag+grad)
+- PCA, which is very useful to reduce the dimension for eeg
+where there is only one channel type.
+
+\subsection{CSP Regularization}
+
+\subsection{CSP : Variance vs Second order moment}
+
+\subsection{CSP Solving}
+
+
+\subsection{Subtilités mathématiques}
+
+\paragraph{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
+
+By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the roc auc score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as roc auc and our cross validation is as legitimate as a group cross validation.
+Another way to say it is that : we do not want to test the generalization ability of our classifier between different runs. We just want to say : Our classifier proves a difference exists between the two conditions.
+So I think no need to worry because no need for group cross-validation.
+
+
+\paragraph{Possiblité de mettre un des frequences et des crop non uniformes}
+
+
+
+
+\section{Permutations statistics algorithm}
+
+\subparagraph{t-values calculation}
+
+Les t-valeur est un test parametrique qui suppose la gaussianité des valuer sours jacentes caluclé. Cette hypothése de gaussianité n'es past tojours vrifiée dpour des données venant d'imagerie cerebrale en raison des nombreux filtres préliminaires. Mais dans notre cas, on calucle les t-valeur à partir de la différence entre le roc-auc score et le niveau de chance moyen ce qui permet de rétablir l'hypothese de gaussianité.
+
+Le calcul des p-valeurs se fait pour chaque time-frequency bin de manière indépendante.
+
+On considère la liste des différences $(X_i)_{i \in [\text{Nb Subjects}]}$ pour tous les sujets entre le roc-auc et le chance level $c=0.5$ pour une time frequency bin.
+
+On soustrait alors toutes ces cartes au chance level d'une roc-auc à savoir $0.5$. On obtient alors la différence entre le roc-auc et le chance level.
+
+Il suffit alors de Calculate the T-test for the mean of ONE group of scores.
+
+This is a test for the null hypothesis that the expected value (mean) of a sample of independent observations a is equal to the given population mean, popmean.
+
+Ce test permet de rejeter l'hypothese nulle sous laquelle la moyenne d'une population d'observation independantes est egal à $0$.
+
+Formellement,
+On veut comparer la moyenne $\mu$ d'une population de loi normale et d’écart type $\sigma$ non connu à $0$. Pour ce faire, on calcule la moyenne empirique $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}x_i$ et l'estimateur  sans biais $S^{\ast ^2}_n$ de sa variance $\sigma^2$
+:$S^{\ast ^2}_n = \frac{1}{n-1}\sum\limits_{i=1}^n (X_i - \overline X_n )^2$.
+
+Selon l’hypothese nulle, la distribution d’échantillonnage de cette moyenne se distribue elle aussi normalement avec un écart type $\frac{\sigma}{\sqrt{n}}$.
+
+La statistique de test:
+
+$ Z = \sqrt{n}\frac{\overline{X} - \mu_0}{S^{\ast}_n}$
+suit alors une [[loi de Student]] à $n-1$ degrés de liberté sous l'hypothèse nulle (c'est le théorème de Cochran).
+
+On choisit un risque $\alpha$, généralement $0.05$ ou $0.01$ et l'on calcule la réalisation de la statistique de test :
+
+:$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ où $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
+
+% Si l'on veut tester H0 : μ ≥ μ0 :
+% Si z est inférieur au quantile d'ordre α de la loi de Student à n – 1 degrés de liberté alors on rejette l'hypothèse nulle.
+
+% Implémentation se fait à l'aide la fonction scipy.stats.ttest_1samp.
+
+
+
+
+\chapter{Source}
