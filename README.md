@@ -5,4 +5,4 @@ Traduction of this document :  https://docs.google.com/document/d/1O-HTKqwWyN_Xy
 
 
 
-à la place d'utiliser chapitre, utiliser les parts
+une fois que l'on fini le plan on appelle MM et on lui explique, et on regarde par quoi on commence l'explication +  on enregistre dictaphone
