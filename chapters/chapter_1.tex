@@ -399,7 +399,9 @@ covariance matrix over each epoch or a rolling time-window and extract the CSP
 filtered signals. A linear discriminant classifier is then applied to these
 signals.
 
-CSP is a technique to analyze multichannel data based on recordings from two classes.
+CSP is a technique to analyze multichannel data based on recordings from two classes qui a été introduite dans le contexte des EEG par \cite{koles1990spatial}.
+
+
 
 \paragraph{Intuitive explanation}
 
@@ -493,15 +495,72 @@ Et il suffit alors de remplacer dans \ref{eq:general_eigenvalue} puis de multipl
     \lambda_1 = \lambda^{+}_1 / \lambda^{-}_1
 \end{equation}
 
+% complement eventuel
+% https://www.youtube.com/watch?v=S4znknOIcRk&t=332s
+% https://www.youtube.com/watch?v=zsOULC16USU
+
 \subsubsection{Finding the significant time-frequency bins with Permutation statistics}
 
 We try to answer the following question: is the difference between
-the two conditions statistically significant? We use the classic permutations
-cluster tests on the time-frequency roc-auc map.
-More details are available here:
-% https://mne.tools/stable/auto_tutorials/stats-sensor-space/10_background_stats.html
-The user has only to specify the list of frequency and the list of timings.
+the two conditions statistically significant? We use the a permutations
+cluster tests on the time-frequency roc-auc map in order to check the significance of the activation.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=15cm]{images_report/sensor/Permutation_statistics.png}
+    \caption[Overview of the permutation statistics pipeline.]%
+    {Overview of the permutation statistics pipeline.}
+    \label{permutation_statistics_pipeline}
+\end{figure}
+
+
+\paragraph{Overview of the cluster permutation statistics method}
+
+La figure \ref{permutation_statistics_pipeline} donne un apercut de la pipeline de création des clusters.
+
+On commence par rassembler toutes les time-frequency roc-auc map de tous les sujets. Pour chaque time-frequency bin, on calcule une t-value, de manière indépendante pour chaque bin (le détail des calculs se trouve en annexe). On obtient anisi la carte des t-values. Puis afin de trouver l'emplacement des clusters, il suffit d'utiliser un seiuil, par exemple correspodant à un niveau de chance de $0.05$ ou de $0.01$. Ce seil n'a pas une grande importance mathématique, mais en pratique, il permet de controler la taille des clusters. Une fois le seuil appliqué, on obtient potentiellement un ou des clusters. Afin de pouvoir attribuer une p-valeurs à chaque cluster, il faut alors utiliser le mécanismes des permutations.
+
+Le mécanisme des permutation consiste à caluler une métrique sur nos cluster: qui peut être classiquement soit la taille du cluster, soit le maximum de t-vleur au sein du cluster, soit la somme des t-valeur au sein du cluster. Puis on compare cette métrique à la distribution de cette métrique simulée pour les permutation:
+On inverse le signe de la différence pour chaque bin de chaque subject. On obtient la distribution de la metrique dans l'hypothese nulle ou The distribution of spatial cluster sizes is independent of the sign of the data.
+
+
+\paragraph{details permutations}
+
+\subparagraph{t-values calculation}
+
+Les t-valeur est un test parametrique qui suppose la gaussianité des valuer sours jacentes caluclé. Cette hypothése de gaussianité n'es past tojours vrifiée dpour des données venant d'imagerie cerebrale en raison des nombreux filtres préliminaires. Mais dans notre cas, on calucle les t-valeur à partir de la différence entre le roc-auc score et le niveau de chance moyen ce qui permet de rétablir l'hypothese de gaussianité. 
+
+Le calcul des p-valeurs se fait pour chaque time-frequency bin de manière indépendante.
+
+On considère la liste des différences $(X_i)_{i \in [\text{Nb Subjects}]}$ pour tous les sujets entre le roc-auc et le chance level $c=0.5$ pour une time frequency bin.
+
+On soustrait alors toutes ces cartes au chance level d'une roc-auc à savoir $0.5$. On obtient alors la différence entre le roc-auc et le chance level.
+
+Il suffit alors de Calculate the T-test for the mean of ONE group of scores.
+
+This is a test for the null hypothesis that the expected value (mean) of a sample of independent observations a is equal to the given population mean, popmean.
+
+Ce test permet de rejeter l'hypothese nulle sous laquelle la moyenne d'une population d'observation independantes est egal à $0$.
+
+Formellement, 
+On veut comparer la moyenne $\mu$ d'une population de loi normale et d’écart type $\sigma$ non connu à $0$. Pour ce faire, on calcule la moyenne empirique $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}x_i$ et l'estimateur  sans biais $S^{\ast ^2}_n$ de sa variance $\sigma^2$
+:$S^{\ast ^2}_n = \frac{1}{n-1}\sum\limits_{i=1}^n (X_i - \overline X_n )^2$.
+
+Selon l’hypothese nulle, la distribution d’échantillonnage de cette moyenne se distribue elle aussi normalement avec un écart type $\frac{\sigma}{\sqrt{n}}$.
+
+La statistique de test:
+
+$ Z = \sqrt{n}\frac{\overline{X} - \mu_0}{S^{\ast}_n}$
+suit alors une [[loi de Student]] à $n-1$ degrés de liberté sous l'hypothèse nulle (c'est le théorème de Cochran).
+
+On choisit un risque $\alpha$, généralement 0,05 ou 0,01 et l'on calcule la réalisation de la statistique de test :
+
+:$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ où $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
+
+[Si l'on veut tester H0 : μ ≥ μ0 :
+Si z est inférieur au quantile d'ordre α de la loi de Student à n – 1 degrés de liberté alors on rejette l'hypothèse nulle.]
+
+% Implémentation se fait à l'aide la fonction scipy.stats.ttest_1samp.
 
 \subsubsection{Annexe}
 
