@@ -313,8 +313,20 @@ Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me 
 
 Mes premieeres contributions consistere donc à rajouter des sanity check dans la pipeline, actualiser les docstring et les en tetes de codes, travailler sur l'hormonie du code en harminisant les noms des variables entre les différents scripts.
 
+\subsection{Preprocessing of artifacts}
 
-Apres m'être familiarisé avec la l'esprit du code, j'ai pu travailler sur la logique. Notemment un point important qui est l'ordre dans lequel la donnée est rejetée. En effet, une difficulté majeure des données brutes venant des signaux corticaux est le fait que ces signaux sont minuscules. Bien que l'enregistrement des donnée se fassent dans une chambre blindée, le moindre bruit peut ecraser totalement le signal.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=5cm]{images_report/sensor/noise_order_of_magnitude.png}
+    \caption[Scale of magnitude of different magnetic fields]%
+    {Scale of magnitude of different magnetic fields}
+
+    \label{noise_order_of_magnitude}
+\end{figure}
+
+
+Apres m'être familiarisé avec la l'esprit du code, j'ai pu travailler sur la logique. Notemment un point important qui est l'ordre dans lequel la donnée est rejetée. En effet, une difficulté majeure des données brutes venant des signaux corticaux est le fait que ces signaux sont minuscules. Bien que l'enregistrement des donnée se fassent dans une chambre blindée, le moindre bruit peut ecraser totalement le signal. La figure \ref{noise_order_of_magnitude} présente l'échelle des ordres de grandeurs, qui montre bien que les bruits exterieux sont d'un ordre de granduer incommensurablement plus grands que les signaux d'interets neurologiques.
 
 Même apres avoir enlevé tous les bruits venant de l'environnement exterieur certains bruits que l'on appelle artifacts biologiques, tels que les battement de coeurs ou bien les clignement d'oeils doivent être soit enlevés en rejetant l'interval temporel contaminé, soit en sépanrant les sources par l'usage de l'analyse en composante indépandantes (ICA), qui permet de séparer les ssources de signaux emises par le coeurs ou les clignements d'oeuil du reste du signal.
 
