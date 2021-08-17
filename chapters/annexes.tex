@@ -2,9 +2,74 @@
 \chapter{Sensor}
 
 [metre le détail des methodes ICA si pas assez de maths]
+
 \section{CSP algorithm}
 
-\subsection{Why not aiming for the best classifier?}
+\subsection{CSP running time optimization}
+
+L'implémentation initiale naïve de l'algorithme des CSP mettait une journée entière calculer pour un seul subject. Il était donc crutial de trouver des manières d'acceler fortement les calculs, qui seront dès lors repetés à chaque commit de la pipeline dans le cadre de l'integration continue avec Circle CI.
+
+Un grand effort de recherche et d'ingénieurie à alors été mené pour réduire le temps de calculs.
+
+\subparagraph{Technique d'ingenieurie logicielles classique}
+
+Les techiques d'ingénieuries logicielles classique ont été clefs pour accellerer massivement les temps de calculs : - factoriasation de toutes les étapes, utilisation des outils tels que le line-profiler, qui permet de visualiser le temps d'execution de chacune des lignes. D'aptres part, même si mathématiquement certaines opération son commutatives, en pratique, le choix de l'ordre des opératio permet d'économiser du temps de calcul : par exemple même si l'opération (time crop, frequency filter), il vaut mieux commencer par crop la donnée puis filtrer, car l'opération de filtrage est très couteuse.
+
+
+\subparagraph{Reduction de la dimensionalité}
+
+Une fois toutes les améliorations logicielles approtées, on peut egalement apporter des améliorations venant des techniques du machine learning en utilisant des techiniques de reduction de dimensionalité, soit en selectionnant le type de channels, soit en utilsnat une PCA:
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=5cm]{images_report/sensor/sensors_elekta.png}
+    \caption[MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{ELekta documentation}]]%
+    {MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{ELekta documentation}]}
+    \label{sensors_elekta}
+\end{figure}
+
+\begin{itemize}
+    \item Reduction de la dimensionalité par selection du type de channel: Les données MEG provient de sensor, qui sont au nombre de 102 et qui sont repartis comme sur la figure \ref{sensors_elekta}. Chaque sensor est constitué de 2 gradiometers mesurant le champs gradiometrique (Tesla/meter) suivant les directions tangente au plan du sensor, et d'un magnetometers mesurant le chanps electrique dans le suivant la normale au plan du sensor. Les magnetometres sont robustes au bruit exterieur tandis que les magnetometres sont davantages exposées. Mais les magnetometres ont deux avantages capitaux : 1. Ils enregistrent une information spatiale localisée, ce qui convient parfaitement à l'algorithme des CSP, qui qui favorise par la suite l'interpretabilités des patterns issus des CSP. 2. Les magnetometres sont deux fois moins nombreux que les gradiometres. AInsi, en selectionnant uniquement les magnetometres, on divise par trois le nombre de channells. L'algorithmes des CSP étant limité par une SVD dont la complexité en $\mathcal{O}(T n^2)$ évolue en fonction du carré de nombre $n$ de channels \cite{dhillonalan}, on accellère ainsi l'algorithme par un facteur 9. (T is the number of time point, in our case bigger than the number of channels. La complexité de la SVD interne au CSP est en carré du minimum entre $T$ et $n$).
+    \item Le point presceent ne s'applique qu'à des données provenant d'une MEG, mais ne s'applique pas aux EEG. En effet, les EEG ne possèdent qu'un seul tyepe de channel. Il faut donc réduire la dimensionalité à l'aide d'une simple PCA.
+\end{itemize}
+
+
+\subparagraph{Sampling}
+
+- CV, decimation, niquist
+
+La dernière manière d'accellerer les temps de calculs est de faire du sampling sur 
+
+
+\subparagraph{CSP running time optimization results}
+
+Le choix de l'ordre de la commutativité, la reduction de la dimensionalité et le resampling nous permettent aujourd'hui d'obtenir des résultats en moins de trois heures avec 8Cross validation pour tous les sujects. C'est trois techniques permettent d'acceller respectivment par $2*10*5$ sur notre jeu de donnée tout en conservant des performances en tout point similaire. Il semblerait même que la PCA augmente la stabilité numérique des résultats.
+
+
+% - Interaface avec le reste de la pipeline, openscience, reproductibilité
+% - Anexes : Implémentation et choix d'architecte logiciel
+
+
+
+
+\subsection{Iterations levels}
+
+Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit ici plus un probleme d'ingénieurie que de la recherche pure.
+
+- contrasts
+- We iterate through subjects and sessions
+- If there are multiple runs, runs are concatenated into one session.
+
+\subsection{CSP Regularization}
+
+\subsection{CSP : Variance vs Second order moment}
+
+\subsection{CSP Solving}
+
+
+\subsection{Subtilités mathématiques}
+
+\paragraph{Why not aiming for the best classifier?}
 Mathetically we do not seek here to create the best classifier,
 and to optimize the rocauc score, we only seek
 to obtain unbiased scores usable afterwards in the permutation test.
@@ -16,14 +81,6 @@ the information contained in (mag+grad)
 - PCA, which is very useful to reduce the dimension for eeg
 where there is only one channel type.
 
-\subsection{CSP Regularization}
-
-\subsection{CSP : Variance vs Second order moment}
-
-\subsection{CSP Solving}
-
-
-\subsection{Subtilités mathématiques}
 
 \paragraph{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
 

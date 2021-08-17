@@ -54,7 +54,7 @@ Mes premieeres contributions consistere donc à rajouter des sanity check dans l
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=5cm]{images_report/sensor/noise_order_of_magnitude.png}
+    \includegraphics[width=7cm]{images_report/sensor/noise_order_of_magnitude.png}
     \caption[Scale of magnitude of different magnetic fields]%
     {Scale of magnitude of different magnetic fields}
 
@@ -128,7 +128,7 @@ Classiqueemnt l'espace des sensor se décompose en les étapes suivantes :
 Cet ordre des opération est très bien pour la majorité des études. Mais dans le cas de notre étude il est crutial d'obtenir des résultats dans l'espace du time-frequzncy. Il nous faut donc combiner les fonctionalités du script "slifing estimator" permettant d'étudier un contraste entre deux conditions ainsi que du scipt "time frequency decomposition" qui permet d'étudier le signal dans l'espace du temps et de la frequence. C'est pour combler cette lacune que j'ai donc implementé un nouveau script dans la pipeline permettant de de visualiser quelles sont les time-frequency bin qui différenet significativement entre les deux conditions.
 
 
-\subsection{Theorie algo}
+
 My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions.
 
 There are two main steps in this script:
@@ -139,7 +139,7 @@ There are two main steps in this script:
 \end{itemize}
 
 
-\subsubsection{Decoding with Common Spatial Patterns (CSP)}
+\subsection{Decoding with Common Spatial Patterns (CSP)}
 
 The time-frequency decomposition is estimated by iterating over raw data that has been band-passed at different frequencies. This is used to compute a
 covariance matrix over each epoch or a rolling time-window and extract the CSP
@@ -150,7 +150,7 @@ CSP is a technique to analyze multichannel data based on recordings from two cla
 
 
 
-\paragraph{Intuitive explanation}
+\subsubsection{Intuitive explanation}
 
 % Why CSP better than ...
 
@@ -189,9 +189,12 @@ Les nuages de pooints correpondent à un event, et chaque couleur correpond à u
 
 Par la suite, on peut entrainer un classifieur linéaire qui prend en entré
 
-\paragraph{Technical Description}
+\subsubsection{Technical Description}
 
 L'explication prescedente ne fait qu'expliquer intuitivement l'algorithme pour la première composante du CSP. Mais la manière la plus efficace d'implementer les CSP est de formaliser le problème sous la forme d'un problme de vecteur propres generalisé.
+[mettre les deux autres formulations]
+
+\paragraph{General Eigenvalue Problem Formulation}
 
 Let $X \in \mathbb{R}^{C * T}$ be a matrix containing  $C$ channels and $T$ time points. The data at a single time point is denoted by $x(t) \in  \mathbb{R}^{C}$. Common spatial pattern (CSP) finds a decomposition that projects the signal in the original sensor space to CSP space using the following transformation:
 
@@ -220,6 +223,7 @@ Where the two $\lambda$ are diagonal matrices whose entries are the eigenvalues 
 
 Large entries in the diagonal matrix corresponds to a spatial filter which gives high variance in one class but low variance in the other. Thus, the filter facilitates discrimination between the two classes.
 
+\paragraph{The unmixing matrix}
 
 Une autre manière de lire les deux equations \ref{eq:lambda_plus} et \ref{eq:lambda_minus} est de se rappeller que $w^{T}\Sigma w$ calcule la variance de la covariance $\Sigma$ suivant la direction $w$. Ainsi, $W^{T} \Sigma^{+} W$ et $W^{T} \Sigma^{-} W$ ne font que calculer des matrices diagonales, dont les elements diagonaux sont les variances des covariances suivant les différentes colonnes de $W$, à savoir les variances suivant les difféntes filtres spatiaux.
 
@@ -246,11 +250,13 @@ Et il suffit alors de remplacer dans \ref{eq:general_eigenvalue} puis de multipl
 % https://www.youtube.com/watch?v=S4znknOIcRk&t=332s
 % https://www.youtube.com/watch?v=zsOULC16USU
 
-\subsubsection{Finding the significant time-frequency bins with Permutation statistics}
+\subsection{Significance of time-frequency bins with Permutation statistics}
 
 We try to answer the following question: is the difference between
 the two conditions statistically significant? We use the a permutations
 cluster tests on the time-frequency roc-auc map in order to check the significance of the activation.
+
+\subsubsection{Overview of the cluster permutation statistics method}
 
 \begin{figure}[ht]
     \centering
@@ -260,9 +266,6 @@ cluster tests on the time-frequency roc-auc map in order to check the significan
     \label{permutation_statistics_pipeline}
 \end{figure}
 
-
-\paragraph{Overview of the cluster permutation statistics method}
-
 La figure \ref{permutation_statistics_pipeline} donne un apercut de la pipeline de création des clusters.
 
 On commence par rassembler toutes les time-frequency roc-auc map de tous les sujets. Pour chaque time-frequency bin, on calcule une t-value, de manière indépendante pour chaque bin (le détail des calculs se trouve en annexe). On obtient anisi la carte des t-values. Puis afin de trouver l'emplacement des clusters, il suffit d'utiliser un seiuil, par exemple correspodant à un niveau de chance de $0.05$ ou de $0.01$. Ce seil n'a pas une grande importance mathématique, mais en pratique, il permet de controler la taille des clusters. Une fois le seuil appliqué, on obtient potentiellement un ou des clusters. Afin de pouvoir attribuer une p-valeurs à chaque cluster, il faut alors utiliser le mécanismes des permutations.
@@ -271,64 +274,9 @@ Le mécanisme des permutation consiste à caluler une métrique sur nos cluster:
 On inverse le signe de la différence pour chaque bin de chaque subject. On obtient la distribution de la metrique dans l'hypothese nulle ou The distribution of spatial cluster sizes is independent of the sign of the data.
 
 
-
-
-\paragraph{Iterations levels}
-
-Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit ici plus un probleme d'ingénieurie que de la recherche pure.
-
-- contrasts
-- We iterate through subjects and sessions
-- If there are multiple runs, runs are concatenated into one session.
-
-
 \subsection{Implementation}
 
-[annexe]
 
-\paragraph{CSP running time optimization}
-
-L'implémentation initiale naïve de l'algorithme des CSP mettait une journée entière calculer pour un seul subject. Il était donc crutial de trouver des manières d'acceler fortement les calculs, qui seront dès lors repetés à chaque commit de la pipeline dans le cadre de l'integration continue avec Circle CI.
-
-Un grand effort de recherche et d'ingénieurie à alors été mené pour réduire le temps de calculs.
-
-\subparagraph{Technique d'ingenieurie logicielles classique}
-
-Les techiques d'ingénieuries logicielles classique ont été clefs pour accellerer massivement les temps de calculs : - factoriasation de toutes les étapes, utilisation des outils tels que le line-profiler, qui permet de visualiser le temps d'execution de chacune des lignes. D'aptres part, même si mathématiquement certaines opération son commutatives, en pratique, le choix de l'ordre des opératio permet d'économiser du temps de calcul : par exemple même si l'opération (time crop, frequency filter), il vaut mieux commencer par crop la donnée puis filtrer, car l'opération de filtrage est très couteuse.
-
-
-\subparagraph{Reduction de la dimensionalité}
-
-Une fois toutes les améliorations logicielles approtées, on peut egalement apporter des améliorations venant des techniques du machine learning en utilisant des techiniques de reduction de dimensionalité, soit en selectionnant le type de channels, soit en utilsnat une PCA:
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=5cm]{images_report/sensor/sensors_elekta.png}
-    \caption[MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{ELekta documentation}]]%
-    {MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{ELekta documentation}]}
-    \label{sensors_elekta}
-\end{figure}
-
-\begin{itemize}
-    \item Reduction de la dimensionalité par selection du type de channel: Les données MEG provient de sensor, qui sont au nombre de 102 et qui sont repartis comme sur la figure \ref{sensors_elekta}. Chaque sensor est constitué de 2 gradiometers mesurant le champs gradiometrique (Tesla/meter) suivant les directions tangente au plan du sensor, et d'un magnetometers mesurant le chanps electrique dans le suivant la normale au plan du sensor. Les magnetometres sont robustes au bruit exterieur tandis que les magnetometres sont davantages exposées. Mais les magnetometres ont deux avantages capitaux : 1. Ils enregistrent une information spatiale localisée, ce qui convient parfaitement à l'algorithme des CSP, qui qui favorise par la suite l'interpretabilités des patterns issus des CSP. 2. Les magnetometres sont deux fois moins nombreux que les gradiometres. AInsi, en selectionnant uniquement les magnetometres, on divise par trois le nombre de channells. L'algorithmes des CSP étant limité par une SVD dont la complexité en $\mathcal{O}(T n^2)$ évolue en fonction du carré de nombre $n$ de channels \cite{dhillonalan}, on accellère ainsi l'algorithme par un facteur 9. (T is the number of time point, in our case bigger than the number of channels. La complexité de la SVD interne au CSP est en carré du minimum entre $T$ et $n$).
-    \item Le point presceent ne s'applique qu'à des données provenant d'une MEG, mais ne s'applique pas aux EEG. En effet, les EEG ne possèdent qu'un seul tyepe de channel. Il faut donc réduire la dimensionalité à l'aide d'une simple PCA.
-\end{itemize}
-
-
-\subparagraph{Sampling}
-
-- CV, decimation, niquist
-
-La dernière manière d'accellerer les temps de calculs est de faire du sampling sur 
-
-
-\subparagraph{CSP running time optimization results}
-
-Le choix de l'ordre de la commutativité, la reduction de la dimensionalité et le resampling nous permettent aujourd'hui d'obtenir des résultats en moins de trois heures avec 8Cross validation pour tous les sujects. C'est trois techniques permettent d'acceller respectivment par $2*10*5$ sur notre jeu de donnée tout en conservant des performances en tout point similaire. Il semblerait même que la PCA augmente la stabilité numérique des résultats.
-
-
-% - Interaface avec le reste de la pipeline, openscience, reproductibilité
-% - Anexes : Implémentation et choix d'architecte logiciel
 
 \subsection{Results}
 - Discussion
