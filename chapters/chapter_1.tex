@@ -44,39 +44,44 @@ reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
 
 Cette partie présente the \textit{time in Working Memory} paradigm, qui a été exposé dans le papier \cite{herbst2021abstracting}. Le but de mon stage est d'aider à la reproduction de ce papier mais cette fois ci en utilisant des donnée venant de MEG.
 
-\subsection{Paradigme de la Pilot study: Abstracting Time in Working Memory}
+\subsection{Description of the Pilot Study}
 
-Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new n-item delayed duration reproduction task to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element. [present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].The participants listened to sequences composed of empty time intervals that they had to reproduce as precisely as possible. For each sequence, one can manipulate the number of time intervals and the overall duration of the sequence to separate their effects on recall accuracy.  Temporal reproduction accuracy decreased systematically with an increasing number of items. These results suggested that the number of time intervals, not their duration, determines recall precision. According to the brain clock models proposed by cognitive science, these results are interpreted as evidence of the existence of a symbolic representation of duration in working memory.
+Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new n-item delayed duration reproduction task to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element. 
 
-Thus, according to this preliminary study, we know that durations are not represented in a continuous way, but in a symbolic way. But we still do not know in which part of the brain the information is stored. In order to visualize in which part of the brain the working memory is encoded, we reproduced the experiment this time by recording the cerebral data with magnetoencephalograms. In this new experiment, we no longer concentrate on the analysis of the accuracy of the restitution of the duration of the time intervals, but we will concentrate more on the visualization of the frequencies and cerebral areas at stake for the working memory.
+[present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].
 
+The participants listened to sequences composed of empty time intervals that they had to reproduce as precisely as possible. For each sequence, one can manipulate the number of time intervals and the overall duration of the sequence to separate their effects on recall accuracy. The figure \ref{paradigm} presents the paradigm. Temporal reproduction accuracy decreased systematically with an increasing number of items. These results suggested that the number of time intervals, not their duration, determines recall precision. According to the brain clock models proposed by cognitive science, these results are interpreted as evidence of the existence of a symbolic representation of duration in working memory.
 
-\subsection{Dataset description}
-
-
-Nombre de participants
 
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
     \caption[n-item delayed reproduction task]%
-    {n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
+    {n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. \textbf{(b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it.} (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
 
     \label{paradigm}
 \end{figure}
 
-In Experiment 2 (Fig. 1B), the number of items and the duration of the sequence were orthogonalized. Three sequence durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. Wit
 
-- Les modèles de clocks cerebrales??
-- Pourquoi EEG plutot que FMRI
+\subsection{Goal of the internship: reproduce the pilot study using MEG data}
 
-\subsection{Donner le but du Stage}
+Thus, according to this first study, we know that durations are not represented in a continuous way, but in a symbolic way. But we still do not know in which part of the brain the information is stored. In order to visualize in which part of the brain the working memory is encoded, we reproduced the experiment this time by recording the cerebral data with magnetoencephalograms. In this new experiment, we no longer concentrate on the analysis of the accuracy of the restitution of the duration of the time intervals, but we will concentrate more on the visualization of the frequencies and cerebral areas at stake for the working memory.
 
-Reproduire cette study mais avec la MEG. Nous ne smme interessé que par l'experiment 2 puisqu'il faut que l'on garde constant la durée du signal.
-D'autre part, afin de maximiser la significativité du signal , nous n'utilions uniquement des event  comportant 1 ou 3 items, cela afin de maximiser la puissance de la statistique étant donné que la pilot study à montré que la relation est linéaire.
+Compared to the original study, we changed two main points:
+
+\begin{itemize}
+    \item We did not repeat the 3 experiments using MEGs, but only experiment 2, which orthogonalizes the number of items and the total sequence duration.
+    \item In the original Experiment 2, three sequences durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. In our replication of this experiment, we use only sequences of either 1 or 3 items, which allows to maximize the effect size.
+\end{itemize}
+
+% - Les modèles de clocks cerebrales??
+% - Pourquoi EEG plutot que FMRI
+
 
 \subsection{Glossaire}
+
+In the context of MEEG, the vocabulary used is very specific, and is essential to the understanding. The table \ref{Tab:Glossary_theory} gives the main vocabulary of the neural ocillation theory. The table \ref{Tab:Glossary_protocol} gives the usual vocabulary used in experimental protocols.
 
 \begin{table}[ht]
     \centering
@@ -118,17 +123,9 @@ D'autre part, afin de maximiser la significativité du signal , nous n'utilions 
 
 \section{EEG, MEG}
 
-EEG (electroencephalography) end MEG (magnetoencephalography) measures the electrical activity of our brain via electrodes that are placed on the scalp. It tells us, from the surface measurements, how active the brain is. It is possible to measure both eeg and meg data, so the acronym meeg is used to designate this data.
+EEG and MEG measure the electrical activity of our brain using electrodes placed on the scalp. It tells us, from the surface measurements, how active the brain is. It is possible to measure both eeg and meg data, which is why the acronym meeg is used to designate these data.
 
-Pour notre paradigme experimental, il est bien plus important d'avoir une grande precesion temporelle, nous avons donc choisi d'utiliser les MEG de neurospin [image neurospin MEG], qui sont parmis les seuls MEG en France.
-
-
-% http://meg-france.in2p3.fr/_lesCentres/Neurospin_en.php
-The MEG lab is part of NeuroSpin, a neuroimaging center located on the campus of Saclay. We are part of the Comissariat à l'Energie Atomique (CEA), the Division of Life Sciences (DSV) and the Institute of BioImaging (I2BM) as well as the INSERM Cognitive Neuroimaging Unit.
-
-Equipment
-The MEG at Neurospin is an Elekta Neuromag 306 sensors whole-head device (details). The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer).
-
+For our experimental paradigm, it is much more important to have high temporal precession than high spatial precision. This is why we choose to use MEEG rather than fMRI to study this paradigm.
 
 \subsection{How does EEG work?}
 
@@ -138,14 +135,20 @@ The electrodes of an EEG headset can’t detect changes in single neurons, but i
 
 The signal from the electrodes is then sent to an amplifier, that (no surprises here) amplifies the signal. A computer then receives this signal, and can generate various maps of brain activity, with a rapid temporal resolution.
 
-A drawback for EEG is the spatial resolution – as the electrodes measure electrical activity at the surface of the brain, it is difficult to know whether the signal was produced near the surface (in the cortex) or from a deeper region.
-
-There are calculations that can be applied that attempt to get around this limitation (e.g. [2]), but it remains a challenge for EEG research.
-
 \subsection{MEG in comparison to EEG}
+
 Although EEG and MEG signals originate from the same neurophysiological processes, there are important differences.[28] Magnetic fields are less distorted than electric fields by the skull and scalp, which results in a better spatial resolution of the MEG. Whereas scalp EEG is sensitive to both tangential and radial components of a current source in a spherical volume conductor, MEG detects only its tangential components. Scalp EEG can, therefore, detect activity both in the sulci and at the top of the cortical gyri, whereas MEG is most sensitive to activity originating in sulci. EEG is, therefore, sensitive to activity in more brain areas, but activity that is visible in MEG can also be localized with more accuracy.
 
 Scalp EEG is sensitive to extracellular volume currents produced by postsynaptic potentials. MEG detects intracellular currents associated primarily with these synaptic potentials because the field components generated by volume currents tend to cancel out in a spherical volume conductor.[29] The decay of magnetic fields as a function of distance is more pronounced than for electric fields. Therefore, MEG is more sensitive to superficial cortical activity, which makes it useful for the study of neocortical epilepsy. Finally, MEG is reference-free, while scalp EEG relies on a reference that, when active, makes interpretation of the data difficult.
+
+\subsection{Equipement : MEG in Neurospin}
+
+% http://meg-france.in2p3.fr/_lesCentres/Neurospin_en.php
+The MEG lab is part of NeuroSpin, a neuroimaging center located on the campus of Saclay. We are part of the Comissariat à l'Energie Atomique (CEA), the Division of Life Sciences (DSV) and the Institute of BioImaging (I2BM) as well as the INSERM Cognitive Neuroimaging Unit.
+
+
+The MEG at Neurospin is an Elekta Neuromag 306 sensors whole-head device (details). The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer).
+
 
 
 \subsection{Generalities about MEG data and their preprocessing}
