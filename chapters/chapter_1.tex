@@ -15,14 +15,14 @@
 % \subsection{mne-bids}
 % \end{comment}
 
-\section*{Prélude}
 
-J'ai séparé ce rapport en deux parties qui suivent grossièremetnt l'ordre chronologiqe de mon stage.
+\section*{Prelude}
 
-Le premier chapitre donne le contexte scientifique de mon stage. Cete partie ne consitutue pas compte rendu de mon travail mais plutot de l'environnement dans lequel je m'inserre et des connaissances prerequises pour comprendre par la suite mon travail. L'activité scientifique n'est plus une activité solitaire, surtout en neuroscience, ou les outils utilisés reposent dsur des années de travail collectifs. Cette partie rend donc hommage au épaules de géants ssur lesquelles je me suis basé pendant mon stage. J'explique notemment dans ce chapitre les tenant et aboutissants du papier sémin al/ Pilot study sur lequel je me repose \cite{herbst2021abstracting}. Mais ce papier initial ne permettait pas de voir en détail la structure du cerveau pendant l'accomplissaement de la tache. Ce chapitre pourrait consitituer l'introduction d'un papier publié à la suite de ce stage.
+I divided this report into two parts that roughly follow the chronological order of my internship.
 
-Le second chapitre est une exposition de mon travail. J'y expose en détail la reproduction du papier séminal : "Abstracting time in Working Memory" de Sophie Herbst en utilisant cette fois ci la MEG. Nous avons reproduit les résultat de la Pilot study mais en utilisant l'imagerie par MEG afin d'analyser les parties du cerveau à l'oeuvre lors de l'utilisation de la mémoire de trvail. La MNE-bis -pipeline, qui est une pipeline d'analyse automatique de donnée MEEG consititua le socle de notre analyse. Mais afin de pouvoir réellement analyser la donnée cérébrale, il a fallut adapter la mne-bids-pipeline en utilisant de nouveaux algorithmes afin de répondre aux exigence de notre paradigme experimental. Cette partie pourrait constituer la partie methode, resultats et discussion d'un futur papier.
+The first chapter gives the scientific context of my internship. This part is not an account of my work but rather of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. This part pays homage to the giant shoulders on which I based myself during my internship. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the mne-bids-pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
 
+The second chapter is an exhibition of my work. We reproduced the results of the pilot study but using MEG imaging to analyze the parts of the brain at work during the use of working memory. We used the mne-bids-pipeline to analyze the data. But we had to adapt the mne-bids-pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results and discussion part of a future paper.
 
 \chapter{Scientific Context}
 
