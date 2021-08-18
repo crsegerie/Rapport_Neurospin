@@ -20,46 +20,105 @@
 
 I divided this report into two parts that roughly follow the chronological order of my internship.
 
-The first chapter gives the scientific context of my internship. This part is not an account of my work but rather of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. This part pays homage to the giant shoulders on which I based myself during my internship. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the mne-bids-pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
+The first chapter gives the scientific context of my internship. This part is an account of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the mne-bids-pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
 
 The second chapter is an exhibition of my work. We reproduced the results of the pilot study but using MEG imaging to analyze the parts of the brain at work during the use of working memory. We used the mne-bids-pipeline to analyze the data. But we had to adapt the mne-bids-pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results and discussion part of a future paper.
 
 \chapter{Scientific Context}
 
-\section{Sujet de stage}
-This internship combines two aims: to extract the neural signatures of time stored
-in working memory from existing MEG data, and to contribute to ongoing efforts of
-establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging
-data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE
-Python developers at Inria, with the aim to push the use of BIDS for
-more transparent and open MEEG research practices.
+Potentiellemnt dire : developper des methodes mathematiques qui vont permettre à la suite aux chercheurs d'utiliser la pipeline pour open sscience... Dire que nous avons pu égalemetn eu des premiers résultats afin de trouver les régions du cervaux, même si ce n'était pas le but premier de mon stge, une early analyse sous le prismes des sciences cognitive à été menée.
 
-As shown by a large number of studies, humans (and animals) can perceive
-temporal intervals (durations in the range of seconds), judge or compare them with other
-intervals, and recognize or reproduce them later on. Hence, durations can be stored in
-memory, like sensory stimuli. It is however not known yet how the brain achieves this, for
-instance in which format (continuous or symbolic) durations are stored and which brain
-mechanisms support this crucial ability \cite{polti2018effect}, \cite{teki2014working}. In this internship, you will join the team in the
-ongoing analysis of the previously collected MEG based on a working memory paradigm,
-with the aim to reconstruct source time courses of brain activity from the cortex, and
-possibly the hippocampus and cerebellum \cite{gauthier2020hippocampal}(using volume source models in MNE-Python.
+This internship combines two aims: to extract the neural signatures of time stored in working memory from existing MEG data, and to contribute to ongoing efforts of establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE Python developers at Inria, with the aim to push the use of BIDS for more transparent and open MEEG research practices.
+
+As shown by a large number of studies, humans can perceive temporal intervals (durations in the range of seconds), judge or compare them with other intervals, and recognize or reproduce them later on. Hence, durations can be stored in memory, like sensory stimuli. It is however not known yet how the brain achieves this, for instance in which format (continuous or symbolic) durations are stored and which brain mechanisms support this ability \cite{polti2018effect}, \cite{teki2014working}. In this internship, I joined the inria/neurospin team in the ongoing analysis of the previously collected MEG data, with the aim to reconstruct source time courses of brain activity from the cortex, and possibly the hippocampus and cerebellum \cite{gauthier2020hippocampal} using volume source models in MNE-Python.
 
 The pipeline developed during the project will contribute to ongoing open-science
 efforts by the team to establish a robust and publicly available pipeline for source
 reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
 
 
-% Why this stage
 % Mes connaissances préalables: MVA cours imagerie fonctionnelel cerebrale + Neuroscience + imagerie médiacle
-% L'environnement : les différentes équipes
+
+
+\section{The Time in Working Memory (TiWM) paradigm}
+
+Cette partie présente the \textit{time in Working Memory} paradigm, qui a été exposé dans le papier \cite{herbst2021abstracting}. Le but de mon stage est d'aider à la reproduction de ce papier mais cette fois ci en utilisant des donnée venant de MEG.
+
+\subsection{Paradigme de la Pilot study: Abstracting Time in Working Memory}
+
+Planning the future relies on the ability to remember how long events last, yet, how durations  are  stored  in  memory  is  unknown.  Here,  we  developed  a  novel n-item delayed duration reproduction taskto assess whether elapsed time is stored as a continuous feature or as an abstract item in memory. In three experiments (N = 58), participants listened to non-rhythmic sequences composed of empty time intervals (durations), which they had to reproduce as precisely as possible following a delay period.  We  manipulated  the  number  of  time  intervals  (n-item)  and  the  overall sequenceduration  to separate  their effects  on  recall  precision.  The  precision  of temporal reproduction systematically decreased with an increasing number of items. Our results suggest that the number of time intervals, not their duration, determines recall precision. We interpret this as evidence towardsan abstract representation of duration in working memory.
+
+
+\subsection{Dataset description}
+
+
+Nombre de participants
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
+    \caption[n-item delayed reproduction task]%
+    {n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
+
+    \label{paradigm}
+\end{figure}
+
+In Experiment 2 (Fig. 1B), the number of items and the duration of the sequence were orthogonalized. Three sequence durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. Wit
+
+- Les modèles de clocks cerebrales??
+- Pourquoi EEG plutot que FMRI
+
+\subsection{Donner le but du Stage}
+
+Reproduire cette study mais avec la MEG. Nous ne smme interessé que par l'experiment 2 puisqu'il faut que l'on garde constant la durée du signal.
+D'autre part, afin de maximiser la significativité du signal , nous n'utilions uniquement des event  comportant 1 ou 3 items, cela afin de maximiser la puissance de la statistique étant donné que la pilot study à montré que la relation est linéaire.
+
+\subsection{Glossaire}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{@{}| p{4cm}|p{9cm}| @{}}
+        \hline
+        EEG-MEG                     & The Electro-magnetoencephalography is a non-invasive methods for studying brain function that reflect the electrical activity of neuronal populations with millisecond temporal resolution.                                                                                                                                                             \\
+
+        Local field potential (LFP) & electric potential in the extracellular space around neurons. LFP is a widely available signal in many recording configurations, ranging from single-electrode recordings to multi-electrode arrays                                                                                                                                                     \\
+        Neuronal oscillations       & prominent feature of spontaneous and task-related brain activity that occur at the level of single units, local field potentials (LFPs), and EEG/MEG recordings. The traditional view is that neuronal oscillations reflect inhibition-based fluctuations of neuronal activity that emerge from the synchronous activation of large neuronal ensembles. \\
+        Spectral power              & reflects the amplitude of neural oscillations computed through a time–frequency transformation (TFT).                                                                                                                                                                                                                                                   \\
+        \hline
+    \end{tabular}
+    \caption{Glossary of the Neural Oscillation and of the Theory of the working memory. \cite{roux2014working}}
+    \label{Tab:Glossary_theory}
+\end{table}
+
+\begin{table}[ht]
+
+    \centering
+    \begin{tabular}{@{}| p{3cm}|p{10cm}| @{}}
+        \hline
+        Session      & A logical grouping of neuroimaging and behavioural data collected consistently across participants. A session includes the time involved in completing all experimental tasks. This begins when a participant enters the research environment until he/she leaves it.                                                    \\
+        Run          & An uninterrupted period of continuous data acquisition without operator involvement.                                                                                                                                                                                                                                     \\
+        Event        & An isolated occurrence of a presented stimulus, or a subject response recorded during a task                                                                                                                                                                                                                             \\
+        Epoch        & In the MEEG literature, the term epoch designates the outcome of a data segmentation process. Typically, epochs in event-related designs (for analysis of event related potentials or event related spectral perturbations) are time-locked to a particular event (such as a stimulus or a response)                     \\
+        Evoked data  & Evoked objects typically store an EEG or MEG signal that has been averaged over multiple epochs, which is a common technique for estimating stimulus-evoked activity.                                                                                                                                                    \\
+        Sensors      & Sensors are the physical objects or transducers that are used to perform the analogue recording, i.e., EEG electrodes and MEG magnetometers/ gradiometers. Sensors are connected to amplifiers, which not only amplify, but also filter the MEEG activity.                                                               \\
+        Channels     & Channels refer to the digital signals that have been recorded by the amplifiers. It is thus important to distinguish them from sensors. A ‘bad channel’ refers to a channel that is producing a consistently artifactual or low-quality signal.                                                                          \\
+        Sensor space & Sensor space refers to a representation of the MEEG data at the level of the original sensors, where each of the signals maps onto the spatial location of one of the sensors.                                                                                                                                           \\
+        Source space & Source space refers to MEEG data reconstructed at the level of potential neural sources that presumably gave rise to the measured signals (according to an assumed biophysical model). Each signal maps onto a spatial location that is readily interpretable in relation to individual or template-based brain anatomy. \\
+        \hline
+    \end{tabular}
+    \caption{Glossary of MEEG terminology commonly used to describe stimulation and task parameters and protocols as defined in \cite{pernet2018best}}
+
+    \label{Tab:Glossary_protocol}
+\end{table}
+
+
 
 \section{EEG, MEG}
 
+EEG (electroencephalography) end MEG (magnetoencephalography) measures the electrical activity of our brain via electrodes that are placed on the scalp. It tells us, from the surface measurements, how active the brain is. It is possible to measure both eeg and meg data, so the acronym meeg is used to designate this data.
 
-
-EEG (electroencephalography) end MEG measures the electrical activity of our brain via electrodes that are placed on the scalp. It tells us, from the surface measurements, how active the brain is.
-
-Pour notre paradigme, il est bien plus important d'avoir une grande precesion temporelle, nous avons donc choisi d'utiliser les MEG de neurospin [image neurospin MEG], qui sont parmis les seuls MEG en France.
+Pour notre paradigme experimental, il est bien plus important d'avoir une grande precesion temporelle, nous avons donc choisi d'utiliser les MEG de neurospin [image neurospin MEG], qui sont parmis les seuls MEG en France.
 
 
 % http://meg-france.in2p3.fr/_lesCentres/Neurospin_en.php
@@ -189,73 +248,3 @@ In the case of time in working memory parafdigm, it is very useful to employ thi
     \item De nombreux meta parammetres sont dur à calibrer, notemment pour le nettoyage et lors du passage dans l'espace des source, et sans expertise, il vaut mieux utiliser les parametres par défaults utilisés dans la pipeline
     \item La pipeline permet de process les différents participants en paralleles, ce qui permet de considérablement accellerer les temps de calculs.
 \end{itemize}
-
-\section{Pilot Study}
-\subsection{Paradigme de la Pilot study: Abstracting Time in Working Memory}
-
-Planning the future relies on the ability to remember how long events last, yet, how durations  are  stored  in  memory  is  unknown.  Here,  we  developed  a  novel n-item delayed duration reproduction taskto assess whether elapsed time is stored as a continuous feature or as an abstract item in memory. In three experiments (N = 58), participants listened to non-rhythmic sequences composed of empty time intervals (durations), which they had to reproduce as precisely as possible following a delay period.  We  manipulated  the  number  of  time  intervals  (n-item)  and  the  overall sequenceduration  to separate  their effects  on  recall  precision.  The  precision  of temporal reproduction systematically decreased with an increasing number of items. Our results suggest that the number of time intervals, not their duration, determines recall precision.We interpret this as evidence towardsan abstract representation of duration in working memory.
-
-
-\subsection{Dataset description}
-
-
-Nombre de participants
-
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
-    \caption[n-item delayed reproduction task]%
-    {n-item delayed reproduction task - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. (b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
-
-    \label{paradigm}
-\end{figure}
-
-In Experiment 2 (Fig. 1B), the number of items and the duration of the sequence were orthogonalized. Three sequence durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. Wit
-
-- Les modèles de clocks cerebrales??
-- Pourquoi EEG plutot que FMRI
-
-\subsection{Donner le but du Stage :}
-
-Reproduire cette study mais avec la MEG. Nous ne smme interessé que par l'experiment 2 puisqu'il faut que l'on garde constant la durée du signal.
-D'autre part, afin de maximiser la significativité du signal , nous n'utilions uniquement des event  comportant 1 ou 3 items, cela afin de maximiser la puissance de la statistique étant donné que la pilot study à montré que la relation est linéaire.
-
-\subsection{Glossaire}
-
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{@{}| p{4cm}|p{9cm}| @{}}
-        \hline
-        EEG-MEG                     & The Electro-magnetoencephalography is a non-invasive methods for studying brain function that reflect the electrical activity of neuronal populations with millisecond temporal resolution.                                                                                                                                                             \\
-
-        Local field potential (LFP) & electric potential in the extracellular space around neurons. LFP is a widely available signal in many recording configurations, ranging from single-electrode recordings to multi-electrode arrays                                                                                                                                                     \\
-        Neuronal oscillations       & prominent feature of spontaneous and task-related brain activity that occur at the level of single units, local field potentials (LFPs), and EEG/MEG recordings. The traditional view is that neuronal oscillations reflect inhibition-based fluctuations of neuronal activity that emerge from the synchronous activation of large neuronal ensembles. \\
-        Spectral power              & reflects the amplitude of neural oscillations computed through a time–frequency transformation (TFT).                                                                                                                                                                                                                                                   \\
-        \hline
-    \end{tabular}
-    \caption{Glossary of the Neural Oscillation and of the Theory of the working memory. \cite{roux2014working}}
-    \label{Tab:Glossary_theory}
-\end{table}
-
-\begin{table}[ht]
-
-    \centering
-    \begin{tabular}{@{}| p{3cm}|p{10cm}| @{}}
-        \hline
-        Session      & A logical grouping of neuroimaging and behavioural data collected consistently across participants. A session includes the time involved in completing all experimental tasks. This begins when a participant enters the research environment until he/she leaves it.                                                    \\
-        Run          & An uninterrupted period of continuous data acquisition without operator involvement.                                                                                                                                                                                                                                     \\
-        Event        & An isolated occurrence of a presented stimulus, or a subject response recorded during a task                                                                                                                                                                                                                             \\
-        Epoch        & In the MEEG literature, the term epoch designates the outcome of a data segmentation process. Typically, epochs in event-related designs (for analysis of event related potentials or event related spectral perturbations) are time-locked to a particular event (such as a stimulus or a response)                     \\
-        Evoked data  & Evoked objects typically store an EEG or MEG signal that has been averaged over multiple epochs, which is a common technique for estimating stimulus-evoked activity.                                                                                                                                                    \\
-        Sensors      & Sensors are the physical objects or transducers that are used to perform the analogue recording, i.e., EEG electrodes and MEG magnetometers/ gradiometers. Sensors are connected to amplifiers, which not only amplify, but also filter the MEEG activity.                                                               \\
-        Channels     & Channels refer to the digital signals that have been recorded by the amplifiers. It is thus important to distinguish them from sensors. A ‘bad channel’ refers to a channel that is producing a consistently artifactual or low-quality signal.                                                                          \\
-        Sensor space & Sensor space refers to a representation of the MEEG data at the level of the original sensors, where each of the signals maps onto the spatial location of one of the sensors.                                                                                                                                           \\
-        Source space & Source space refers to MEEG data reconstructed at the level of potential neural sources that presumably gave rise to the measured signals (according to an assumed biophysical model). Each signal maps onto a spatial location that is readily interpretable in relation to individual or template-based brain anatomy. \\
-        \hline
-    \end{tabular}
-    \caption{Glossary of MEEG terminology commonly used to describe stimulation and task parameters and protocols as defined in \cite{pernet2018best}}
-
-    \label{Tab:Glossary_protocol}
-\end{table}
-
