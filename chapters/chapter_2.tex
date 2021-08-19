@@ -369,6 +369,7 @@ cluster tests on the time-frequency roc-auc map in order to check the significan
     {Overview of the permutation statistics pipeline.}
     \label{permutation_statistics_pipeline}
 \end{figure}
+[harmoniser les images]
 
 The figure \ref{permutation_statistics_pipeline} gives an overview of the cluster creation pipeline.
 
@@ -379,18 +380,76 @@ We reverse the sign of the difference for each bin in each subject. We obtain th
 
 [detailler]
 
-\subsection{Implementation}
-
+% \subsection{Implementation}
 
 
 \subsection{Results}
+
+\subsubsection{CSP results}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/csp_permutation_res/csp_frequency.png}
+        \caption{CSP frequency decoding.}
+        \label{fig:csp_frequency}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/csp_permutation_res/csp_time_frequency.png}
+        \caption{CSP time-frequency decoding.}
+        \label{fig:csp_time_frequency}
+    \end{subfigure}
+    \caption{CSP results for the average subject.}
+    \label{fig:csp_results}
+\end{figure}
+
+
+[expliquer avant que le csp est appliqué pour différentes bins et que l'on compare par la suite le reoc auc score pour différentess bins, ce qui permet de mettre les régions d'interet en ]
+
+Dans la figure \ref{fig:csp_results}, on observe le score roc-auc de du classifieur composé de (CSP, regression logistique) pour différentes frequences réparties linéairement entre 5 Hz et 20 Hz ainsi que pour moments entre $t=0$ et $t=5$ secondes (les figures \ref{fig:Evoked_data}, \ref{fig:decoding_initial} ne présentaient les temps $t \leq 0$ qu'à des fins pédagogiques). On voit que l'algorithme CSP a réussi à mettre en évidence la bande de fréquence alpha entre 8 et 12 Hz, et les résultats sont cohérents entre la carte fréquencielle \ref{fig:csp_frequency} et la time-frequency map \ref{fig:csp_time_frequency}.
+
+
+[annexe choix du seuil]
+En choisissant un seuil de t-valeur de 0.01 on obtient la figure \ref{permutation_statistics_results}, avec un cluster ayant une p-valuer de $10^{-3.6}$. J'ai choisit ce seuil restrictif de 0.01 pour mon image finale afin que limiter l'aire de mon cluster et afin de se limiter aux zones les plus significatives. Mais il est possible en choisissant un seuil de de 0.05 d'obtenir une figure avec un cluster allant parcourant toute la bande alpha de 0 à 5secondes.
+
+[topo first component ?]
+
+\subsection{Cluster Permutation Test results}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=15cm]{images_report/sensor/csp_permutation_res/permutations_test.png}
+    \caption[Permutation statistics results.]%
+    {Permutation statistics results.}
+    \label{permutation_statistics_results}
+\end{figure}
+
 - Discussion
 - resultats significatifs alors que dans la tête
+
+- Une AUC de 0.6 n'est pas elevé dans l'absolu mais pas mal en neuroscience sur des intervalles de 0.5. Si l'on combine toutes les bins on obteindrait une bien meuilleure AUC.
+
+
+[annexe le choix du nombre de bins]
 
 
 \subsection{Limites + Discu}
 
+Limite algo:
 - Seuelemnt 2 classes
+
+Limite results:
+- Choix du nombre de Bin est quelque peu aritraire. Il fut juste respecter quelques conditions telle que Nyquist, plus le fait d'avoir assez de point pour estimer la matrice de covariance. Mais ici, ce n'est pas gracve d'ête arbitraire sur le nombre de point étant donné que le résultat du snesor space n'est utilisé que pour cibler le travail en allant dans le source step.
+- Le fait de pouvoir choisir la taille des cluster simplement en ajustant le threshold de la t-value est perturant à première vue. Mais en réalité c'est plutot un bon signe. Nous n'avons testé que deux t-velur différentes (0.01 er 0.05) et le fait d'obtenir deux cluster de taille différentes signiifie simplement que notre cluster associé à 0.05 présente une différence significative tout comme notre cluster à 0.01 qui est assui significative. L'un n'exclue par l'autre.
+- Si l'on peut choisir la taille du cluster, la carte des tvaluer est beaucoup moins arbitraire, et il est clair sur cette carte que les valeurs les plus significatives sont associées aux premières secondes entre 0 et 3secondes. Cela est quelque peu perturbant étant donnée que nous somme ici dans une tache de reproduction temporelle, et on pourrait simaginer que l'information des intervalles ne disparaitrait pas aussi rapidement. Nous avons deux explications pour expliquer cet evaporement de l'information:
+- Certains event ne durent qu'une seconde. Il est possible qu'après restitution, le stockage soit relaché pour etre plus efficace pour la tache suivante.
+- D'autre part 
+
+
+Dans l'absolue , c'est tres bien alpha, on a des papiers qui justifient ça. \cite{obleser2012adverse}
 
 \section{Source Space Analysis}
 
