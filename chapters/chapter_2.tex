@@ -374,15 +374,16 @@ We reverse the sign of the difference for each bin in each subject. We obtain th
 
 \section{Source Space Analysis}
 
-After going into the sensor space. The natural direction is to go to the source space. [ detailler ou retravailler]
+Following the extraction of the most informative time and frequency ranges, we can now study the anatomical location of the brain response. To do this, we must visualize the contrast in a three-dimensional space corresponding to a model of the brain, which is called the source space.
 
-\subsection{Generalités source space.}
+% \subsection{Generalités source space.}
 
-[Mettre les différents scripts.]
+% [Mettre les différents scripts.]
 
-\subsection{New script: Contrast in source space}
-Motivation: Insufficient classical pipeline, and inability to average from individual CSPs component.
+% \subsection{New script: Contrast in source space}
+% Motivation: Insufficient classical pipeline, and inability to average from individual CSPs component.
 
+\subsection{Contrast calculation for one subject}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/source/flow_source_contrasts.png}
@@ -390,3 +391,17 @@ Motivation: Insufficient classical pipeline, and inability to average from indiv
     {Shema of the procedure to visualize the contrast in source space.}
     \label{flow_source_contrasts}
 \end{figure}
+
+
+The figure \ref{flow_source_contrasts} explains the procedure to obtain the contrast in the source space for one subject:
+\begin{itemize}
+    \item We start with two different conditions, i.e. the sequences of one item and three items.
+    \item We filter the data to keep only the most informative times and frequencies, in order to increase our signal-to-noise ratio.
+    \item We compute the covariance matrix of each condition.
+    \item We project the covariance matrix of each condition in the source space (see dSPM method, in section [?]). We then obtain a three-dimensional activation map called a \textit{source estimate}.
+    \item We then subtract the log of the power associated with the two source estimates.
+\end{itemize}
+
+\subsection{Group average}
+Once we have the contrast for a subject, we need to average the 3D contrast for different subjects. But we cannot take the average between the different subjects immediately because the different subjects do not have the same head shape. Before taking the average of a subject, we morph all the head shapes to an average head shape, which we call \textit{fsaverage} (fs stands for freesurfer, the software that segments the fmri images, which allows to create the electromagnetic conductivity model of the brain tissue, and the boundary element model, see annex \ref{BEM_model_freeview_cropped}). We can then calculate the average contrast in the source space.
+
