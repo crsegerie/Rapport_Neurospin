@@ -328,11 +328,11 @@ Large entries in the diagonal matrix corresponds to a spatial filter which gives
 
 \paragraph{The unmixing matrix}
 
-Une autre manière de lire les deux equations \ref{eq:lambda_plus} et \ref{eq:lambda_minus} est de se rappeller que $w^{T}\Sigma w$ calcule la variance de la covariance $\Sigma$ suivant la direction $w$. Ainsi, $W^{T} \Sigma^{+} W$ et $W^{T} \Sigma^{-} W$ ne font que calculer des matrices diagonales, dont les elements diagonaux sont les variances des covariances suivant les différentes colonnes de $W$, à savoir les variances suivant les difféntes filtres spatiaux.
+Another way to read the two equations \ref{eq:lambda_plus} and \ref{eq:lambda_minus} is to remember that $w^{T}\Sigma w$ computes the variance of the covariance $\Sigma$ along the $w$ direction. Thus, $W^{T} \Sigma^{+} W$ and $W^{T} \Sigma^{-} W$ just compute diagonal matrices, whose diagonal elements are the variances of the covariances along the different columns of $W$, namely the variances along the different spatial filters.
 
-En trouvant tous les $w$ qui satisfont l'équation \ref{eq:general_eigenvalue}, on construit ainsi la matrice $W$ aussi appellée \textit{unmixing matrix}.
+By finding all the $w$ which satisfy the equation \ref{eq:general_eigenvalue}, we construct the matrix $W$ also called \textit{unmixing matrix}.
 
-Apres avoir trouvé tous les couples $(w_i, \lambda_i)$ qui satisfont l'équation aux valeurs propres généralisées \ref{eq:general_eigenvalue}, on peut ordonner les solutions par valeurs propres décroissantes. Le premier filtre correspond à la direction maximisant le rapport des variances entre les deux nuages de points. En effet, si l'on remplace dans l'équaqtion \ref{eq:lambda_plus}, \ref{eq:lambda_minus}, on obtient:
+After having found all the couples $(w_i, \lambda_i)$ which satisfy the generalized eigenvalue equation \ref{eq:general_eigenvalue}, we can order the solutions by decreasing eigenvalues. The first filter corresponds to the direction maximizing the ratio of the variances between the two scatter plots. Indeed, if we replace in the equation \ref{eq:lambda_plus}, \ref{eq:lambda_minus}, we obtain:
 
 \begin{equation}
     w^{T}_{i} \Sigma^{+} w_{i} = \lambda^{+}_{i}
@@ -343,7 +343,8 @@ Apres avoir trouvé tous les couples $(w_i, \lambda_i)$ qui satisfont l'équatio
     \label{eq:lambda_minus_first_component}
 \end{equation}
 
-Et il suffit alors de remplacer dans \ref{eq:general_eigenvalue} puis de multiplier à gauche par $w^{T}$ pour obtenir
+And it is then enough to replace in \ref{eq:general_eigenvalue} then to multiply on the left by $w^{T}$ to obtain
+
 
 \begin{equation}
     \lambda_1 = \lambda^{+}_1 / \lambda^{-}_1
