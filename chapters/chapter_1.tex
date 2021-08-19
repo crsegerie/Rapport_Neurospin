@@ -231,24 +231,38 @@ Thus, by implementing the BIDS format support, it is possible to switch from one
 
 Using BIDS-compatible datasets enables us to apply the MNE-BIDS-Pipeline to the preprocessing part of the model. The MNE-BIDS-Pipeline is an automatic preprocessing and processing pipeline for MEG and EEG data stored following the BIDS format \cite{gorgolewski2016brain}. To apply the preprocessing steps wanted, the MNE-BIDS-Pipeline only requires to set the corresponding parameter in a configuration file. Once it is done for one dataset it can be used on other datasets just by changing one line in the configuration file.
 
-The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed.
+The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed .
 
-\begin{itemize}
-    \item I Added the possibility to exclude runs from the analysis.
-    \item Files docstrings in the preprocessing steps were updated.
-    \item Warn if using ICA and no EOG- or ECG-related ICs were detected.
-    \item Added the possibility to have different runs for different subjects.
-    \item Massive PR
-    \item The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data.
-    \item Some variables were named incorrectly in some test config files.
-\end{itemize}
+La liste des features à laquelle j'ai contribué est présenté dans le tableau \ref{Tab:PR}
 
-(\url{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}).
-In the case of time in working memory parafdigm, it is very useful to employ this pipeline because:
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{@{}| p{3cm}|p{9cm}| @{}}
+        \hline
+        Type & Title \\
+        \hline
+New feature & Add possibility to exclude runs from the analysis via the new exclude run setting. \\
+Code health & Files docstrings in the preprocessing steps were updated. \\
+Behavior changes & Warn if using ICA and no EOG- or ECG-related ICs were detected. \\
+New feature & Added the possibility to have different runs for different subjects. \\
+Behavior changes & Check that the baseline interval falls into the epoch interval. \\
+Behavior changes & ica\_reject now also applies to ECG and EOG epochs. \\
+Bug fix & The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data. \\
+Bug fix & epochs\_tmin and epochs\_tmax were named incorrectly in some test config files. \\
+Bug fix & We now reject bad epochs by using ica\_reject before producing the "overlay" plots that show the evoked data before and after ICA cleaning in the `proc-ica\_report`. \\
+New feature & It is now possible to analyze the contrast using the Common Spatial Patterns in the time-frequency domain using the new script: 03b-time\_frequency\_csp.py. We also test the significance of the contrast between the two conditions using cluster permutation statistics. \\
+        \hline
+    \end{tabular}
+    
+    \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
+    {Summary of my contributions to the MNE-BIDS-Pipeline \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{on GitHub}}
+    \label{Tab:PR}
+\end{table}
+
+In the case of time in working memory paradigm, it is very useful to employ this pipeline for the following reasons:
 \begin{itemize}
-    \item it will be exactly the same steps for all the datasets.
-    \item It enhances reproducibility, because we now only nned a simple configuration file to reproduce every figure.
-    \item The most classical steps of preprocessing and analysis of MEEG studies are common to all studies, and it is enough to change one or two scripts to obtain a complete study.
-    \item De nombreux meta parammetres sont dur à calibrer, notemment pour le nettoyage et lors du passage dans l'espace des source, et sans expertise, il vaut mieux utiliser les parametres par défaults utilisés dans la pipeline
-    \item La pipeline permet de process les différents participants en paralleles, ce qui permet de considérablement accellerer les temps de calculs.
+    \item It improves reproducibility, as a simple setup file is now all that is needed to reproduce each figure.
+    \item The pre-processing and analysis steps of MEEG studies are common to all studies, and only one or two scripts need to be modified (or created in our case!) to obtain a complete study.
+    \item Many of the meta parameters are hard to calibrate, especially for cleaning and when passing through the source space, and without expertise, it is better to use the default parameters used in the pipeline
+    \item The pipeline allows to process the different participants in parallel, which allows to considerably accelerate the calculation times.
 \end{itemize}
