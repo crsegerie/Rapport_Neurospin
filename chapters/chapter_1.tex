@@ -140,31 +140,19 @@ The advantage of measuring magnetic fields, rather than electric fields as in el
 
 MEGs are extremely rare in France, and MEG equipment in France can be counted on the fingers of one hand. But Neurospin is one of them. Our center has a shielded chamber protecting a MEG recording device from electromagnetic noise.
 
-The MEG at Neurospin is an Elekta Neuromag device. The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer). This organization between gradiometer and magnetometer will be important when we try to speed up the algorithms in the section \ref{Sec:running_time_optimisation}
-
-\subsection{Generalities about MEG data and their preprocessing}
+The MEG at Neurospin is an Elekta Neuromag device. The MEG helmet consists of 102 sensors-triplets (1 triplet = 2 orthogonal planar gradiometers and 1 magnetometer). The MEG data I am manipulating during the internship are composed of 204 gradiometer channels and 102 magnetometer channels (Figure \ref{raw_data}) This organization between gradiometer and magnetometer will be important when we try to speed up the algorithms in the section \ref{Sec:running_time_optimisation}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/preprocessing/raw_data/Example_of_MEG_recording_reduced.png}
     \caption{Example of an MEG recording of a passive session. Here 20 of the 306 channels are represented.}
+    \label{raw_data}
 \end{figure}
 
-With magnetoencaphalography we can capture the magnetic field created by the electrical currents in our brain. The MEG data are collected through two types of sensors : the gradiometers and the magnetometers. The MEG data I am manipulating during the internship are composed of 204 gradiometer channels and 102 magnetometer channels (Figure 1). These MEG data were recorded
-trhough three sessions per subjects : one at rest with closed eyes, one passive with separately visual
-and auditive stimuli and one with sensorimotor tasks (audio-visual stimuli with manual response)
-([Taylor et al., 2017]).
+\subsection{Frequency band}
 
 
-
-
-
-\section{L'écosysteme MNE}
-
-To realize analysis on MEG recordings I used the MNE-Python library \cite{GramfortEtAl2013a}.
-
-Raw MEG data, epochs or evoked response can also be studied in the frequency domain. Nine
-frequency bands are commonly used and are defined in Table \ref{Tab:neural_freq_band}.
+The high temporal accuracy of MEG data allows the study of signals in the frequency domain. The main frequency bands used are defined in Table \ref{Tab:neural_freq_band}.
 
 \begin{table}[ht]
     \caption{Comparison of EEG bands for a typical adult}
@@ -183,25 +171,48 @@ frequency bands are commonly used and are defined in Table \ref{Tab:neural_freq_
 \end{table}
 
 
-mne python est une librairie python open-source permettant d'analyser les données cérébrales venant d'EEG ou de MEG. Le format BIds
+\section{The MNE ecosystem}
 
-\subsection{mne-python}
+The MNE ecosystem is composed (among other things!) of three different libraries, nested by increasing dependency.
 
+\begin{itemize}
+    \item MNE-Python, which is an open-source Python package for exploring, visualizing, and analyzing human neurophysiological data mainly in EEG and MEG format. This library contains everything needed to manipulate EEG signals, from visualization to machine learning.
+    \item MNE-BIDS. The Bids format is a convention for structuring MEEG datasets. MNE-BIDS is a library that facilitates the use of this convention in python.
+    \item mne-bids-pipeline is a library allowing to automate the analysis of meeg data for datasets using the Bids format.
+\end{itemize}
+
+\subsection{MNE-Python}
+
+MNE-Python \cite{GramfortEtAl2013a} is an open-source python library allowing to analyze brain data from EEG or MEG. The figure \ref{workflow_mne} allows to visualize the flow of the data from the collection of the anatomical information (T1) and the raw data collected by MEEG to the estimation of the tridimensional Sources.
+
+For the comprehension of this report, the most important steps are on the left of the figure:
+
+\begin{itemize}
+    \item Raw data: The recording of the data is done in a continuous way during runs of 10 minutes. The recording is not stopped during this period. A run is composed of about 30 samples.
+    \item The data is pre-processed: defective sensors are removed, a low-pass filter is applied to keep only the useful brain signals, and an artifact removal technique such as ica is used. The artifact rejection pipeline is presented in section \ref{preprocessing_of_artifacts}. [nested]
+    \item Epoch Data : After cleaning the run, we split the run into different events. In our study, the events are either composed by intervals of 3 items or intervals of one item.
+    \item Evoked Data : We average the events in order to obtain exploitable results. In our case we mainly calculate two averages, one for each number of items.
+    \item Source Estimate. All the previous steps are carried out in the sensor space, that is to say in the space of the 306 sensors of the MEG, which represent 306 temporal series. The calculation of the source estimate allows to convert these temporal series into a 3D or 4D representation.
+\end{itemize}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/workflow_of_the_mne_software.png}
     \caption{Workflow of the MNE software \cite{GramfortEtAl2013a}}
+    \label{workflow_mne}
 \end{figure}
 
 
 \subsection{the Brain Imaging Data Structure (BIDS) format}
 
-The main objective of my internship was to extend the age prediction method I presented pre-
-viously in order to apply it on new and diverse datasets. To begin with, I implemented the usage
-of a standard electrophysiological data format called Brain Imaging Data Structure or BIDS. As
-a second step, I made modifications in the script of the method to include the extraction of new
-features and to ease the multimodal handling of the stacking regressor.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/BIDS.png}
+    \caption{Un exemple d'utilisation du format BIDS.}
+    \label{BIDS}
+\end{figure}
+
+The main objective of my internship was to extend the age prediction method I presented previously in order to apply it on new and diverse datasets. To begin with, I implemented the usage of a standard electrophysiological data format called Brain Imaging Data Structure or BIDS. As a second step, I made modifications in the script of the method to include the extraction of new features and to ease the multimodal handling of the stacking regressor.
 
 \begin{figure}[ht]
     \centering
@@ -212,12 +223,9 @@ features and to ease the multimodal handling of the stacking regressor.
 
 The Brain Imaging Data Structure was created to provide a simple way to organize neuroimaging data. The aim of this structure is to be a standard format to make the data accessible to every-one and avoid confusion. Thanks to a Python package called MNE-BIDS \cite{appelhoff2019mne}, datasets can easily be converted in the BIDS format. So, if datasets can be transformed in BIDS-compatible datasets, there is only need for the method to support datasets in this format.
 
-Figure \ref{bids_example} illustrates one of the modifications I made to allow support of datatsets in BIDS format. Without any standard format, to access a file you need to write the whole path. One path is specific to one file so if you want to access another file or even another dataset you will need to change the whole path. If the dataset is in the BIDS format, it is possible to use the function BIDSPath of MNE-BIDS to call a file. In this case, if you want to call another file or another BIDS-compatible dataset you only need to change a few arguments of this function like the subject name or the file root and you do not have to think about the whole path. It also allows to use EEG data easily just by changing the parameter "datatype".
+Figure \ref{bids_example} illustrates an exemple of modifications to allow support of datatsets in BIDS format. Without any standard format, to access a file you need to write the whole path. One path is specific to one file so if you want to access another file or even another dataset you will need to change the whole path. If the dataset is in the BIDS format, it is possible to use the function BIDSPath of MNE-BIDS to call a file. In this case, if you want to call another file or another BIDS-compatible dataset you only need to change a few arguments of this function like the subject name or the file root and you do not have to think about the whole path.
 
-Thus, by implementing the support of BIDS format in the age-prediction model it is possible to switch between BIDS-compatible datasets by only modifying a few elements of the scripts even
-if the datasets contain EEG instead of MEG data. We can now perform the analysis made in
-\cite{herbst2021abstracting} on new datasets.
-
+Thus, by implementing the support of BIDS format it is possible to switch between BIDS-compatible datasets in a breeze by only modifying a few elements of the scripts.
 
 \subsection{Automatic preprocessing with the MNE-BIDS-Pipeline}
 

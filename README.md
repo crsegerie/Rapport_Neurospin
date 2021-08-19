@@ -14,3 +14,5 @@ montrer que l'on voit les différents item sur le preprocessing, long,  ou court
 faire un schema de mon stage.
 
 Abstracting time in WM, paradigm > symbolic > ok symbolic now where and how > Sophie collected meg data > Need mathematic tool to analyse > My internship aims to create those tools + implement in pipeline > Cognitive researcher can now use the tools in with the pipeline 
+
+applique des ctrol f MNE-BIDS-Pipeline
