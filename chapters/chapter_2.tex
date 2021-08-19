@@ -1,15 +1,15 @@
 \chapter{TiWM paradigm explored with MEG data}
 
-% Setup
-% - renvoyer au document de l'ensemble des choses que j'auraient aimés savoir dés le début
+ % Setup
+ % - renvoyer au document de l'ensemble des choses que j'auraient aimés savoir dés le début
 
-% Deux études : 
-% - Welcome study
-% - Localizer ?
-% - Sample
+ % Deux études : 
+ % - Welcome study
+ % - Localizer ?
+ % - Sample
 
 
-[résumer la situation et dire ce qu'il se passe dans ce chapitre. Raconter une histoire.]
+ [résumer la situation et dire ce qu'il se passe dans ce chapitre. Raconter une histoire.]
 
 
 Our exploration of the MEG data for the paradigm follows the classical steps of a MEG study:
@@ -17,7 +17,7 @@ Our exploration of the MEG data for the paradigm follows the classical steps of 
 \begin{itemize}
     \item Pre-Processing of the data. Our study started with the verification and cleaning of the data.
     \item Analysis in the sensor space. In this step we visualized the Evoked response of the different conditions. In order to find out when and how often the information is stored at the time of retrieval, we implemented a new procedure, based on Common Spatial Patterns (CSP). After determining the most salient time and frequency, we check the statistical significance of the response using cluster permutation tests.
-    % \item [report visualization. CSP to see the patterns and see the frequencies and moments. Why at the beginning not at the end. We should have separated between the different length of sequence ??? Visualization of filters and paterns. Difficulties with the patterns. Should have taken just the first pattern].
+          % \item [report visualization. CSP to see the patterns and see the frequencies and moments. Why at the beginning not at the end. We should have separated between the different length of sequence ??? Visualization of filters and paterns. Difficulties with the patterns. Should have taken just the first pattern].
     \item Source analysis. After having determined the frequency and the moment of maximum activation of the Working memory, we visualize the 3D response.
 \end{itemize}
 
@@ -29,21 +29,21 @@ The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is 
     \centering
     \begin{tabular}{@{}| p{3cm}|p{9cm}| @{}}
         \hline
-        Type & Title \\
+        Type             & Title                                                                                                                                                                                                                                                                       \\
         \hline
-New feature & Add possibility to exclude runs from the analysis via the new exclude run setting. \\
-Code health & Files docstrings in the preprocessing steps were updated. \\
-Behavior changes & Warn if using ICA and no EOG- or ECG-related ICs were detected. \\
-New feature & Added the possibility to have different runs for different subjects. \\
-Behavior changes & Check that the baseline interval falls into the epoch interval. \\
-Behavior changes & ica\_reject now also applies to ECG and EOG epochs. \\
-Bug fix & The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data. \\
-Bug fix & epochs\_tmin and epochs\_tmax were named incorrectly in some test config files. \\
-Bug fix & We now reject bad epochs by using ica\_reject before producing the "overlay" plots that show the evoked data before and after ICA cleaning in the `proc-ica\_report`. \\
-New feature & It is now possible to analyze the contrast using the Common Spatial Patterns in the time-frequency domain using the new script: 03b-time\_frequency\_csp.py. We also test the significance of the contrast between the two conditions using cluster permutation statistics. \\
+        New feature      & Add possibility to exclude runs from the analysis via the new exclude run setting.                                                                                                                                                                                          \\
+        Code health      & Files docstrings in the preprocessing steps were updated.                                                                                                                                                                                                                   \\
+        Behavior changes & Warn if using ICA and no EOG- or ECG-related ICs were detected.                                                                                                                                                                                                             \\
+        New feature      & Added the possibility to have different runs for different subjects.                                                                                                                                                                                                        \\
+        Behavior changes & Check that the baseline interval falls into the epoch interval.                                                                                                                                                                                                             \\
+        Behavior changes & ica\_reject now also applies to ECG and EOG epochs.                                                                                                                                                                                                                         \\
+        Bug fix          & The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data.                                                                                                                       \\
+        Bug fix          & epochs\_tmin and epochs\_tmax were named incorrectly in some test config files.                                                                                                                                                                                             \\
+        Bug fix          & We now reject bad epochs by using ica\_reject before producing the "overlay" plots that show the evoked data before and after ICA cleaning in the `proc-ica\_report`.                                                                                                       \\
+        New feature      & It is now possible to analyze the contrast using the Common Spatial Patterns in the time-frequency domain using the new script: 03b-time\_frequency\_csp.py. We also test the significance of the contrast between the two conditions using cluster permutation statistics. \\
         \hline
     \end{tabular}
-    
+
     \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
     {Summary of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
     \label{Tab:PR}
@@ -146,35 +146,105 @@ Even if the global pipeline rejection method was already established before my a
 
 
 
-[put an example of a heart or EOG ?].
+[put an example of a heart or EOG ? Example of preprocessing reports.].
+
+\section{Analysis in Sensor Space}
+
+\subsection{Insufficiency of the pipeline to analyze in a relevant way the MEG}
+
+\begin{figure}[htb]
+    \centering % <-- added
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/1_item_short.png}
+        \caption{1\_item\_short}
+        \label{fig:1_item_short}
+    \end{subfigure}\hfil % <-- added
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/1_item_medium.png}
+        \caption{1\_item\_medium}
+        \label{fig:1_item_medium}
+    \end{subfigure}\hfil % <-- added
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/1_item_long.png}
+        \caption{1\_item\_long}
+        \label{fig:1_item_long}
+    \end{subfigure}
+
+    \medskip
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/3_item_short.png}
+        \caption{3\_item\_short}
+        \label{fig:3_item_short}
+    \end{subfigure}\hfil % <-- added
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/3_item_medium.png}
+        \caption{3\_item\_medium}
+        \label{fig:3_item_medium}
+    \end{subfigure}\hfil % <-- added
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{images_report/sensor/evoked/3_item_long.png}
+        \caption{3\_item\_long}
+        \label{fig:3_item_long}
+    \end{subfigure}
+    \caption[Evoked data for our 6 different items.]%
+    {Evoked data for our 6 different items.}
+    \label{fig:Evoked_data}
+\end{figure}
 
 
+\begin{figure}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/contrast/contrast_1_item_short_vs_1_item_long.png}
+        \caption{Decoding between 1\_item\_short and 1\_item\_long.}
+        \label{fig:decoding_1_item}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=1.\linewidth]{images_report/sensor/contrast/contrast_3_item_short_vs_3_item_long.png}
+        \caption{Decoding between 3\_item\_short and 3\_item\_long.}
+        \label{fig:decoding_3_item}
+    \end{subfigure}
+    \caption{Decoding ititialement dans la pipeline.}
+    \label{fig:decoding_initial}
+    % mettre seulement 1item vs 3 item ici
+\end{figure}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=9cm]{images_report/sensor/auditory_cortex.png}
+    \caption[Topographic map of the first peak from 1\_item\_short.]%
+    {Topographic map of the first peak from 1\_item\_short evoked data \ref{fig:1_item_short}. We can see that during these peaks which appear on the figures \ref{fig:Evoked_data}, it is above all the auditory cortex which is involved.}
+    \label{auditory_cortex}
+\end{figure}
 
-\section{Sensor Space}
+Au début de mon stage, la mne-bids-pipeline nous a permis d'obtenir rapidement des figures telles que les figures \ref{fig:Evoked_data} et telle que \ref{fig:decoding_initial}. Ces figures montre que le preprocessing s'est bien passé étant donné que les résultats sont propres. Mais ces figures présentent égalemetn des limite dans le cadre de notre paradigme.
 
-\subsection{Insuffisance de la pipeline: besoin d'une nouvelle step}
+En effet la figure \ref{fig:Evoked_data} présente l'evoked data pour chacin de nos 6 items différents. Les Trois figures en haut sont des séquences temporelle ne contenant qu'un seul interval (1 item), tandis que les trois figures du bas contiennent des séquences de 3 intervals (3 items). 
+Lorsqu'il n'y a qu'un seul item, on observe deux pics très clairs avant $t=0$. Ces deux pic correspondent au pure tone qui donnent le début et la fin de l'interval. Apres $t=0$ commence la phase de restitution, c'est à dire la phase pendant laquelle le participant doit se remémorer la séquence dans la tête aussi precisement que possible. On voit que durant cette phase de restitution, l'evoked data ne présente pas de phénomène particulier, pas de peak à exploiter. 
 
-Une fois la data nettoyée, on peut passer au sensor steps qui permet d'analyser la donnée dans l'espace des sensors.
+De même pour la figure \ref{fig:decoding_initial}, même si l'on voit que le decodeur utilisé dans la pipeline arive à decoder de manière très satisfaisante les signaux avant $t=0$, notemment à l'emplacement des stimulations auditives, les performances du decodeurs sont nulles pendant la phase de restitution.
 
-Classiqueemnt l'espace des sensor se décompose en les étapes suivantes :
+Hors, dans cette étude , nous ne nous interessont pas au cortex auditif, mais à la mémoirede travail. Il nous faut donc nous concentrer non pas pendant la phase d'écoute avant $t \leq 0$, mais plutot sur la phase de restitution apres $t \geq 0$. Cela signifie que les algorithmes actuellement en place dans la pipeleline n'étaient pas suffisant au début de mon stage, et qu'il faut trouver une méthode adéquate pour étudier la mémoire de travail.
+
+\subsection{Strategy: analysing the contrast in time-frequency space}
+
+Classically the sensor space is decomposed in the following steps:
 - creation of the evoked data sets are created by averaging different conditions.
 - Using a sliding estimator with a logistic regression model for every time point.
-- Time frequency decomposition: The epoched data is transformed to time-frequency domain using morlet wavelets.
+- Time frequency decomposition: the epoched data is transformed to time-frequency domain.
 - Computation of the group average results.
 
-Cet ordre des opération est très bien pour la majorité des études. Mais dans le cas de notre étude il est crutial d'obtenir des résultats dans l'espace du time-frequzncy. Il nous faut donc combiner les fonctionalités du script "slifing estimator" permettant d'étudier un contraste entre deux conditions ainsi que du scipt "time frequency decomposition" qui permet d'étudier le signal dans l'espace du temps et de la frequence. C'est pour combler cette lacune que j'ai donc implementé un nouveau script dans la pipeline permettant de de visualiser quelles sont les time-frequency bin qui différenet significativement entre les deux conditions.
+This order of operations is fine for most studies. But in the case of our study it is crucial to obtain results in the time-frequency space. We therefore need to combine the features of the "sliding estimator" script to study a contrast between two conditions and the "time frequency decomposition" script to study the signal in time and frequency space. It is to fill this gap that I implemented a new script in the pipeline allowing to visualize which are the time-frequency bin which present in the most salient way the working memory by studying the contrast between the sequences of an item and the sequences of 3 items. 
 
+Indeed, 3\_items load the working memory much more than a single item. The reason for contrasting 3\_items with 1\_item and not 3\_item with 0\_item (rest) is that the contrast should not be based on a difference in the nature of the tasks, but rather a difference in load.
 
-
-My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions.
-
-There are two main steps in this script:
-
-\begin{itemize}
-    \item 1. Decoding: for each time-frequency bin: For each time-frequency bin, we use a csp classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
-    \item 2. Permutation statistics at the group level: We try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
-\end{itemize}
+My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions. There are two main steps in this script:
+\begin{enumerate}
+    \item Decoding: for each time-frequency bin: For each time-frequency bin, we use a csp classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
+    \item Permutation statistics at the group level: We try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
+\end{enumerate}
 
 
 \subsection{Decoding with Common Spatial Patterns (CSP)}
@@ -325,7 +395,7 @@ On inverse le signe de la différence pour chaque bin de chaque subject. On obti
 
 - Seuelemnt 2 classes
 
-\section{Source Space}
+\section{Source Space Analysis}
 
 - Generalités source space
 Nouveau script: Contrast in source space
