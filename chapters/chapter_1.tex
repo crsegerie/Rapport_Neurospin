@@ -22,19 +22,19 @@ I divided this report into two parts that roughly follow the chronological order
 
 The first chapter gives the scientific context of my internship. This part is an account of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the mne-bids-pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
 
-The second chapter is an exhibition of my work. We reproduced the results of the pilot study but using MEG imaging to analyze the parts of the brain at work during the use of working memory. We used the mne-bids-pipeline to analyze the data. But we had to adapt the mne-bids-pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results and discussion part of a future paper.
+The second chapter presents the more technical aspects of my contribution to the reproduction of the pilot study. This replication using MEG imaging, I detail the method used to analyze the parts of the brain in action during the use of the working memory. We used the mne-bids-pipeline to analyze the data. But we had to adapt the mne-bids-pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results of a future paper. The beginning of a discussion is also outlined.
 
 \chapter{Scientific Context}
 
-Potentiellemnt dire : developper des methodes mathematiques qui vont permettre à la suite aux chercheurs d'utiliser la pipeline pour open sscience... Dire que nous avons pu égalemetn eu des premiers résultats afin de trouver les régions du cervaux, même si ce n'était pas le but premier de mon stge, une early analyse sous le prismes des sciences cognitive à été menée.
+% Potentiellemnt dire : developper des methodes mathematiques qui vont permettre à la suite aux chercheurs d'utiliser la pipeline pour open sscience... Dire que nous avons pu égalemetn eu des premiers résultats afin de trouver les régions du cervaux, même si ce n'était pas le but premier de mon stge, une early analyse sous le prismes des sciences cognitive à été menée.
 
-This internship combines two aims: to extract the neural signatures of time stored in working memory from existing MEG data, and to contribute to ongoing efforts of establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE Python developers at Inria, with the aim to push the use of BIDS for more transparent and open MEEG research practices.
+% This internship combines two aims: to extract the neural signatures of time stored in working memory from existing MEG data, and to contribute to ongoing efforts of establishing an open-science pipeline for MEG analysis in BIDS (standardized brain imaging data format, \cite{gorgolewski2016brain}). The project is part of a collaboration between NeuroSpin, and the MNE Python developers at Inria, with the aim to push the use of BIDS for more transparent and open MEEG research practices.
 
-As shown by a large number of studies, humans can perceive temporal intervals (durations in the range of seconds), judge or compare them with other intervals, and recognize or reproduce them later on. Hence, durations can be stored in memory, like sensory stimuli. It is however not known yet how the brain achieves this, for instance in which format (continuous or symbolic) durations are stored and which brain mechanisms support this ability \cite{polti2018effect}, \cite{teki2014working}. In this internship, I joined the inria/neurospin team in the ongoing analysis of the previously collected MEG data, with the aim to reconstruct source time courses of brain activity from the cortex, and possibly the hippocampus and cerebellum \cite{gauthier2020hippocampal} using volume source models in MNE-Python.
+% As shown by a large number of studies, humans can perceive temporal intervals (durations in the range of seconds), judge or compare them with other intervals, and recognize or reproduce them later on. Hence, durations can be stored in memory, like sensory stimuli. It is however not known yet how the brain achieves this, for instance in which format (continuous or symbolic) durations are stored and which brain mechanisms support this ability \cite{polti2018effect}, \cite{teki2014working}. In this internship, I joined the inria/neurospin team in the ongoing analysis of the previously collected MEG data, with the aim to reconstruct source time courses of brain activity from the cortex, and possibly the hippocampus and cerebellum \cite{gauthier2020hippocampal} using volume source models in MNE-Python.
 
-The pipeline developed during the project will contribute to ongoing open-science
-efforts by the team to establish a robust and publicly available pipeline for source
-reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
+% The pipeline developed during the project will contribute to ongoing open-science
+% efforts by the team to establish a robust and publicly available pipeline for source
+% reconstruction of MEEG data based on the BIDS MEG data format in MNE-Python.
 
 
 % Mes connaissances préalables: MVA cours imagerie fonctionnelel cerebrale + Neuroscience + imagerie médiacle
@@ -132,7 +132,7 @@ Indeed, the temporal sampling rate of MEG is high, with more than 1000 Hz per se
 
 \subsection{MEG in comparison to EEG}
 
-MEG is a cutting-edge functional brain imaging technology. MEG is extremely sensitive and measures very weak magnetic fields produced by the electromagnetic activity of neurons. MEG is the safest of the various brain imaging technologies. No energy is deposited in the individual being monitored. The machine does not even touch the head.  MEG is particularly important in basic and clinical research and especially in studies with young child populations.
+MEG is a cutting-edge functional brain imaging technology. MEG is extremely sensitive and measures very weak magnetic fields produced by the electromagnetic activity of neurons. MEG is the safest of the various brain imaging technologies: no energy is deposited in the individual being monitored. The machine does not even touch the head. MEG is particularly important in basic and clinical research and especially in studies with young child populations.
 
 The advantage of measuring magnetic fields, rather than electric fields as in electroencephalography (EEG), is that they pass through the skull and other tissues between the active neurons and the MEG detectors without distortion, unlike EEG, where the signal is less accurate.
 
@@ -188,10 +188,11 @@ MNE-Python \cite{GramfortEtAl2013a} is an open-source python library allowing to
 For the comprehension of this report, the most important steps are on the left of the figure:
 
 \begin{itemize}
-    \item Raw data: The recording of the data is done in a continuous way during runs of 10 minutes. The recording is not stopped during this period. A run is composed of about 30 samples.
-    \item The data is pre-processed: defective sensors are removed, a low-pass filter is applied to keep only the useful brain signals, and an artifact removal technique such as ica is used. The artifact rejection pipeline is presented in section \ref{preprocessing_of_artifacts}. [nested]
-    \item Epoch Data : After cleaning the run, we split the run into different events. In our study, the events are either composed by intervals of 3 items or intervals of one item.
-    \item Evoked Data : We average the events in order to obtain exploitable results. In our case we mainly calculate two averages, one for each number of items.
+    \item Raw data: The recording of the data is done in a continuous way during runs of 10 minutes. The recording is not stopped during this period. A run is composed of about 30 events.
+    \item The data is pre-processed: defective sensors are removed, a low-pass filter is applied to keep only the useful brain signals, and an artifact removal technique such as ICA is used. The artifact rejection pipeline is presented in section \ref{preprocessing_of_artifacts}. 
+    % [nested]
+    \item Epoch data : After cleaning the run, we split the run into different events. In our study, the events are either composed by intervals of 3 items or intervals of one item.
+    \item Evoked data : We average the events in order to obtain exploitable results. In our case we mainly calculate two averages, one for each number of items.
     \item Source Estimate. All the previous steps are carried out in the sensor space, that is to say in the space of the 306 sensors of the MEG, which represent 306 temporal series. The calculation of the source estimate allows to convert these temporal series into a 3D or 4D representation.
 \end{itemize}
 
@@ -216,8 +217,8 @@ For the comprehension of this report, the most important steps are on the left o
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/bids_example.png}
-    \caption[Example d'utilisation de mne-bids]%
-    {Example d'utilisation de mne-bids dans Python: on transforme le long chemin initial en une fonction modulaire.}
+    \caption[Example of use of mne-bids]%
+    {Example of the use of mne-bids in Python: we transform the initial long path into a modular function.}
     \label{bids_example}
 \end{figure}
 
@@ -231,9 +232,9 @@ Thus, by implementing the BIDS format support, it is possible to switch from one
 
 Using BIDS-compatible datasets enables us to apply the MNE-BIDS-Pipeline to the preprocessing part of the model. The MNE-BIDS-Pipeline is an automatic preprocessing and processing pipeline for MEG and EEG data stored following the BIDS format \cite{gorgolewski2016brain}. To apply the preprocessing steps wanted, the MNE-BIDS-Pipeline only requires to set the corresponding parameter in a configuration file. Once it is done for one dataset it can be used on other datasets just by changing one line in the configuration file.
 
-The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed .
+The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed.
 
-La liste des features à laquelle j'ai contribué est présenté dans le tableau \ref{Tab:PR}
+The list of features to which I contributed is presented in the table \ref{Tab:PR}.
 
 \begin{table}[ht]
     \centering
@@ -255,14 +256,14 @@ New feature & It is now possible to analyze the contrast using the Common Spatia
     \end{tabular}
     
     \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
-    {Summary of my contributions to the MNE-BIDS-Pipeline \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{on GitHub}}
+    {Summary of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
     \label{Tab:PR}
 \end{table}
 
-In the case of time in working memory paradigm, it is very useful to employ this pipeline for the following reasons:
+It is very useful to employ this pipeline for the following reasons:
 \begin{itemize}
     \item It improves reproducibility, as a simple setup file is now all that is needed to reproduce each figure.
-    \item The pre-processing and analysis steps of MEEG studies are common to all studies, and only one or two scripts need to be modified (or created in our case!) to obtain a complete study.
-    \item Many of the meta parameters are hard to calibrate, especially for cleaning and when passing through the source space, and without expertise, it is better to use the default parameters used in the pipeline
+    \item The pre-processing and analysis steps of MEEG studies are common to most studies, and only one or two scripts need to be modified (or created in our case) to obtain a complete study.
+    \item Many of the meta parameters are hard to calibrate, especially for cleaning and when going through the source space. Without expertise, it is better to use the default parameters used in the pipeline.
     \item The pipeline allows to process the different participants in parallel, which allows to considerably accelerate the calculation times.
 \end{itemize}
