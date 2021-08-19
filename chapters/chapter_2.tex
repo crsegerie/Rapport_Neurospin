@@ -1,4 +1,4 @@
-\chapter{Ma contribution: replication mais avec MEG}
+\chapter{TiWM paradigm explored with MEG data}
 
 % Setup
 % - renvoyer au document de l'ensemble des choses que j'auraient aimés savoir dés le début
@@ -8,22 +8,57 @@
 % - Localizer ?
 % - Sample
 
+
+[résumer la situation et dire ce qu'il se passe dans ce chapitre. Raconter une histoire.]
+
+
+Our exploration of the MEG data for the paradigm follows the classical steps of a MEG study:
+
+\begin{itemize}
+    \item Pre-Processing of the data. Our study started with the verification and cleaning of the data.
+    \item Analysis in the sensor space. In this step we visualized the Evoked response of the different conditions. In order to find out when and how often the information is stored at the time of retrieval, we implemented a new procedure, based on Common Spatial Patterns (CSP). After determining the most salient time and frequency, we check the statistical significance of the response using cluster permutation tests.
+    % \item [report visualization. CSP to see the patterns and see the frequencies and moments. Why at the beginning not at the end. We should have separated between the different length of sequence ??? Visualization of filters and paterns. Difficulties with the patterns. Should have taken just the first pattern].
+    \item Source analysis. After having determined the frequency and the moment of maximum activation of the Working memory, we visualize the 3D response.
+\end{itemize}
+
+
+The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. The list of features to which I contributed is presented in the table \ref{Tab:PR}.
+% Ce chapitre détaille les modification liées à un probleme de recherche, 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{@{}| p{3cm}|p{9cm}| @{}}
+        \hline
+        Type & Title \\
+        \hline
+New feature & Add possibility to exclude runs from the analysis via the new exclude run setting. \\
+Code health & Files docstrings in the preprocessing steps were updated. \\
+Behavior changes & Warn if using ICA and no EOG- or ECG-related ICs were detected. \\
+New feature & Added the possibility to have different runs for different subjects. \\
+Behavior changes & Check that the baseline interval falls into the epoch interval. \\
+Behavior changes & ica\_reject now also applies to ECG and EOG epochs. \\
+Bug fix & The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data. \\
+Bug fix & epochs\_tmin and epochs\_tmax were named incorrectly in some test config files. \\
+Bug fix & We now reject bad epochs by using ica\_reject before producing the "overlay" plots that show the evoked data before and after ICA cleaning in the `proc-ica\_report`. \\
+New feature & It is now possible to analyze the contrast using the Common Spatial Patterns in the time-frequency domain using the new script: 03b-time\_frequency\_csp.py. We also test the significance of the contrast between the two conditions using cluster permutation statistics. \\
+        \hline
+    \end{tabular}
+    
+    \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
+    {Summary of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
+    \label{Tab:PR}
+\end{table}
+
 \section{Preprocessing}
 
-La différence entre les travaux que j'avais déjà fait lors du cours du MVA Imagerie fonctionnelle cerebrale pour le challenge Kaggle BCI et ce cours repose surtout sur le fait que la donnée à travaité a deja été nettoyé lors du challenge Kaggle. Même si le nettoyage de la donnée n'était pas le coeur de mon stage, il a fallut y poaaser un temps consequent.
+Before this internship, I had already worked on EEG data for the "Dream, sleep apnea" challenge or for the Kaggle "Inria - BCI Challenge". But on these two occasions, the data I had manipulated had already been cleaned by the competition organizers. This internship allowed me to realize the complexity of preprocessing data in brain imaging.
 
-Les différentes phases du preprocessing de la données se fait comme suit:
-
-
-The common preprocessing steps of raw MEG data are the following:
+The different phases of the data preprocessing are as follows:
 \begin{itemize}
     \item Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to be identified and marked as bad so they are not taking into account during the analysis;
     \item Applying Maxwell filter : help to remove part of the sensors noise;
     \item Frequency filter: to remove non desired frequency bands;
-    \item Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG
-          signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds
-          before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and
-          overlapping frames of the MEG signal.
+    \item Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and overlapping frames of the MEG signal.
     \item Computing evoked data: they are created by averaging MEG signal over several epochs. It is useful to study stimulus-evoked brain activity.
 \end{itemize}
 
@@ -33,21 +68,20 @@ La figure \ref{cheat_sheet} resume l'étape du preprocessing dans la pipeline
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/preprocessing/cheatsheet preprocessing.png}
-    \caption[sheat sheet of the preprocessing of the pipeline]%
-    {sheat sheet of the preprocessing of the pipeline}
-
+    \caption[Summary of the preprocessing of the pipeline.]%
+    {Summary of the preprocessing of the pipeline.}
     \label{cheat_sheet}
 \end{figure}
 
 
-\subsection{Bids Pipeline}
-- Premiereres PR necessité pourquoi ?
-premiere contri open source
-avec une utilité
+% \subsection{Bids Pipeline}
+% - Premiereres PR necessité pourquoi ?
+% premiere contri open source
+% avec une utilité
 
-Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me familiarise avec la librairie mne-bids-pipeline et tous ses différents script, et également afin de me familieariser avec le developpement open-source ainsi que les exigences qui en découlent.
+% Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me familiarise avec la librairie mne-bids-pipeline et tous ses différents script, et également afin de me familieariser avec le developpement open-source ainsi que les exigences qui en découlent.
 
-Mes premieeres contributions consistere donc à rajouter des sanity check dans la pipeline, actualiser les docstring et les en tetes de codes, travailler sur l'hormonie du code en harminisant les noms des variables entre les différents scripts.
+% Mes premieeres contributions consistere donc à rajouter des sanity check dans la pipeline, actualiser les docstring et les en tetes de codes, travailler sur l'hormonie du code en harminisant les noms des variables entre les différents scripts.
 
 \subsection{Preprocessing of artifacts}
 \label{preprocessing_of_artifacts}

@@ -232,38 +232,10 @@ Thus, by implementing the BIDS format support, it is possible to switch from one
 
 Using BIDS-compatible datasets enables us to apply the MNE-BIDS-Pipeline to the preprocessing part of the model. The MNE-BIDS-Pipeline is an automatic preprocessing and processing pipeline for MEG and EEG data stored following the BIDS format \cite{gorgolewski2016brain}. To apply the preprocessing steps wanted, the MNE-BIDS-Pipeline only requires to set the corresponding parameter in a configuration file. Once it is done for one dataset it can be used on other datasets just by changing one line in the configuration file.
 
-The MNE-BIDS-Pipeline (\url{https://github.com/mne-tools/mne-bids-pipeline}) is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed.
-
-The list of features to which I contributed is presented in the table \ref{Tab:PR}.
-
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{@{}| p{3cm}|p{9cm}| @{}}
-        \hline
-        Type & Title \\
-        \hline
-New feature & Add possibility to exclude runs from the analysis via the new exclude run setting. \\
-Code health & Files docstrings in the preprocessing steps were updated. \\
-Behavior changes & Warn if using ICA and no EOG- or ECG-related ICs were detected. \\
-New feature & Added the possibility to have different runs for different subjects. \\
-Behavior changes & Check that the baseline interval falls into the epoch interval. \\
-Behavior changes & ica\_reject now also applies to ECG and EOG epochs. \\
-Bug fix & The sanity check comparing the rank of the experimental data and the rank of the empty-room after Maxwell-filtering did not use the maxfiltered data. \\
-Bug fix & epochs\_tmin and epochs\_tmax were named incorrectly in some test config files. \\
-Bug fix & We now reject bad epochs by using ica\_reject before producing the "overlay" plots that show the evoked data before and after ICA cleaning in the `proc-ica\_report`. \\
-New feature & It is now possible to analyze the contrast using the Common Spatial Patterns in the time-frequency domain using the new script: 03b-time\_frequency\_csp.py. We also test the significance of the contrast between the two conditions using cluster permutation statistics. \\
-        \hline
-    \end{tabular}
-    
-    \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
-    {Summary of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
-    \label{Tab:PR}
-\end{table}
-
 It is very useful to employ this pipeline for the following reasons:
 \begin{itemize}
-    \item It improves reproducibility, as a simple setup file is now all that is needed to reproduce each figure.
-    \item The pre-processing and analysis steps of MEEG studies are common to most studies, and only one or two scripts need to be modified (or created in our case) to obtain a complete study.
+    \item It improves reproducibility, as only a config file contains all the information required to reproduce the results.
+    \item The pre-processing and analysis steps of MEEG studies are common to most studies.
     \item Many of the meta parameters are hard to calibrate, especially for cleaning and when going through the source space. Without expertise, it is better to use the default parameters used in the pipeline.
     \item The pipeline allows to process the different participants in parallel, which allows to considerably accelerate the calculation times.
 \end{itemize}
