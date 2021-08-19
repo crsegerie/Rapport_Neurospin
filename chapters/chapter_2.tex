@@ -370,13 +370,14 @@ cluster tests on the time-frequency roc-auc map in order to check the significan
     \label{permutation_statistics_pipeline}
 \end{figure}
 
-La figure \ref{permutation_statistics_pipeline} donne un apercut de la pipeline de création des clusters.
+The figure \ref{permutation_statistics_pipeline} gives an overview of the cluster creation pipeline.
 
-On commence par rassembler toutes les time-frequency roc-auc map de tous les sujets. Pour chaque time-frequency bin, on calcule une t-value, de manière indépendante pour chaque bin (le détail des calculs se trouve en annexe). On obtient anisi la carte des t-values. Puis afin de trouver l'emplacement des clusters, il suffit d'utiliser un seiuil, par exemple correspodant à un niveau de chance de $0.05$ ou de $0.01$. Ce seil n'a pas une grande importance mathématique, mais en pratique, il permet de controler la taille des clusters. Une fois le seuil appliqué, on obtient potentiellement un ou des clusters. Afin de pouvoir attribuer une p-valeurs à chaque cluster, il faut alors utiliser le mécanismes des permutations.
+We start by collecting all the time-frequency roc-auc maps of all the subjects. For each time-frequency bin, we compute a t-value, independently for each bin (the details of the computations can be found in the Appendix). We then obtain the t-value map. Then, in order to find the location of the clusters, we use a threshold, for example corresponding to a chance level of $0.05$ or $0.01$. This threshold is not very important mathematically, but in practice, it allows to control the size of the clusters. Once the threshold is applied, we potentially get one or more clusters. In order to assign a p-value to each cluster, we have to use the permutation mechanism.
 
-Le mécanisme des permutation consiste à caluler une métrique sur nos cluster: qui peut être classiquement soit la taille du cluster, soit le maximum de t-vleur au sein du cluster, soit la somme des t-valeur au sein du cluster. Puis on compare cette métrique à la distribution de cette métrique simulée pour les permutation:
-On inverse le signe de la différence pour chaque bin de chaque subject. On obtient la distribution de la metrique dans l'hypothese nulle ou The distribution of spatial cluster sizes is independent of the sign of the data.
+The permutation mechanism consists in computing a metric on our clusters: which can be either the size of the cluster, or the maximum of t-values within the cluster, or the sum of t-values within the cluster. [us?] Then we compare this metric to the distribution of this metric simulated for the permutation:
+We reverse the sign of the difference for each bin in each subject. We obtain the distribution of the metric in the null hypothesis where the distribution of spatial cluster sizes is independent of the sign of the data.
 
+[detailler]
 
 \subsection{Implementation}
 
