@@ -53,7 +53,12 @@ New feature & It is now possible to analyze the contrast using the Common Spatia
 
 Before this internship, I had already worked on EEG data for the "Dream, sleep apnea" challenge or for the Kaggle "Inria - BCI Challenge". But on these two occasions, the data I had manipulated had already been cleaned by the competition organizers. This internship allowed me to realize the complexity of preprocessing data in brain imaging.
 
+\subsection{presentations of the different stages}
+
 The different phases of the data preprocessing are as follows:
+
+[duplicates]
+
 \begin{itemize}
     \item Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to be identified and marked as bad so they are not taking into account during the analysis;
     \item Applying Maxwell filter : help to remove part of the sensors noise;
@@ -63,7 +68,7 @@ The different phases of the data preprocessing are as follows:
 \end{itemize}
 
 
-La figure \ref{cheat_sheet} resume l'étape du preprocessing dans la pipeline
+The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. At the beginning of my internship, I created this table in order to familiarize myself with the different scripts of the pipeline. Then, I added the main problems that occur in practice associated with each step as well as the main ideas of sanity checks to be performed after the execution of the pipeline.
 
 \begin{figure}[ht]
     \centering
@@ -92,35 +97,33 @@ La figure \ref{cheat_sheet} resume l'étape du preprocessing dans la pipeline
     \includegraphics[width=7cm]{images_report/sensor/noise_order_of_magnitude.png}
     \caption[Scale of magnitude of different magnetic fields]%
     {Scale of magnitude of different magnetic fields}
-
     \label{noise_order_of_magnitude}
 \end{figure}
 
 
-Apres m'être familiarisé avec la l'esprit du code, j'ai pu travailler sur la logique. Notemment un point important qui est l'ordre dans lequel la donnée est rejetée. En effet, une difficulté majeure des données brutes venant des signaux corticaux est le fait que ces signaux sont minuscules. Bien que l'enregistrement des donnée se fassent dans une chambre blindée, le moindre bruit peut ecraser totalement le signal. La figure \ref{noise_order_of_magnitude} présente l'échelle des ordres de grandeurs, qui montre bien que les bruits exterieux sont d'un ordre de granduer incommensurablement plus grands que les signaux d'interets neurologiques.
+An important point is the order in which the data is rejected. Indeed, a major difficulty with raw data coming from cortical signals is the fact that these signals are extremely small. Although the data is recorded in a shielded chamber, the slightest noise can totally overwhelm the signal. Figure \ref{noise_order_of_magnitude} shows the scale of orders of magnitude, which makes it clear that the external noise is of an order of magnitude immeasurably larger than the neurological signals of interest.
 
-Même apres avoir enlevé tous les bruits venant de l'environnement exterieur certains bruits que l'on appelle artifacts biologiques, tels que les battement de coeurs ou bien les clignement d'oeils doivent être soit enlevés en rejetant l'interval temporel contaminé, soit en sépanrant les sources par l'usage de l'analyse en composante indépandantes (ICA), qui permet de séparer les ssources de signaux emises par le coeurs ou les clignements d'oeuil du reste du signal.
+Even after removing all the noise from the external environment, some of the so-called biological artifacts, such as heartbeats and blinks, must be removed by either discarding the contaminated time interval or separating the sources by using independent component analysis (ICA), which separates the heartbeat and blink sources from the rest of the signal.
 
-La figure \ref{rejection_pipeline} permet visualiser la rejection pipeline de la mne-bids-pipeline.
+The figure \ref{rejection_pipeline} allows to visualize the pipeline rejection of the mne-bids-pipeline.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/preprocessing/rejection_pipeline.png}
-    \caption[Simplification of the rejection pipeline of the bids pipeline.]%
-    {Simplification of the rejection pipeline of the bids pipeline.}
+    \caption[Simplification of the BIDS-Pipeline rejection process.]%
+    {Simplification of the BIDS-Pipeline rejection process.}
     \label{rejection_pipeline}
 \end{figure}
 
-Voici le détail de la procédure:
+Here are the details of the procedure:
 \begin{itemize}
-    \item Au début le signal contient des artefacts à la fois biologiques (clignement d'oeil, battement de coeur), et non biologiques. Ces derniers sont d'un ordre de grandeur d'amplitude plus grands que les artefacts biologiques.
-    \item On peut commencer par filtrer les différentes epoches en utilisant rejetant les epochs dnt l'amplitude peak-to-peak dépasse l'amplitude specifiée par le parametre "ica\_reject". Ce parametre permet de filtrer des signaux qui en ordre de grandeur sont 50 fois plus grand qu'une amplitude nominale et permet donc de faire un premier tris.
-    \item Le signal resultant ne contient plus d'artefact non biologique redhibitoire, ce qui peremt d'améliorer la convergence de l'ICA, qui permet de séparer les sources pour les artefacts oculaires et cardiques.
-    \item La séparation de source par ICA ne fonctionne pas parfaitement, et il faut donc prevoir une étape supplémentaire afin de rejeter les derniers artefacts à l'aide du parametere "reject", qui permet de filter les signaux avec une amplitude peak-to-peak 10 fois supérieure à l'amplitude nominale. On obtient alors le signal preprocessed.
+    \item At the beginning the signal contains both biological artifacts (eye blink, heartbeat), and non biological artifacts. The latter are of an order of magnitude larger than the biological artifacts.
+    \item We can start by filtering the different epochs using rejecting the epochs whose peak-to-peak amplitude exceeds the amplitude specified by the "ica\_reject" parameter. This parameter allows to filter signals that are 50 times larger than the nominal amplitude and therefore allows to make a first screening.
+    \item The resulting signal does not contain any more redhibitory non-biological artifact, which allows to improve the convergence of the ICA, allowing to separate the sources for the ocular and cardiac artifacts.
+    \item The ICA source separation does not work perfectly, so an additional step is required to reject the last artifacts using the "reject" parameter, which allows to filter the signals with a peak-to-peak amplitude 10 times higher than the nominal amplitude. The result is the preprocessed signal.
 \end{itemize}
 
-Même si la méthode globale de rejection de la pipeline était déjà établie avznt mon arivée, les donées experiementales ont revelées des problemes dans l'ordre des opération de filtrage, et nous avons aisi amélioré de beaucoup le preprocessing automatique de la donnée notemment pour de la donnée difficile qui contient simulanément des artifacts biologique et des artifacts non-biologiques telles que des inversion de champs de phase. La figure \ref{fig:PR_ica} montre un example d'amélioration des ICA.
-
+Even if the global pipeline rejection method was already established before my arrival, the experimental data revealed problems in the order of the filtering operations, and we thus improved a lot the automatic data preprocessing especially for difficult data that contains simulaneously biological and non-biological artifacts such as phase inversion fields. Figure \ref{fig:PR_ica} shows an example of ICA enhancement before and after our Pull request that changes the order of operations, in particular by filtering out non-biological signals before the ICA.
 
 
 \begin{figure}
@@ -143,7 +146,7 @@ Même si la méthode globale de rejection de la pipeline était déjà établie 
 
 
 
-[mettre un exemple d'un battmenet de coeur ou des oeuils]
+[put an example of a heart or EOG ?].
 
 
 
