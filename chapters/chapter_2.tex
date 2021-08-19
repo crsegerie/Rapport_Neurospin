@@ -219,22 +219,24 @@ Even if the global pipeline rejection method was already established before my a
     \label{auditory_cortex}
 \end{figure}
 
-Au début de mon stage, la mne-bids-pipeline nous a permis d'obtenir rapidement des figures telles que les figures \ref{fig:Evoked_data} et telle que \ref{fig:decoding_initial}. Ces figures montre que le preprocessing s'est bien passé étant donné que les résultats sont propres. Mais ces figures présentent égalemetn des limite dans le cadre de notre paradigme.
+At the beginning of my internship, the mne-bids-pipeline allowed us to quickly obtain figures such as \ref{fig:Evoked_data} and such as \ref{fig:decoding_initial}. These figures show that the preprocessing went well since the results are clean. But these two figures also present some limits in the framework of our paradigm.
 
-En effet la figure \ref{fig:Evoked_data} présente l'evoked data pour chacin de nos 6 items différents. Les Trois figures en haut sont des séquences temporelle ne contenant qu'un seul interval (1 item), tandis que les trois figures du bas contiennent des séquences de 3 intervals (3 items). 
-Lorsqu'il n'y a qu'un seul item, on observe deux pics très clairs avant $t=0$. Ces deux pic correspondent au pure tone qui donnent le début et la fin de l'interval. Apres $t=0$ commence la phase de restitution, c'est à dire la phase pendant laquelle le participant doit se remémorer la séquence dans la tête aussi precisement que possible. On voit que durant cette phase de restitution, l'evoked data ne présente pas de phénomène particulier, pas de peak à exploiter. 
+- The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items). 
+When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak to exploit. 
 
-De même pour la figure \ref{fig:decoding_initial}, même si l'on voit que le decodeur utilisé dans la pipeline arive à decoder de manière très satisfaisante les signaux avant $t=0$, notemment à l'emplacement des stimulations auditives, les performances du decodeurs sont nulles pendant la phase de restitution.
+- In the same way for the figure \ref{fig:decoding_initial}, even if we can see that the decoder used in the pipeline manages to decode the signals before $t=0$ in a very satisfactory way, especially at the location of the auditory stimuli, the performance of the decoders is null during the restitution phase.
 
-Hors, dans cette étude , nous ne nous interessont pas au cortex auditif, mais à la mémoirede travail. Il nous faut donc nous concentrer non pas pendant la phase d'écoute avant $t \leq 0$, mais plutot sur la phase de restitution apres $t \geq 0$. Cela signifie que les algorithmes actuellement en place dans la pipeleline n'étaient pas suffisant au début de mon stage, et qu'il faut trouver une méthode adéquate pour étudier la mémoire de travail.
+In this study, we are not interested in the auditory cortex, but in the working memory. We must therefore concentrate not on the listening phase before $t \leq 0$, but rather on the restitution phase after $t \geq 0$. This means that the algorithms currently in place in the pipeline were not sufficient at the beginning of my internship, and that we must find an adequate method to study the working memory.
 
 \subsection{Strategy: analysing the contrast in time-frequency space}
 
 Classically the sensor space is decomposed in the following steps:
-- creation of the evoked data sets are created by averaging different conditions.
-- Using a sliding estimator with a logistic regression model for every time point.
-- Time frequency decomposition: the epoched data is transformed to time-frequency domain.
-- Computation of the group average results.
+\begin{itemize}
+    \item creation of the evoked data sets are created by averaging different conditions.
+    \item Using a sliding estimator with a logistic regression model for every time point.
+    \item Time frequency decomposition: the epoched data is transformed to time-frequency domain.
+    \item Computation of the group average results.
+\end{itemize}
 
 This order of operations is fine for most studies. But in the case of our study it is crucial to obtain results in the time-frequency space. We therefore need to combine the features of the "sliding estimator" script to study a contrast between two conditions and the "time frequency decomposition" script to study the signal in time and frequency space. It is to fill this gap that I implemented a new script in the pipeline allowing to visualize which are the time-frequency bin which present in the most salient way the working memory by studying the contrast between the sequences of an item and the sequences of 3 items. 
 
@@ -246,7 +248,6 @@ My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} 
     \item Permutation statistics at the group level: We try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
 \end{enumerate}
 
-
 \subsection{Decoding with Common Spatial Patterns (CSP)}
 
 The time-frequency decomposition is estimated by iterating over raw data that has been band-passed at different frequencies. This is used to compute a
@@ -255,8 +256,6 @@ filtered signals. A linear discriminant classifier is then applied to these
 signals.
 
 CSP is a technique to analyze multichannel data based on recordings from two classes qui a été introduite dans le contexte des EEG par \cite{koles1990spatial}.
-
-
 
 \subsubsection{Intuitive explanation}
 
@@ -283,34 +282,30 @@ I took the figure from \cite{blankertz2007optimizing} which also contains a conp
 \end{figure}
 [je peux faire un shema mieux]
 
-Si on a deux signaux gaussiens, tous les deux centrés en zeros, mais avec des directions principales différentes, on peut tenter de transformer les deux nuages de points de telle manière à ce que les diretions principales des deux nuages de points dans l'espaces des CSP soient orthogonales de façon à maximiser le rapport des variances suivants les directions principales.
+If we have two Gaussian signals, both centered in zeros, but with different principal directions, we can try to transform the two scatterplots in such a way that the principal directions of the two scatterplots in the CSP space are orthogonal so as to maximize the ratio of the variances following the principal directions.
 
-On part de deux nuage de points, rouge et bleu, très corrélées, que l'on transforme en des nuages de points rouges' et bleu' découplées.
+For example on the figure \ref{fig:csp_intuitive}, we start from two point clouds, red and blue, very correlated, which we transform into decoupled red' and blue' point clouds.
 
-Par example sur la figure \ref{fig:csp_intuitive}, le vecteur principal du nuage rouge' est aligné sur l'axe des absices, tandis que le vecteur principal du nuage blueu' est aligné sur l'axe des ordonnées.
+The main vector of the red' cloud is aligned on the absice axis, while the main vector of the blue' cloud is aligned on the ordinate axis.
 
-Par ce procédé, on maximise alors le rapport de variance suivant l'axe des abscices entre le nuage rouge' et le nuage bleu'.
+By this process, we maximize the variance ratio along the abscissa axis between the red' and the blue' clouds.
 
-
-Les nuages de pooints correpondent à un event, et chaque couleur correpond à une condition différente. Si l'on essaye de deviner la couleur/condition d'un nuage de point, il suffit par la suite de transformer le nuage de point avec la même transformation que prescedement, et de prendre la projection sur l'axe des abcices du nuage de point transformé dans l'espace des CSP. On peut alors calculer la variance suivant l'axe des abcises et suivant l'axe des abscice, puis entrainer un classifieru linéaire à disciminer parmis les différentes variances ce qui permet de classifier entre les deux conditions.
-
-
-Par la suite, on peut entrainer un classifieur linéaire qui prend en entré
+In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e. apply the unmixing matrix as we will see later), and take the projection on the x axis of the new point cloud. We can then calculate the variance along the x axis and then train a linear classifier to discriminate among the different variances. By combining the csp algorithm, and for example a logistic regression, we can classify between the two conditions.
 
 \subsubsection{Technical Description}
 
-L'explication prescedente ne fait qu'expliquer intuitivement l'algorithme pour la première composante du CSP. Mais la manière la plus efficace d'implementer les CSP est de formaliser le problème sous la forme d'un problme de vecteur propres generalisé.
+The above explanation only explains intuitively the algorithm for the first component of the CSP. But it does not explain how to obtain the other orientations. An efficient formulation to obtain all components of the CSP while being computationally reasonable is to formalize the problem as a generalized eigenvector problem.
 [mettre les deux autres formulations]
 
 \paragraph{General Eigenvalue Problem Formulation}
 
-Let $X \in \mathbb{R}^{C * T}$ be a matrix containing  $C$ channels and $T$ time points. The data at a single time point is denoted by $x(t) \in  \mathbb{R}^{C}$. Common spatial pattern (CSP) finds a decomposition that projects the signal in the original sensor space to CSP space using the following transformation:
+Let $X \in \mathbb{R}^{C * T}$ be a matrix containing $C$ channels and $T$ time points. The data at a single time point is denoted by $x(t) \in  \mathbb{R}^{C}$. Common spatial pattern (CSP) finds a decomposition that projects the signal in the original sensor space to CSP space using the following transformation:
 
 \begin{equation}
     x_{\text{CSP}}(t) = W^{T}x(t)
 \end{equation}
 
-where each column of $W \in \mathbb{R}^{C*C}$ is a spatial filter and each row of $x_{\text{CSP}}(t)$ is a CSP component. Let $\Sigma^{+} \in \mathbb{R}^{C * C}$ and $\Sigma^{-} \in \mathbb{R}^{C * C}$ be the respective covariance matrices of the two differnet  conditions. CSP analysis is given by the simultaneous diagonalization of the two covariance matrices.
+where each column of $W \in \mathbb{R}^{C*C}$ is a spatial filter and each row of $x_{\text{CSP}}(t)$ is a CSP component. Let $\Sigma^{+} \in \mathbb{R}^{C * C}$ and $\Sigma^{-} \in \mathbb{R}^{C * C}$ be the respective covariance matrices of the two different conditions. CSP analysis is given by the simultaneous diagonalization of the two covariance matrices.
 
 
 \begin{equation}
