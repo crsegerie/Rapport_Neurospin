@@ -158,17 +158,36 @@ Choosing the number of Bin is somewhat arbitrary. One just has to respect some c
 
 \chapter{Source annex}
 
-Subtilité :
-Neuroscience : quest ce qui constitue du bruit ? Quel choix de la matrice de covariance
-Subtilités mathématiques :  commutativité Log + moyenne
-BEM model freeview
 
+\section{Dynamic statistical parametric mapping (dSPM)}
 
+\paragraph{Method}
+
+Dynamic statistical parametric mapping allows to obtain a three-dimensional image of the sources by taking into account the activation of the baseline. For each three-dimensional point, a normalization by the noise variance is performed. The resulting image gives the activation map, made of positive intensities only.
+
+\paragraph{Choice of covariance matrix}
+
+In order to calculate the source estimate by dSPM, we need to choose a covariance matrix, in order to know the covariance of the signal not carrying the information. The choice of the covariance matrix is therefore not a mathematical problem, but a choice that follows from our experimental paradigm. We must answer the question: what constitutes noise? Here are the two main choices of covariance matrix:
+\begin{itemize}
+    \item Use the empty room covariance. This is the covariance matrix associated with sensor noise when there is no one in the room. This is the default choice in the MNE-BIDS-Pipeline.
+    \item Use the pre-stimulus covariance. Indeed, before the cue, the participant does not yet know the duration of the cue. This is the method we recommend.
+\end{itemize}
+
+% Subtilités mathématiques :  commutativité Log + moyenne
+
+\section{Boundary Element Model (BEM)}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/source/BEM_model_freeview_cropped.png}
-    \caption[Segemntentation results visualized on Freeview.]%
-    {BEM model used. Only one because MEG transparent.}
+    \caption[BEM model used for one of our anonymized subjects.]%
+    {BEM model used for one of our anonymized subjects.}
     \label{BEM_model_freeview_cropped}
 \end{figure}
+
+
+Figure \ref{BEM_model_freeview_cropped} presents the boundary element model used to model one of our subject's heads. Our participants were recorded by MRI before their MEG recording in order to obtain T1 anatomical images. These T1 images are used to create a 3D model of the brain and to model each area of the brain with different electromagnetic conductivity. This model is then used to calculate the inverse operator to find the location in the brain of the electromagnetic sources from the MEG recording.
+
+We can see on the figure \ref{BEM_model_freeview_cropped} that the face of the person has been cut in order to anonymize the data.  We can see on the figure the result of the segmentation between the white matter and the grey matter. The results of the algorithm although satisfactory, are not perfect. But this is of little importance because MEG is a relatively robust technique with respect to the imperfections of eletromagnetic conductivity modeling. For example, for EEG we use generaly 3 layers (inner skull, outer skull, and skin) while for MEG 1 layer (inner skull) is enough: The MEG is said to be "transparent".
+
+
