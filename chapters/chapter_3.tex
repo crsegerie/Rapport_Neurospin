@@ -1,12 +1,16 @@
 \chapter{Results}
 
-Dans ce chapitre, nous présontons les résultats de la méthode exposée préscédemment. 
+In this chapter, we present the results of the method explained previously.
 
-3.1. Sensor Space : Nous commonçons par étudier la donnée dans le time-frequency space afin de trouver les temps et les frequences les plus importantes:
-- La classification par CSP nous a permis d'obtenir une time-frequency map qui permet d'associer à chaque temps et frequences une roc auc. Cette roc auc indique à quel point l'information stoquée dans la mémoire de travail est décodable par des informations géométrique.
-- Les statisitques par permutation permettent de vérifier la significativité du time-frequency cluster obtenu.
-
-3.2. Source space. Apres avoir vérifié la significativité statistique de notre cluster, nous utilisons ce cluster pour projeter l'information dans un espace tridimensionel, (aka l'espace des sources), afin d'y visualiser le contraste entre la mémoire de travail chargée avec 3-items contre 1-item. C'esr principalement cette étape qui permet d'extraire les informations neuroanatomiques.
+\begin{enumerate}
+    \item Sensor Space: We start by studying the data in the time-frequency space to find the most important times and frequencies ranges:
+    \begin{enumerate}
+        \item The classification by CSP allowed us to obtain a time-frequency map which allows to associate to each time and frequency a roc auc. This roc auc indicates to what extent the information stored in the working memory is decodable by geometric information.
+        \item The permutation statistics allow to extract the most informative time-frequency cluster, as well as to check the significance of the results.
+    \end{enumerate}
+    
+    \item Source space: After having verified the statistical significance of our cluster, we use this cluster to project the information in a three-dimensional space, (aka the source space), in order to visualize the contrast between the working memory loaded with 3-items versus 1-item. It is mainly this step that allows us to extract the neuroanatomical information.
+\end{enumerate}
 
 \section{Sensor space results}
 
@@ -34,7 +38,14 @@ Dans ce chapitre, nous présontons les résultats de la méthode exposée présc
 
 % [expliquer avant que le CSP est appliqué pour différentes bins et que l'on compare par la suite le roc auc score pour différentess bins, ce qui permet de mettre les régions d'interet en ]
 
-In the figure \ref{fig:csp_results}, we observe the roc-auc score of the classifier composed of (CSP, logistic regression) for different frequencies distributed linearly between 5 Hz and 20 Hz as well as for times between $t=0$ and $t=5$ seconds (the figures \ref{fig:Evoked_data}, \ref{fig:decoding_initial} presented the times $t \leq 0$ only for pedagogical purposes). We can see that the CSP algorithm succeeded in highlighting the alpha frequency band between 8 and 12 Hz, and the results are consistent between the frequency map \ref{fig:csp_frequency} and the time-frequency map \ref{fig:csp_time_frequency}.
+In the figure \ref{fig:csp_results}, we observe the roc-auc score of the classifier composed of (CSP, logistic regression) for different :
+
+\begin{itemize}
+    \item frequencies ranges distributed linearly between 5 Hz and 20 Hz as well.
+    \item times ranges in the reproduction interval, i.e. between $t=0$ and $t=5$ seconds (the figures \ref{fig:Evoked_data}, \ref{fig:decoding_initial} presented the times $t \leq 0$ only for pedagogical purposes).
+\end{itemize}
+
+We can see that the CSP algorithm succeeded in highlighting the alpha frequency band between 8 and 12 Hz, and the results are consistent between the frequency map \ref{fig:csp_frequency} and the time-frequency map \ref{fig:csp_time_frequency}, with both a maximal score around 10 Hz.
 
 \subsection{Cluster Permutation Test results}
 
@@ -46,14 +57,16 @@ In the figure \ref{fig:csp_results}, we observe the roc-auc score of the classif
     \label{permutation_statistics_results}
 \end{figure}
 
+The figure \ref{permutation_statistics_results} presents the results of the permutation test cluster. We obtain two clusters of p-values, in low alpha frequency (6 Hz to 14 Hz) and beta (17 Hz-18.5 Hz), of p-values $10^{-3.6}$ and $0.12$ respectively. These clusters indicate that it is necessary to filter on the alpha band at the beginning of the reproduction phase in order to maximize the signal to noise ratio when studying the contrast in source space.
+
 \section{Sensor results discussion}
 
 \paragraph{Quantitative analysis}
-An AUC of 0.6 is not high in absolute terms but not bad in neuroscience on intervals of only 0.5 seconds. If we combine all the bins we would get a much better AUC. Furthermore, statictics by permutation of clusters show that the results are very significant at the group level.
+An AUC of 0.6 is not high in absolute terms but not bad in EEG analysis on intervals of only 0.5 seconds. If we combine all the bins by bagging, we would get a much better AUC. Furthermore, statictics by clusters permutation show that the results are very significant at the group level.
 
 \paragraph{Qualitative analysis}
 
-Our main cluster is centered on the alpha band. We will discuss the alpha band in more detail in section \ref{section:alpha_discussion}. But at first sight, the literature shows frequently significant results in the alpha band for working memory loadings \cite{obleser2012adverse} which is encouraging.
+Our main cluster is centered on the alpha band. We will discuss the alpha band in more detail in section \ref{section:alpha_discussion}. But we already know from the litterature that the alpha band is key to the working memory loadings \cite{obleser2012adverse}, which is encouraging.
 
 A surprising phenomenon is that the algorithm can decode much more easily at the beginning of the restitution phase than at the end of the restitution phase. Given that the CSP encodes a geometric information, this means that:
 \begin{itemize}
@@ -63,7 +76,7 @@ A surprising phenomenon is that the algorithm can decode much more easily at the
 
 
 
-\section{Results of the contrast in source space²}
+\section{Source space results}
 
 
 \begin{figure}[ht]
@@ -86,7 +99,7 @@ The figure \ref{results_source_space_alpha} presents the results of the contrast
 
 \paragraph{Occipital cortex (visual)}
 \label{section:alpha_discussion}
-The red region activated here is the visual area. The fact that we see the visual area here is not surprising. Indeed, we have to remember that we are visualizing here the alpha band which is a classically inhibitory band in the tlitterature. Thus, the classical interpretation of an activation in the alpha band corresponds to an inhibition of the function of the associated region. This is confirmed by the fact that when we look at the activation in the beta \ref{results_source_space_beta} of our contrast, the activation of the visual cortex (the red region) disappears almost completely.
+The red region activated here is the visual area. The fact that we see the visual area here is not surprising: we have to remember that we are visualizing here the alpha band which is a classically inhibitory band in the tlitterature. Thus, the classical interpretation of an activation in the alpha band corresponds to an inhibition of the function of the associated region. This is confirmed by the fact that when we look at the activation in the beta \ref{results_source_space_beta} of our contrast, the activation of the visual cortex (the red region) disappears almost completely.
 
 The literature presents other results similar to this one. For example \cite{obleser2012adverse} shows that "Enhanced alpha oscillations (8-13 Hz) during retention of items in working memory are often interpreted to reflect increased demands on storage and inhibition".
 
@@ -107,11 +120,11 @@ A possible interpretation is that time is represented by the imagination of the 
 \paragraph{Auditory area}
 
 The regions close to the ears are deactivated while the cue is an auditory one. There are several interpretations:
-- To see an activation in the auditory zones one must place oneself at $t \leq 0$, as on the figures \ref{auditory_cortex}: After $t \geq 0$, the auditory cortex is no longer involved
+- To see an activation in the auditory zones one must place oneself at $t \leq 0$, as on the figures \ref{auditory_cortex}. But here during the replication phase after $t \geq 0$, the auditory cortex is no longer involved.
 - The signal is abstracted from the auditory region to transform it into a purely rhythmic information, thus no longer restricted to the auditory areas.
 - The auditory region is activated, but we do not see it in this group figure. As a matter of fact, the auditory regions are visible in the CSP components of the subjects as in the figure \ref{fig:csp_component_beta_band}. But there is a lot of inter-subject variability: After looking at the CSP components for the different subjects, it appears that only subjects with a marked beta peak show activation in auditory cortex, and this peak is not restricted to $0 \leq t \leq 1$ but are spread across all subjects between $0s - 5s$. In order to see an auditory signal at the group level, one would have to align and average the first extracted components for each peak from each subject. But averaging the components presents mathematical difficulties [ref. Appendix], and could be a research topic in itself.
 
-[Image beta et pour CSP aussi.]
+% [Image beta et pour CSP aussi.]
 
 % \section{Discussion}
 
