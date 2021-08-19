@@ -212,8 +212,6 @@ For the comprehension of this report, the most important steps are on the left o
     \label{BIDS}
 \end{figure}
 
-The main objective of my internship was to extend the age prediction method I presented previously in order to apply it on new and diverse datasets. To begin with, I implemented the usage of a standard electrophysiological data format called Brain Imaging Data Structure or BIDS. As a second step, I made modifications in the script of the method to include the extraction of new features and to ease the multimodal handling of the stacking regressor.
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/bids_example.png}
@@ -221,11 +219,11 @@ The main objective of my internship was to extend the age prediction method I pr
     \label{bids_example}
 \end{figure}
 
-The Brain Imaging Data Structure was created to provide a simple way to organize neuroimaging data. The aim of this structure is to be a standard format to make the data accessible to every-one and avoid confusion. Thanks to a Python package called MNE-BIDS \cite{appelhoff2019mne}, datasets can easily be converted in the BIDS format. So, if datasets can be transformed in BIDS-compatible datasets, there is only need for the method to support datasets in this format.
+The brain imaging data structure was created to provide a simple way to organize neuroimaging data. The goal of this structure is to be a standard format to make the data accessible to everyone and avoid confusion. Using a Python package called MNE-BIDS \cite{appelhoff2019mne}, datasets can easily be converted to BIDS format. Datasets in BIDS format are supported by many tools. BIDS is the result of a collaborative effort to standardize brain data for easy analysis and sharing.
 
-Figure \ref{bids_example} illustrates an exemple of modifications to allow support of datatsets in BIDS format. Without any standard format, to access a file you need to write the whole path. One path is specific to one file so if you want to access another file or even another dataset you will need to change the whole path. If the dataset is in the BIDS format, it is possible to use the function BIDSPath of MNE-BIDS to call a file. In this case, if you want to call another file or another BIDS-compatible dataset you only need to change a few arguments of this function like the subject name or the file root and you do not have to think about the whole path.
+Figure \ref{BIDS} gives an example of a file architeture in BIDS format. Figure \ref{bids_example} shows an example of the use in python of the MNE-BIDS library. In the absence of a standard format, to access a file, the full path must be written. A path is specific to a file, so if you want to access another file or even another dataset, you will have to change the full path. If the dataset is in BIDS format, it is possible to use the BIDSPath function of MNE-BIDS to call a file. In this case, if you want to call another file or another BIDS-compatible dataset, you only need to change a few arguments of this function, such as the subject name or the root of the file, without having to worry about the full path, which makes it much more modular.
 
-Thus, by implementing the support of BIDS format it is possible to switch between BIDS-compatible datasets in a breeze by only modifying a few elements of the scripts.
+Thus, by implementing the BIDS format support, it is possible to switch from one BIDS-compatible dataset to another in the blink of an eye by changing only a few elements of the scripts.
 
 \subsection{Automatic preprocessing with the MNE-BIDS-Pipeline}
 
