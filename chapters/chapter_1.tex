@@ -10,9 +10,9 @@
 % \section{Théorie}
 % voir le cours de gramfort. Voir le cours du mva.
 % \section{L'écosysteme MNE - Bids}
-% \subsection{mne-python}
-% \subsection{mne-bids-pipeline}
-% \subsection{mne-bids}
+% \subsection{MNE-Python}
+% \subsection{MNE-BIDS-Pipeline}
+% \subsection{MNE-BIDS}
 % \end{comment}
 
 
@@ -20,9 +20,9 @@
 
 I divided this report into two parts that roughly follow the chronological order of my internship.
 
-The first chapter gives the scientific context of my internship. This part is an account of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the mne-bids-pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
+The first chapter gives the scientific context of my internship. This part is an account of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the MNE-BIDS-Pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
 
-The second chapter presents the more technical aspects of my contribution to the reproduction of the pilot study. This replication using MEG imaging, I detail the method used to analyze the parts of the brain in action during the use of the working memory. We used the mne-bids-pipeline to analyze the data. But we had to adapt the mne-bids-pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results of a future paper. The beginning of a discussion is also outlined.
+The second chapter presents the more technical aspects of my contribution to the reproduction of the pilot study. This replication using MEG imaging, I detail the method used to analyze the parts of the brain in action during the use of the working memory. We used the MNE-BIDS-Pipeline to analyze the data. But we had to adapt the MNE-BIDS-Pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results of a future paper. The beginning of a discussion is also outlined.
 
 \chapter{Scientific Context}
 
@@ -48,7 +48,7 @@ Cette partie présente the \textit{time in Working Memory} paradigm, qui a été
 
 Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new n-item delayed duration reproduction task to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element. 
 
-[present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].
+% [present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].
 
 The participants listened to sequences composed of empty time intervals that they had to reproduce as precisely as possible. For each sequence, one can manipulate the number of time intervals and the overall duration of the sequence to separate their effects on recall accuracy. The figure \ref{paradigm} presents the paradigm. Temporal reproduction accuracy decreased systematically with an increasing number of items. These results suggested that the number of time intervals, not their duration, determines recall precision. According to the brain clock models proposed by cognitive science, these results are interpreted as evidence of the existence of a symbolic representation of duration in working memory.
 
@@ -180,7 +180,7 @@ The MNE ecosystem is composed (among other things!) of three different libraries
 \begin{itemize}
     \item MNE-Python, which is an open-source Python package for exploring, visualizing, and analyzing human neurophysiological data mainly in EEG and MEG format. This library contains everything needed to manipulate EEG signals, from visualization to machine learning.
     \item MNE-BIDS. The Bids format is a convention for structuring MEEG datasets. MNE-BIDS is a library that facilitates the use of this convention in python.
-    \item mne-bids-pipeline is a library allowing to automate the analysis of meeg data for datasets using the Bids format.
+    \item MNE-BIDS-Pipeline is a library allowing to automate the analysis of meeg data for datasets using the Bids format.
 \end{itemize}
 
 \subsection{MNE-Python}
@@ -219,8 +219,8 @@ For the comprehension of this report, the most important steps are on the left o
 \begin{figure}[ht]
     \centering
     \includegraphics[width=10cm]{images_report/bids_example.png}
-    \caption[Example of use of mne-bids]%
-    {Example of the use of mne-bids in Python: we transform the initial long path into a modular function.}
+    \caption[Example of use of MNE-BIDS]%
+    {Example of the use of MNE-BIDS in Python: we transform the initial long path into a modular function.}
     \label{bids_example}
 \end{figure}
 

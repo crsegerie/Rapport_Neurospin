@@ -45,7 +45,7 @@ The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is 
     \end{tabular}
 
     \caption[List of my contributions to the MNE-BIDS-Pipeline.]%
-    {List of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
+    {List of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/MNE-BIDS-Pipeline/main/docs/source/changes.md}{GitHub}.}
     \label{Tab:PR}
 \end{table}
 
@@ -84,7 +84,7 @@ The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. 
 % premiere contri open source
 % avec une utilité
 
-% Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me familiarise avec la librairie mne-bids-pipeline et tous ses différents script, et également afin de me familieariser avec le developpement open-source ainsi que les exigences qui en découlent.
+% Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me familiarise avec la librairie MNE-BIDS-Pipeline et tous ses différents script, et également afin de me familieariser avec le developpement open-source ainsi que les exigences qui en découlent.
 
 % Mes premieeres contributions consistere donc à rajouter des sanity check dans la pipeline, actualiser les docstring et les en tetes de codes, travailler sur l'hormonie du code en harminisant les noms des variables entre les différents scripts.
 
@@ -105,7 +105,7 @@ An important point is the order in which the data is rejected. Indeed, a major d
 
 Even after removing all the noise from the external environment, some of the so-called biological artifacts, such as heartbeats and blinks, must be removed by either discarding the contaminated time interval or separating the sources by using independent component analysis (ICA), which separates the heartbeat and blink sources from the rest of the signal.
 
-The figure \ref{rejection_pipeline} allows to visualize the pipeline rejection of the mne-bids-pipeline.
+The figure \ref{rejection_pipeline} allows to visualize the pipeline rejection of the MNE-BIDS-Pipeline.
 
 \begin{figure}[ht]
     \centering
@@ -219,7 +219,7 @@ Even if the global pipeline rejection method was already established before my a
     \label{auditory_cortex}
 \end{figure}
 
-At the beginning of my internship, the mne-bids-pipeline allowed us to quickly obtain figures such as \ref{fig:Evoked_data} and such as \ref{fig:decoding_initial}. These figures show that the preprocessing went well since the results are clean. But these two figures also present some limits in the framework of our paradigm.
+At the beginning of my internship, the MNE-BIDS-Pipeline allowed us to quickly obtain figures such as \ref{fig:Evoked_data} and such as \ref{fig:decoding_initial}. These figures show that the preprocessing went well since the results are clean. But these two figures also present some limits in the framework of our paradigm.
 
 - The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items). 
 When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak to exploit. 
