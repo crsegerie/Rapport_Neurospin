@@ -245,15 +245,19 @@ Indeed, 3\_items load the working memory much more than a single item. The reaso
 My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions. There are two main steps in this script:
 \begin{enumerate}
     \item Decoding: for each time-frequency bin: For each time-frequency bin, we use a csp classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
-    \item Permutation statistics at the group level: We try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
+    \item Permutation statistics at the group level: we try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
 \end{enumerate}
+
+\subsection{Why using CSP?}
+
+CSP is based on a geometrical analysis of the brain response, which is called pattern-based. CSP is used to identify the most salient time-frequencies. CSP classifies between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
+
+We use CSP to identify the most salient times and frequencies for our task: we just have to look at which frequency interval and which time interval our classifier performs best. A good discrimination between the two conditions (1 itme vs. 3 items) is characterized by a roc-auc close to 1 while a roc-auc close to 0.5 means that the neural code that encodes the working memory is not detectable by high level geometric features.
 
 \subsection{Decoding with Common Spatial Patterns (CSP)}
 
-The time-frequency decomposition is estimated by iterating over raw data that has been band-passed at different frequencies. This is used to compute a
-covariance matrix over each epoch or a rolling time-window and extract the CSP
-filtered signals. A linear discriminant classifier is then applied to these
-signals.
+
+The time-frequency decomposition is estimated by iterating over raw data that has been band-passed at different frequencies. This is used to compute a covariance matrix over each epoch or a rolling time-window and extract the CSP filtered signals. A linear discriminant classifier is then applied to these signals.
 
 CSP is a technique to analyze multichannel data based on recordings from two classes qui a été introduite dans le contexte des EEG par \cite{koles1990spatial}.
 
@@ -411,9 +415,6 @@ We reverse the sign of the difference for each bin in each subject. We obtain th
 
 Dans la figure \ref{fig:csp_results}, on observe le score roc-auc de du classifieur composé de (CSP, regression logistique) pour différentes frequences réparties linéairement entre 5 Hz et 20 Hz ainsi que pour moments entre $t=0$ et $t=5$ secondes (les figures \ref{fig:Evoked_data}, \ref{fig:decoding_initial} ne présentaient les temps $t \leq 0$ qu'à des fins pédagogiques). On voit que l'algorithme CSP a réussi à mettre en évidence la bande de fréquence alpha entre 8 et 12 Hz, et les résultats sont cohérents entre la carte fréquencielle \ref{fig:csp_frequency} et la time-frequency map \ref{fig:csp_time_frequency}.
 
-
-
-
 \subsection{Cluster Permutation Test results}
 
 \begin{figure}[ht]
@@ -424,29 +425,20 @@ Dans la figure \ref{fig:csp_results}, on observe le score roc-auc de du classifi
     \label{permutation_statistics_results}
 \end{figure}
 
-- Discussion
-- resultats significatifs alors que dans la tête
+\subsection{Sensor results discussion}
 
-- Une AUC de 0.6 n'est pas elevé dans l'absolu mais pas mal en neuroscience sur des intervalles de 0.5. Si l'on combine toutes les bins on obteindrait une bien meuilleure AUC.
+\paragraph{Quantitative analysis}
+An AUC of 0.6 is not high in absolute terms but not bad in neuroscience on intervals of only 0.5 seconds. If we combine all the bins we would get a much better AUC. Furthermore, statictics by permutation of clusters show that the results are very significant at the group level.
 
+\paragraph{Qualitative analysis}
 
-[annexe le choix du nombre de bins]
+Our main cluster is centered on the alpha band. We will discuss the alpha band in more detail in section \ref{section:alpha_discussion}. But at first sight, the literature shows frequently significant results in the alpha band for working memory loadings \cite{obleser2012adverse} which is encouraging.
 
-
-\subsection{Limites + Discu}
-
-Limite algo:
-- Seuelemnt 2 classes
-
-Limite results:
-- Choix du nombre de Bin est quelque peu aritraire. Il fut juste respecter quelques conditions telle que Nyquist, plus le fait d'avoir assez de point pour estimer la matrice de covariance. Mais ici, ce n'est pas gracve d'ête arbitraire sur le nombre de point étant donné que le résultat du snesor space n'est utilisé que pour cibler le travail en allant dans le source step.
-- Le fait de pouvoir choisir la taille des cluster simplement en ajustant le threshold de la t-value est perturant à première vue. Mais en réalité c'est plutot un bon signe. Nous n'avons testé que deux t-velur différentes (0.01 er 0.05) et le fait d'obtenir deux cluster de taille différentes signiifie simplement que notre cluster associé à 0.05 présente une différence significative tout comme notre cluster à 0.01 qui est assui significative. L'un n'exclue par l'autre.
-- Si l'on peut choisir la taille du cluster, la carte des tvaluer est beaucoup moins arbitraire, et il est clair sur cette carte que les valeurs les plus significatives sont associées aux premières secondes entre 0 et 3secondes. Cela est quelque peu perturbant étant donnée que nous somme ici dans une tache de reproduction temporelle, et on pourrait simaginer que l'information des intervalles ne disparaitrait pas aussi rapidement. Nous avons deux explications pour expliquer cet evaporement de l'information:
-- Certains event ne durent qu'une seconde. Il est possible qu'après restitution, le stockage soit relaché pour etre plus efficace pour la tache suivante.
-- D'autre part 
-
-
-Dans l'absolue , c'est tres bien alpha, on a des papiers qui justifient ça. \cite{obleser2012adverse}
+A surprising phenomenon is that the algorithm can decode much more easily at the beginning of the restitution phase than at the end of the restitution phase. Given that the csp encodes a geometric information, this means that:
+\begin{itemize}
+    \item either the information in the working memory is transformed in the course of restitution into information disseminated in the brain in a non-geometrical way.
+    \item Or, given the very large number of repetitions of the experiment, the subject gets tired after a while and forgets the sequence "instantly" after having repreated it in order to save mental energy.
+\end{itemize}
 
 \section{Source Space Analysis}
 
@@ -490,6 +482,7 @@ La figure \ref{results_source_space_alpha} presente les resultats du contraste e
 La région bleue en haut du cerveu en haut à gauche est le cortex parietal.
 
 \paragraph{cortex occipital (visuel)}
+\label{section:alpha_discussion}
 La région rouge activée ici est liée à l'aire visuelle. Le fait de voir l'aire visuelle ici n'est pas surprenant. En effet il faut se souvenir du fait que nous visualisons ici la bande alpha qui est une bande classiquement inhibitrice dans la tlitterature. Ainsi, l'interpretation classique d'une activation dans la frequence alpha correspond à une inhibition de la fonction de la region associée. Cela est confirmé par le fait que lorsque l'on regarde les activtion en beta \ref{results_source_space_beta} de notre contraste, l'activation du cortex visuel (la région rouge) disparait presque totalement.
 
 La liiteratude presente d'autre résultt semblbles à celui là : "Enhanced alpha oscillations (8–13 Hz) during retention of items in working memory are often interpreted to reflect increased demands on storage and inhibition", \cite{obleser2012adverse}.
@@ -508,6 +501,4 @@ Les régions proches des oreilles sont désactiviées. Il esiste plusieurs inter
 
 [iamge beta et pour csp aussi.]
 
-- Discussion
-
-Limites:
+Discussion, Limites.

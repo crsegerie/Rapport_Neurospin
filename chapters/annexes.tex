@@ -163,6 +163,11 @@ On choisit un risque $\alpha$, généralement $0.05$ ou $0.01$ et l'on calcule l
 % Implémentation se fait à l'aide la fonction scipy.stats.ttest_1samp.
 
 
+\subsection{Limites algorithmiques}
+[annex]
+
+- Choix du nombre de Bin est quelque peu aritraire. Il fut juste respecter quelques conditions telle que Nyquist, plus le fait d'avoir assez de point pour estimer la matrice de covariance. Mais ici, ce n'est pas gracve d'ête arbitraire sur le nombre de point étant donné que le résultat du snesor space n'est utilisé que pour cibler le travail en allant dans le source step.
+- Le fait de pouvoir choisir la taille des cluster simplement en ajustant le threshold de la t-value est perturant à première vue. Mais en réalité c'est plutot un bon signe. Nous n'avons testé que deux t-velur différentes (0.01 er 0.05) et le fait d'obtenir deux cluster de taille différentes signiifie simplement que notre cluster associé à 0.05 présente une différence significative tout comme notre cluster à 0.01 qui est assui significative. L'un n'exclue par l'autre.
 
 
 \chapter{Source}
