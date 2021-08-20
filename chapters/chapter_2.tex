@@ -44,8 +44,8 @@ The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is 
         \hline
     \end{tabular}
 
-    \caption[Summary of my contributions to the MNE-BIDS-Pipeline.]%
-    {Summary of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
+    \caption[List of my contributions to the MNE-BIDS-Pipeline.]%
+    {List of my contributions to the MNE-BIDS-Pipeline on \href{https://raw.githubusercontent.com/mne-tools/mne-bids-pipeline/main/docs/source/changes.md}{GitHub}.}
     \label{Tab:PR}
 \end{table}
 
@@ -442,19 +442,20 @@ A surprising phenomenon is that the algorithm can decode much more easily at the
 
 \section{Source Space Analysis}
 
-Apres être allé dans le sensor space. La direction naturelle est d'aller dans le source space.
+After going into the sensor space. The natural direction is to go to the source space.
 
-Generalités source space.
+\subsection{Generalités source space.}
+
 [Mettre les différents scripts.]
 
-\subsection{Nouveau script: Contrast in source space}
-Motivation : Insuffiscance de pipeline classique, et impossibilité de faire une moyenne à partir des CSP components.
+\subsection{New script: Contrast in source space}
+Motivation: Insufficient classical pipeline, and inability to average from individual CSPs component.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/source/flow_source_contrasts.png}
-    \caption[Shema de la procedure pour visualiser le contraste en source space.]%
-    {Shema de l'algorithme proposé pour étudier en source space.}
+    \caption[Shema of the procedure to visualize the contrast in source space.]%
+    {Shema of the procedure to visualize the contrast in source space.}
     \label{flow_source_contrasts}
 \end{figure}
 
@@ -464,40 +465,37 @@ Motivation : Insuffiscance de pipeline classique, et impossibilité de faire une
 \begin{figure}[ht]
     \centering
     \includegraphics[width=15cm]{images_report/source/source_results_3d_cropped.png}
-    \caption[Resulats du contraste dans l'espace des sources (alpha)]%
-    {Resulats du contraste dans l'espace des sources pour 0s-1s, et 8Hz-14Hz. (alpha)}
+    \caption[Contrast results in the source space (alpha)]%
+    {Contrast results in source space for 0s-1s, and 8Hz-14Hz (alpha).}
     \label{results_source_space_alpha}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=13cm]{images_report/source/source_results_beta_1s.png}
-    \caption[Resulats du contraste dans l'espace des sources.]%
-    {Resulats du contraste dans l'espace des sources pour 0s-1s, et 15Hz-20Hz. (beta)}
+    \caption[Results of the contrast in the source space.]%
+    {Contrast results in source space for 0s-1s, and 15Hz-20Hz (beta).}
     \label{results_source_space_beta}
 \end{figure}
  
-La figure \ref{results_source_space_alpha} presente les resultats du contraste en source space pour la most significant time-frequency bin at the group level, ie 0s-1s, et 8Hz-14Hz. Dans cette figures les regions rouges sont les régions activées pour 3 items, tandis que les regions bleus sont davantage activées pour 1 item. Nous rappellos que 3 item est sencé charger la mémoire de travail davantage que 1 item.
+The figure \ref{results_source_space_alpha} presents the results of the contrast in source space for the most significant time-frequency bin at the group level, i.e. 0s-1s, and 8Hz-14Hz. In this figure the red regions are the regions activated for 3 items, while the blue regions are more activated for 1 item. We recall that 3 items are supposed to load the working memory more than 1 item.
 
-La région bleue en haut du cerveu en haut à gauche est le cortex parietal.
-
-\paragraph{cortex occipital (visuel)}
+\paragraph{Occipital cortex (visual)}
 \label{section:alpha_discussion}
-La région rouge activée ici est liée à l'aire visuelle. Le fait de voir l'aire visuelle ici n'est pas surprenant. En effet il faut se souvenir du fait que nous visualisons ici la bande alpha qui est une bande classiquement inhibitrice dans la tlitterature. Ainsi, l'interpretation classique d'une activation dans la frequence alpha correspond à une inhibition de la fonction de la region associée. Cela est confirmé par le fait que lorsque l'on regarde les activtion en beta \ref{results_source_space_beta} de notre contraste, l'activation du cortex visuel (la région rouge) disparait presque totalement.
+The red region activated here is the visual area. The fact that we see the visual area here is not surprising. Indeed, we have to remember that we are visualizing here the alpha band which is a classically inhibitory band in the tlitterature. Thus, the classical interpretation of an activation in the alpha band corresponds to an inhibition of the function of the associated region. This is confirmed by the fact that when we look at the activation in the beta \ref{results_source_space_beta} of our contrast, the activation of the visual cortex (the red region) disappears almost completely.
 
-La liiteratude presente d'autre résultt semblbles à celui là : "Enhanced alpha oscillations (8–13 Hz) during retention of items in working memory are often interpreted to reflect increased demands on storage and inhibition", \cite{obleser2012adverse}.
+The literature presents other results similar to this one. For example \cite{obleser2012adverse} shows that "Enhanced alpha oscillations (8-13 Hz) during retention of items in working memory are often interpreted to reflect increased demands on storage and inhibition".
 
 \paragraph{Motor area}
 
-La region bleue activée en haut du cerveau \ref{results_source_space_alpha} est le motor area. Avant l'experience par MEG, les sujets ont été entrainées à reproduire la tache avec un bouton, ce qui explique l'activation ici. Cela est appuyé par le fait que l'activation est plus forte dans le l'hemisphère gauche ce qui est cohérent avec le fait que les suject soient droitiers.
+The blue region activated at the top of the brain is the motor area. Before the MEG experiment, subjects were trained to reproduce the task by pressing a button, which explains the activation here. This is supported by the fact that the activation is stronger in the left hemisphere which is consistent with the fact that the subjects are right-handed.
 
 \paragraph{Auditory area}
 
-Les régions proches des oreilles sont désactiviées. Il esiste plusieurs interpretations:
-- pour voir une activation dans les zones auditives il faut se placer à $t \leq 0$, comme sur les figures \ref{auditory_cortex}.
-- le signal est abstait de l'audition pour le transformer en onformation purement rythmique.
-- la région auditive est activiée, mais on ne le voit pas sur la figure collective. Mais les régions auditives sont visibles dans les csp component des suject ayant une activation en beta comme en figure \ref{fig:csp_component_beta_band}. Mais apres l'observations des csp composnantes pour les différents subjects, il semble que seul les sujet ayant un pic marqué en beta posèdent une activation dans le cortex auditif, et ce pic n'esrt pas restreint à $0 \leq t \leq 1$ mais peut être localisé temporellement plus tard. Ainsi, puisque les pic de l'activation du beta ne sont pas tous rassemblé en $0 \leq t \leq 1$ mais sont disseminés pour tous les sujets entre $0 \leq t \leq 5$, afin d'extraire l'activation, il faudrait moyenner les première composantes extraite pour chaque peak de chaque sujet. Mais moyenner les composantes présentes des difficultés mathématique [ref annexe], et pourrait constituer un sujet de recherche en soi.
-
+The regions close to the ears are deactivated while the cue is an auditory one. There are several interpretations:
+- To see an activation in the auditory zones one must place oneself at $t \leq 0$, as on the figures \ref{auditory_cortex}: After $t \geq 0$, the auditory cortex is no longer involved
+- The signal is abstracted from the auditory region to transform it into a purely rhythmic information, thus no longer restricted to the auditory areas.
+- The auditory region is activated, but we do not see it in this group figure. As a matter of fact, the auditory regions are visible in the csp components of the subjects as in the figure \ref{fig:csp_component_beta_band}. But there is a lot of inter-subject variability: After looking at the csp components for the different subjects, it appears that only subjects with a marked beta peak show activation in auditory cortex, and this peak is not restricted to $0 \leq t \leq 1$ but are spread across all subjects between $0s - 5s$. In order to see an auditory signal at the group level, one would have to align and average the first extracted components for each peak from each subject. But averaging the components presents mathematical difficulties [ref. Appendix], and could be a research topic in itself.
 
 [iamge beta et pour csp aussi.]
 
