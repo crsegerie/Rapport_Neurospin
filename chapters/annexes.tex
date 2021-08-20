@@ -96,7 +96,32 @@ So I think no need to worry because no need for group cross-validation.
 
 \paragraph{Possiblité de mettre un des frequences et des crop non uniformes}
 
+\paragraph{choix du seuil de la t-valeur}
+En choisissant un seuil de t-valeur de $0.01$ on obtient la figure \ref{permutation_statistics_results}, avec un cluster ayant une p-valuer de $10^{-3.6}$. J'ai choisit ce seuil restrictif de 0.01 pour mon image finale afin que limiter l'aire de mon cluster et afin de se limiter aux zones les plus significatives. Mais il est possible en choisissant un seuil de de $0.05$ d'obtenir une figure avec un cluster allant parcourant toute la bande alpha de 0 à 5 secondes.
 
+\paragraph{topographic map}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.55\textwidth}
+       \includegraphics[width=1\linewidth]{images_report/sensor/csp_individual/sub_155_alpha.png}
+       \caption{Example of CSP components (alpha band)}
+       \label{fig:csp_component_alpha_band}
+    \end{subfigure}
+    
+    \begin{subfigure}[b]{0.55\textwidth}
+       \includegraphics[width=1\linewidth]{images_report/sensor/csp_individual/sub_215_beta.png}
+       \caption{Example of CSP components (beta band)}
+       \label{fig:csp_component_beta_band}
+    \end{subfigure}
+
+    \caption[Example of csp components from the alpha and beta band.]%
+    {Example of csp components from the alpha and beta band.}
+    \label{example_csp_component}
+\end{figure}
+
+Expliquer comment lire les topographic map., regle de la main droite.
+Les patterns des csp sont du machine learning ultra interpretable.
 
 
 \section{Permutations statistics algorithm}
@@ -141,3 +166,18 @@ On choisit un risque $\alpha$, généralement $0.05$ ou $0.01$ et l'on calcule l
 
 
 \chapter{Source}
+
+- Annexes : Subtilité :
+Neuroscience : quest ce qui constitue du bruit ? Quel choix de la matrice de covariance
+Subtilités mathématiques :  commutativité Log + moyenne
+BEM model freeview
+
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=15cm]{images_report/source/BEM_model_freeview_cropped.png}
+    \caption[Segemntentation results visualized on Freeview.]%
+    {BEM model used. Only one because MEG transparent.}
+    \label{BEM_model_freeview_cropped}
+\end{figure}
