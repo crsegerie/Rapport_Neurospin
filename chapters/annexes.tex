@@ -14,7 +14,7 @@ My first implementation of the CSP algorithm took a whole day to compute for a s
 
 A great deal of research and engineering effort was then put into reducing the calculation time.
 
-\paragraph{Technique d'ingenieurie logicielles classique}
+\paragraph{Classic software engineering techniques}
 
 Classic software engineering techniques have been key to massively reduce computation times: factoring of all steps, use of tools such as the line-profiler - which allows to visualize the execution time of each line -  use of multi-processing. On the other hand, even if mathematically some operations are commutative, in practice, the choice of the order of the operations allows to save computation time: for example even if the operations (time crop, frequency filter) are commutative, it is better to start by cropping the data and then filtering, because the filtering operation is very expensive.
 
@@ -38,7 +38,7 @@ Once all the software improvements have been made, we can also make improvements
 
 \paragraph{Sampling}
 
-The last way to accelerate the computation time is to use sampling, i. e. to reduce the sampling frequency. This is also called decimation. For example $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods.
+The last way to accelerate the computation time is to use sampling, i. e. to reduce the sampling frequency. This is also called decimation. For example $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods, presented in section \ref{CSP_regularization}.
 
 [Nyquist]
 
@@ -49,49 +49,20 @@ The choice of the order of commutativity, the reduction of the dimensionality an
 % - Interaface avec le reste de la pipeline, openscience, reproductibilité
 % - Anexes : Implémentation et choix d'architecte logiciel
 
-\subsection{Iterations levels}
+% \subsection{Iterations levels}
 
-Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit ici plus un probleme d'ingénieurie que de la recherche pure.
-
-- contrasts
-- We iterate through subjects and sessions
-- If there are multiple runs, runs are concatenated into one session.
+% Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit ici plus un probleme d'ingénieurie que de la recherche pure.
+% - contrasts
+% - We iterate through subjects and sessions
+% - If there are multiple runs, runs are concatenated into one session.
 
 \subsection{CSP Regularization}
+\label{CSP_regularization}
 
-\subsection{CSP : Variance vs Second order moment}
+% \subsection{CSP : Variance vs Second order moment}
+% \subsection{CSP Solving}
 
-\subsection{CSP Solving}
-
-
-\subsection{Subtilités mathématiques}
-
-\subsubsection{Why not aiming for the best classifier?}
-Mathetically we do not seek here to create the best classifier,
-and to optimize the rocauc score, we only seek
-to obtain unbiased scores usable afterwards in the permutation test.
-This is why it is not a big deal to optimize the running time
-by making some approximations, such as:
-- Decimation
-- Selection of the mag channels, which contain a very large part of
-the information contained in (mag+grad)
-- PCA, which is very useful to reduce the dimension for eeg
-where there is only one channel type.
-
-
-\subsubsection{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
-
-By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the roc auc score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as roc auc and our cross validation is as legitimate as a group cross validation.
-Another way to say it is that : we do not want to test the generalization ability of our classifier between different runs. We just want to say : Our classifier proves a difference exists between the two conditions.
-So I think no need to worry because no need for group cross-validation.
-
-
-\subsubsection{Possiblité de mettre un des frequences et des crop non uniformes}
-
-\subsubsection{choix du seuil de la t-valeur}
-En choisissant un seuil de t-valeur de $0.01$ on obtient la figure \ref{permutation_statistics_results}, avec un cluster ayant une p-valuer de $10^{-3.6}$. J'ai choisit ce seuil restrictif de 0.01 pour mon image finale afin que limiter l'aire de mon cluster et afin de se limiter aux zones les plus significatives. Mais il est possible en choisissant un seuil de de $0.05$ d'obtenir une figure avec un cluster allant parcourant toute la bande alpha de 0 à 5 secondes.
-
-\subsubsection{topographic map}
+\subsubsection{topographic map, right hand rule}
 
 \begin{figure}
     \centering
@@ -112,11 +83,31 @@ En choisissant un seuil de t-valeur de $0.01$ on obtient la figure \ref{permutat
     \label{example_csp_component}
 \end{figure}
 
-Expliquer comment lire les topographic map., regle de la main droite.
-Les patterns des csp sont du machine learning ultra interpretable.
+The visualization of csp patterns makes it one of the most interpretable algorithms. But in the context of MEGs, one must keep in mind that the activations are done by magnetic dipole. Thus in the CP0 of the figure, by using the right hand rule, we deduce that the magnetic field enters inside the right ear.
+
+\subsection{Mathematical subtleties}
+
+\subsubsection{Why not aiming for the best classifier?}
+Mathematically, we are not looking here to create the best classifier, and to optimize the rocauc score, we are only looking to obtain unbiased scores that can be used later in the permutation test. This is why it is not a problem to optimize the execution time.
+
+Moreover, in neuroscience, interpretability is much preferred to performance. And the CSP algorithm is ultra interpretable thanks to the visualization of patterns. Since our results are already significant with CSP, there is no need to struggle any further. The CSP algorithm is already one of the best compromise between intepretability and performance.
 
 
-\section{Permutations statistics algorithm}
+% \subsubsection{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
+
+% By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the roc auc score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as roc auc and our cross validation is as legitimate as a group cross validation.
+% Another way to say it is that : we do not want to test the generalization ability of our classifier between different runs. We just want to say : Our classifier proves a difference exists between the two conditions.
+% So I think no need to worry because no need for group cross-validation.
+
+
+% \subsubsection{Possiblité de mettre un des frequences et des crop non uniformes}
+
+\subsubsection{choosing the t-value threshold}
+Choosing a t-value threshold of $0.01$ we obtain the figure \ref{permutation_statistics_results}, with a cluster having a p-value of $10^{-3.6}$. I chose this restrictive threshold of 0.01 for my final image in order to limit the area of my cluster and to limit it to the most significant areas. But it is possible by choosing a threshold of $0.05$ to obtain a figure with a cluster going through the whole alpha band from 0 to 5 seconds.
+
+However the obtained cluster has no physical reality and could be extended to the whole image if we had more subjects. We must therefore take a cluster of reasonable size in order to maximize the signal to noise ratio when moving to the analysis of sources.
+
+\section{Cluster permutations statistics algorithm}
 
 \subsection{t-values calculation}
 
