@@ -18,16 +18,15 @@
 
 \section{The Time in Working Memory (TiWM) paradigm}
 
-Cette partie présente the \textit{time in Working Memory} paradigm, qui a été exposé dans le papier \cite{herbst2021abstracting}. Le but de mon stage est d'aider à la reproduction de ce papier mais cette fois ci en utilisant des donnée venant de MEG.
+This part presents the \textit{time in Working Memory} paradigm, which was exposed in the paper \cite{herbst2021abstracting}. My internship is a continuation of this paper. We take up the experimental paradigm proposed in the pilot study but this time we collect the data using MEG.
 
 \subsection{Description of the Pilot Study}
 
-Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new n-item delayed duration reproduction task to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element. 
+Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new n-item delayed duration reproduction task to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element.
 
 % [present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].
 
 The participants listened to sequences composed of empty time intervals that they had to reproduce as precisely as possible. For each sequence, one can manipulate the number of time intervals and the overall duration of the sequence to separate their effects on recall accuracy. The figure \ref{paradigm} presents the paradigm. Temporal reproduction accuracy decreased systematically with an increasing number of items. These results suggested that the number of time intervals, not their duration, determines recall precision. According to the brain clock models proposed by cognitive science, these results are interpreted as evidence of the existence of a symbolic representation of duration in working memory.
-
 
 
 \begin{figure}[ht]
@@ -40,10 +39,15 @@ The participants listened to sequences composed of empty time intervals that the
 \end{figure}
 
 
-\subsection{Goal of the internship: reproduce the pilot study using MEG data}
+\subsection{Goal of the internship: reproducing the pilot study using MEG data}
 
+\paragraph{Continuing the pilot study}
 Thus, according to this first study, we know that durations are not represented in a continuous way, but in a symbolic way. But we still do not know in which part of the brain the information is stored. In order to visualize in which part of the brain the working memory is encoded, we reproduced the experiment this time by recording the cerebral data with magnetoencephalograms. In this new experiment, we no longer concentrate on the analysis of the accuracy of the restitution of the duration of the time intervals, but we will concentrate more on the visualization of the frequencies and cerebral areas at stake for the working memory.
 
+\paragraph{Working hypothesis}
+The pilot study showed that the accuracy of temporal reproduction decreased systematically with the increase of the number of elements. We will therefore consider that two sequences of the same total duration, but composed of a greater number of items, load the working memory differently: the sequence with the greater number of items loads the working memory more. Thus, we will try to visualize the difference in working memory load for different numbers of items.
+
+\paragraph{Differences in the experiment}
 Compared to the original study, we changed two main points:
 
 \begin{itemize}
@@ -51,8 +55,7 @@ Compared to the original study, we changed two main points:
     \item In the original Experiment 2, three sequences durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. In our replication of this experiment, we use only sequences of either 1 or 3 items, which allows to maximize the effect size.
 \end{itemize}
 
-[add what do we expect : alpha, hypocampus. Cite the other paper from the sujet de stage]
-
+% [add what do we expect : alpha, hypocampus. Cite the other paper from the sujet de stage]
 % - Les modèles de clocks cerebrales??
 
 
@@ -102,7 +105,7 @@ In the context of MEEG, the vocabulary used is very specific, and is essential t
 
 \section{EEG, MEG}
 
-EEG and MEG measure the electrical activity of our brain using electrodes placed on the scalp. It tells us, from the surface measurements, how active the brain is. It is possible to measure both eeg and meg data, which is why the acronym meeg is used to designate these data.
+EEG and MEG measure the electrical activity of our brain using electrodes placed on the scalp. It tells us, from the surface measurements, how active the brain is. It is possible to measure both EEG and meg data, which is why the acronym MEEG is used to designate these data.
 
 For our experimental paradigm, it is much more important to have high temporal precession than high spatial precision. This is why we choose to use MEEG rather than fMRI to study this paradigm.
 
@@ -157,7 +160,7 @@ The MNE ecosystem is composed (among other things!) of three different libraries
 \begin{itemize}
     \item MNE-Python, which is an open-source Python package for exploring, visualizing, and analyzing human neurophysiological data mainly in EEG and MEG format. This library contains everything needed to manipulate EEG signals, from visualization to machine learning.
     \item MNE-BIDS. The Bids format is a convention for structuring MEEG datasets. MNE-BIDS is a library that facilitates the use of this convention in python.
-    \item MNE-BIDS-Pipeline is a library allowing to automate the analysis of meeg data for datasets using the Bids format.
+    \item MNE-BIDS-Pipeline is a library allowing to automate the analysis of MEEG data for datasets using the Bids format.
 \end{itemize}
 
 \subsection{MNE-Python}
