@@ -1,25 +1,26 @@
 
 \chapter{Sensor}
 
-[metre le détail des methodes ICA si pas assez de maths]
+% [metre le détail des methodes ICA si pas assez de maths]
 
 \section{CSP algorithm}
 
 \subsection{CSP running time optimization}
 \label{Sec:running_time_optimisation}
 
-L'implémentation initiale naïve de l'algorithme des CSP mettait une journée entière calculer pour un seul subject. Il était donc crutial de trouver des manières d'acceler fortement les calculs, qui seront dès lors repetés à chaque commit de la pipeline dans le cadre de l'integration continue avec Circle CI.
+The optimization of the computation time does not change the neuroanatomical results presented, and therefore is not integrated in the "method" part, but still required a considerable amount of work.
 
-Un grand effort de recherche et d'ingénieurie à alors été mené pour réduire le temps de calculs.
+My first implementation of the CSP algorithm took a whole day to compute for a single subject, which corresponds to a 15 days computation for our cohort. It was therefore crucial to find ways to greatly accelerate the calculations, which will then be reiterated at each commit of the pipeline as part of the continuous integration with Circle CI.
 
-\subparagraph{Technique d'ingenieurie logicielles classique}
+A great deal of research and engineering effort was then put into reducing the calculation time.
 
-Les techiques d'ingénieuries logicielles classique ont été clefs pour accellerer massivement les temps de calculs : - factoriasation de toutes les étapes, utilisation des outils tels que le line-profiler, qui permet de visualiser le temps d'execution de chacune des lignes. D'aptres part, même si mathématiquement certaines opération son commutatives, en pratique, le choix de l'ordre des opératio permet d'économiser du temps de calcul : par exemple même si l'opération (time crop, frequency filter), il vaut mieux commencer par crop la donnée puis filtrer, car l'opération de filtrage est très couteuse.
+\paragraph{Technique d'ingenieurie logicielles classique}
 
+Classic software engineering techniques have been key to massively reduce computation times: factoring of all steps, use of tools such as the line-profiler - which allows to visualize the execution time of each line -  use of multi-processing. On the other hand, even if mathematically some operations are commutative, in practice, the choice of the order of the operations allows to save computation time: for example even if the operations (time crop, frequency filter) are commutative, it is better to start by cropping the data and then filtering, because the filtering operation is very expensive.
 
-\subparagraph{Reduction de la dimensionalité}
+\paragraph{Dimensionality reduction}
 
-Une fois toutes les améliorations logicielles approtées, on peut egalement apporter des améliorations venant des techniques du machine learning en utilisant des techiniques de reduction de dimensionalité, soit en selectionnant le type de channels, soit en utilsnat une PCA:
+Once all the software improvements have been made, we can also make improvements coming from machine learning techniques by using dimensionality reduction techniques: We can either select the type of channels, or use a PCA.
 
 \begin{figure}[ht]
     \centering
@@ -30,32 +31,23 @@ Une fois toutes les améliorations logicielles approtées, on peut egalement app
 \end{figure}
 
 \begin{itemize}
-    \item Reduction de la dimensionalité par selection du type de channel: Les données MEG provient de sensor, qui sont au nombre de 102 et qui sont repartis comme sur la figure \ref{sensors_elekta}. Chaque sensor est constitué de 2 gradiometers mesurant le champs gradiometrique (Tesla/meter) suivant les directions tangente au plan du sensor, et d'un magnetometers mesurant le chanps electrique dans le suivant la normale au plan du sensor. Les magnetometres sont robustes au bruit exterieur tandis que les magnetometres sont davantages exposées. Mais les magnetometres ont deux avantages capitaux : 1. Ils enregistrent une information spatiale localisée, ce qui convient parfaitement à l'algorithme des CSP, qui qui favorise par la suite l'interpretabilités des patterns issus des CSP. 2. Les magnetometres sont deux fois moins nombreux que les gradiometres. AInsi, en selectionnant uniquement les magnetometres, on divise par trois le nombre de channells. L'algorithmes des CSP étant limité par une SVD dont la complexité en $\mathcal{O}(T n^2)$ évolue en fonction du carré de nombre $n$ de channels \cite{dhillonalan}, on accellère ainsi l'algorithme par un facteur 9. (T is the number of time point, in our case bigger than the number of channels. La complexité de la SVD interne au CSP est en carré du minimum entre $T$ et $n$).
-    \item Le point presceent ne s'applique qu'à des données provenant d'une MEG, mais ne s'applique pas aux EEG. En effet, les EEG ne possèdent qu'un seul tyepe de channel. Il faut donc réduire la dimensionalité à l'aide d'une simple PCA.
+    \item Reduction of dimensionality by selection of the channel type: The MEG data comes from 102 sensors, which are distributed as shown in the figure \ref{sensors_elekta}. Each sensor consists of 2 gradiometers measuring the gradiometric field (Tesla/meter) in the direction tangent to the sensor plane, and a magnetometer measuring the electric field in the direction normal to the sensor plane. Magnetometers are robust to external noise, while magnetometers are more exposed. But magnetometers have two crucial advantages: 1. they record localized spatial information, which is perfectly suited to the CSP algorithm, which subsequently favors the interpretability of patterns from the CSP. 2. The magnetometers are half as numerous as the gradiometers.Thus, by selecting only the magnetometers, the number of channels is divided by three.  The CSP algorithm being limited by an SVD whose complexity in $\mathcal{O}(T n^2)$ evolves as a function of the square of the number $n$ of channels \cite{dhillonalan}, we thus accelerate the algorithm by a factor 9. (T is the number of time point, in our case bigger than the number of channels. The complexity of the SVD internal to the CSP is in square of the minimum between $T$ and $n$).
+    \item The following point applies only to data from a MEG, but not to EEGs. Indeed, EEGs have only one channel tyepe. We can therefore reduce the dimensionality using a simple PCA.
 \end{itemize}
 
 
-\subparagraph{Sampling}
+\paragraph{Sampling}
 
-- CV, decimation, niquist
+The last way to accelerate the computation time is to use sampling, i. e. to reduce the sampling frequency. This is also called decimation. For example $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods.
 
-La dernière manière d'accellerer les temps de calculs est de faire du sampling sur 
+[Nyquist]
 
-Mais sampling délicat car il faut estimer une matrice de covariance.
+\paragraph{CSP running time optimization results}
 
-Ex : 50 Hz pour 0.5 seconde pour estimer une matrice de covariance de 100channels: 100 points necessaires : la regularisation est très necessaires
-
-
-\subparagraph{CSP running time optimization results}
-
-Le choix de l'ordre de la commutativité, la reduction de la dimensionalité et le resampling nous permettent aujourd'hui d'obtenir des résultats en moins de trois heures avec 8Cross validation pour tous les sujects. C'est trois techniques permettent d'acceller respectivment par $2*10*5$ sur notre jeu de donnée tout en conservant des performances en tout point similaire. Il semblerait même que la PCA augmente la stabilité numérique des résultats.
-
+The choice of the order of commutativity, the reduction of the dimensionality and the resampling allow us today to obtain results in less than three hours with 8Cross validation for all subjects. These three techniques allow us to respectively accelerate by $2*10*5$ on our dataset while keeping similar performances in all points. It even seems that the PCA increases the numerical stability of the results.
 
 % - Interaface avec le reste de la pipeline, openscience, reproductibilité
 % - Anexes : Implémentation et choix d'architecte logiciel
-
-
-
 
 \subsection{Iterations levels}
 
@@ -74,7 +66,7 @@ Choisir l'ordre des iterations n'a pas été une mince affaire, bien que ce soit
 
 \subsection{Subtilités mathématiques}
 
-\paragraph{Why not aiming for the best classifier?}
+\subsubsection{Why not aiming for the best classifier?}
 Mathetically we do not seek here to create the best classifier,
 and to optimize the rocauc score, we only seek
 to obtain unbiased scores usable afterwards in the permutation test.
@@ -87,19 +79,19 @@ the information contained in (mag+grad)
 where there is only one channel type.
 
 
-\paragraph{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
+\subsubsection{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les csp.}
 
 By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the roc auc score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as roc auc and our cross validation is as legitimate as a group cross validation.
 Another way to say it is that : we do not want to test the generalization ability of our classifier between different runs. We just want to say : Our classifier proves a difference exists between the two conditions.
 So I think no need to worry because no need for group cross-validation.
 
 
-\paragraph{Possiblité de mettre un des frequences et des crop non uniformes}
+\subsubsection{Possiblité de mettre un des frequences et des crop non uniformes}
 
-\paragraph{choix du seuil de la t-valeur}
+\subsubsection{choix du seuil de la t-valeur}
 En choisissant un seuil de t-valeur de $0.01$ on obtient la figure \ref{permutation_statistics_results}, avec un cluster ayant une p-valuer de $10^{-3.6}$. J'ai choisit ce seuil restrictif de 0.01 pour mon image finale afin que limiter l'aire de mon cluster et afin de se limiter aux zones les plus significatives. Mais il est possible en choisissant un seuil de de $0.05$ d'obtenir une figure avec un cluster allant parcourant toute la bande alpha de 0 à 5 secondes.
 
-\paragraph{topographic map}
+\subsubsection{topographic map}
 
 \begin{figure}
     \centering
