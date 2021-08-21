@@ -8,6 +8,8 @@
  % - Localizer ?
  % - Sample
 
+ Nous avons vu Dans le chapitre 1 le contexte scientifique et les principaux outils utilisés. Nous essoayons dans cette parrie de trouver le "codage d ela mémire de travaillerail notemment dans le cadre de rete
+
 
  [résumer la situation et dire ce qu'il se passe dans ce chapitre. Raconter une histoire.]
 
@@ -21,9 +23,9 @@ Our exploration of the MEG data for the paradigm follows the classical steps of 
     \item Source analysis. After having determined the frequency and the moment of maximum activation of the Working memory, we visualize the 3D response.
 \end{itemize}
 
+In order to pre-process the data, and to analyze the data in the sensor and source space, I based myself on the \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline}, which is still under development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. The list of features to which I contributed is presented in the table \ref{Tab:PR}.
 
-The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is still in development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. The list of features to which I contributed is presented in the table \ref{Tab:PR}.
-% Ce chapitre détaille les modification liées à un probleme de recherche, 
+This chapter aims to detail the list of algorithms I implemented or improved in the pipeline to analyze our MEG data.
 
 \begin{table}[ht]
     \centering
@@ -49,11 +51,11 @@ The \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline} is 
     \label{Tab:PR}
 \end{table}
 
-\section{Preprocessing}
+\section{Preprocessing of the data}
 
 Before this internship, I had already worked on EEG data for the "Dream, sleep apnea" challenge or for the Kaggle "Inria - BCI Challenge". But on these two occasions, the data I had manipulated had already been cleaned by the competition organizers. This internship allowed me to realize the complexity of preprocessing data in brain imaging.
 
-\subsection{presentations of the different stages}
+\subsection{The different steps of the preprocessing}
 
 The different phases of the data preprocessing are as follows:
 
@@ -78,17 +80,7 @@ The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. 
     \label{cheat_sheet}
 \end{figure}
 
-
-% \subsection{Bids Pipeline}
-% - Premiereres PR necessité pourquoi ?
-% premiere contri open source
-% avec une utilité
-
-% Lors de l'étape du preprocessing au début de mon stage, il a fallut que je me familiarise avec la librairie MNE-BIDS-Pipeline et tous ses différents script, et également afin de me familieariser avec le developpement open-source ainsi que les exigences qui en découlent.
-
-% Mes premieeres contributions consistere donc à rajouter des sanity check dans la pipeline, actualiser les docstring et les en tetes de codes, travailler sur l'hormonie du code en harminisant les noms des variables entre les différents scripts.
-
-\subsection{Preprocessing of artifacts}
+\subsection{Highlight on the managment of artifacts}
 \label{preprocessing_of_artifacts}
 
 
@@ -111,7 +103,7 @@ The figure \ref{rejection_pipeline} allows to visualize the pipeline rejection o
     \centering
     \includegraphics[width=15cm]{images_report/preprocessing/rejection_pipeline.png}
     \caption[Simplification of the BIDS-Pipeline rejection process.]%
-    {Simplification of the BIDS-Pipeline rejection process.}
+    {Flow of the BIDS-Pipeline rejection process.}
     \label{rejection_pipeline}
 \end{figure}
 
@@ -149,6 +141,8 @@ Even if the global pipeline rejection method was already established before my a
 [put an example of a heart or EOG ? Example of preprocessing reports.].
 
 \section{Analysis in Sensor Space}
+
+[rappeller le source space]
 
 \subsection{Insufficiency of the pipeline to analyze in a relevant way the MEG}
 
@@ -221,7 +215,7 @@ Even if the global pipeline rejection method was already established before my a
 
 At the beginning of my internship, the MNE-BIDS-Pipeline allowed us to quickly obtain figures such as \ref{fig:Evoked_data} and such as \ref{fig:decoding_initial}. These figures show that the preprocessing went well since the results are clean. But these two figures also present some limits in the framework of our paradigm.
 
-- The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items). 
+- The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items).
 When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak to exploit. 
 
 - In the same way for the figure \ref{fig:decoding_initial}, even if we can see that the decoder used in the pipeline manages to decode the signals before $t=0$ in a very satisfactory way, especially at the location of the auditory stimuli, the performance of the decoders is null during the restitution phase.
@@ -296,7 +290,7 @@ By this process, we maximize the variance ratio along the abscissa axis between 
 
 In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e. apply the unmixing matrix as we will see later), and take the projection on the x axis of the new point cloud. We can then calculate the variance along the x axis and then train a linear classifier to discriminate among the different variances. By combining the csp algorithm, and for example a logistic regression, we can classify between the two conditions.
 
-\subsubsection{Technical Description}
+\subsubsection{Technical Description (to be skipped in a first reading)}
 
 The above explanation only explains intuitively the algorithm for the first component of the CSP. But it does not explain how to obtain the other orientations. An efficient formulation to obtain all components of the CSP while being computationally reasonable is to formalize the problem as a generalized eigenvector problem.
 [mettre les deux autres formulations]
@@ -442,7 +436,7 @@ A surprising phenomenon is that the algorithm can decode much more easily at the
 
 \section{Source Space Analysis}
 
-After going into the sensor space. The natural direction is to go to the source space.
+After going into the sensor space. The natural direction is to go to the source space. [ detailler ou retravailler]
 
 \subsection{Generalités source space.}
 
@@ -486,9 +480,19 @@ The red region activated here is the visual area. The fact that we see the visua
 
 The literature presents other results similar to this one. For example \cite{obleser2012adverse} shows that "Enhanced alpha oscillations (8-13 Hz) during retention of items in working memory are often interpreted to reflect increased demands on storage and inhibition".
 
-\paragraph{Motor area}
+\paragraph{Sensori-Motor Areas}
 
-The blue region activated at the top of the brain is the motor area. Before the MEG experiment, subjects were trained to reproduce the task by pressing a button, which explains the activation here. This is supported by the fact that the activation is stronger in the left hemisphere which is consistent with the fact that the subjects are right-handed.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=10cm]{images_report/source/brodmann_alpha.png}
+    \caption[Focus on the Brodmann areas]%
+    {Focus on the Brodmann areas 1 (green), 2 (blue) and 3 (orange), from the alpha band in the left hemisphere.}
+    \label{brodmann_alpha}
+\end{figure}
+
+The blue region activated at the top of the brain is the sensori-motor area, centred on the postcentral gyrus (Brodmann areas 1, 2 and 3). Before the MEG experiment, subjects were trained to reproduce the task by pressing a button, which explains the activation here. And the region of the somatosensory cortex activated here corresponds to the location of the hand receptors \ref{brodmann_alpha}. This is also supported by the fact that the activation is stronger in the left hemisphere which is consistent with the fact that the subjects are right-handed.
+
+A possible interpretation is that time is represented by the imagination of the movement of one of the body parts, here the hand. We can also reason by analogy by noting that musical children learn to master rhythms by beating the beat or walking to the rhythm of the pulse. The rhythmic information is embodied. Therefore, even if here the analogy has limits since the temporal signal is not organized in a rhythmic and regular way, this interpretation seems to us to be the most natural one.
 
 \paragraph{Auditory area}
 
@@ -497,6 +501,4 @@ The regions close to the ears are deactivated while the cue is an auditory one. 
 - The signal is abstracted from the auditory region to transform it into a purely rhythmic information, thus no longer restricted to the auditory areas.
 - The auditory region is activated, but we do not see it in this group figure. As a matter of fact, the auditory regions are visible in the csp components of the subjects as in the figure \ref{fig:csp_component_beta_band}. But there is a lot of inter-subject variability: After looking at the csp components for the different subjects, it appears that only subjects with a marked beta peak show activation in auditory cortex, and this peak is not restricted to $0 \leq t \leq 1$ but are spread across all subjects between $0s - 5s$. In order to see an auditory signal at the group level, one would have to align and average the first extracted components for each peak from each subject. But averaging the components presents mathematical difficulties [ref. Appendix], and could be a research topic in itself.
 
-[iamge beta et pour csp aussi.]
-
-Discussion, Limites.
+[Image beta et pour csp aussi.]
