@@ -1,28 +1,4 @@
-\chapter*{The neuroanatomical signature of time in Working Memory}
-
-% Il m'a fallu un temps conséquent pour me former au début du stage à l'analyse en EEG. 
-% Au MVA, j'avais déjà fait des neurosciences, ainsi que la théorie physique des EEG et MEG à l'aide du cours d' \href{http://math.ens-paris-saclay.fr/version-francaise/formations/master-mva/contenus-/imagerie-fonctionnelle-cerebrale-et-interface-cerveau-machine-161979.kjsp?RH=1242430202531}{Imagerie fonctionnelle cérébrale et interface cerveau machine}, au cours duquel j'ai déjà manipulé les interfaces cerveau machines par exemple en
-% \href{https://github.com/crsegerie/bci_competition}{réimplémentant} la solution des vainqueurs de la compétition \href{https://www.kaggle.com/c/inria-bci-challenge}{inria-bci-challenge}. Mais en réalité, lors de cette compétition kaggle, les participants ont été épargnés du préprocessing du traitement de la donnée des EEG : les organisateurs du kaggle avaient déjà nettoyé la donnée qui était alors utilisable par n'importe quel praticien en machine learning. Mais il existe tout un savoir faire afin de nettoyer la donnée, et ce nettoyage et cette analyse est presque plus technique que du machine learning conventionnel.
-
-
-
-% \begin{comment}
-% \section{Théorie}
-% voir le cours de gramfort. Voir le cours du mva.
-% \section{L'écosysteme MNE - Bids}
-% \subsection{MNE-Python}
-% \subsection{MNE-BIDS-Pipeline}
-% \subsection{MNE-BIDS}
-% \end{comment}
-
-
-\section*{Prelude}
-
-I divided this report into two parts that roughly follow the chronological order of my internship.
-
-The first chapter gives the scientific context of my internship. This part is an account of the environment in which I am inserted and of the knowledge required to understand my work hereafter. Scientific activity is no longer a solitary activity, especially in neuroscience, where the tools used are based on years of collective work. I notably explain in this chapter the ins and outs of the pilot study paper \cite{herbst2021abstracting} on which I rely. The goal of my internship is to complete this pilot study by analyzing magnetoencephalography (MEG) data, by finding appropriate mathematical methods to analyze the MEG data, and to implement these mathematical methods in an open source automatic analysis pipeline, the MNE-BIDS-Pipeline. This pipeline aims to allow future cognitive science researchers to analyze electroencephalogram data in a snap, while promoting replicability and open science. This part could constitute the introduction part of a future paper.
-
-The second chapter presents the more technical aspects of my contribution to the reproduction of the pilot study. This replication using MEG imaging, I detail the method used to analyze the parts of the brain in action during the use of the working memory. We used the MNE-BIDS-Pipeline to analyze the data. But we had to adapt the MNE-BIDS-Pipeline by using new algorithms in order to meet the requirements of our experimental paradigm. An important part of my work has been allocated to implement in open-source these methods rigorously, while optimizing the computation time. This part could constitute the method, results of a future paper. The beginning of a discussion is also outlined.
+% \chapter*{The neuroanatomical signature of time in Working Memory}
 
 \chapter{Scientific Context}
 
