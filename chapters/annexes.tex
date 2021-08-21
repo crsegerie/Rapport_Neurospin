@@ -58,6 +58,15 @@ The choice of the order of commutativity, the reduction of the dimensionality an
 
 \subsection{CSP Regularization}
 \label{CSP_regularization}
+In order to regularize the estimation of the covariance matrix, many strategies exist, notably based on riemanian geometry. But in our case, it is enough to use a regularization of diagonal elements of the covariance matrix, in order to obtain strictly positive eigenvalues. Thus it is sufficient to replace the empirical estimate $C$ of the covariance matrix by :
+
+\begin{equation}
+    C' = C + \sum_k {\varepsilon_k \bar{\sigma_k}^2 I^{(k)}}\ ,
+\end{equation}
+
+with $k$, the index of the considered channel type, $\varepsilon_k$ the regularization coefficient, $\sigma_k$ the average standard deviation of the considered channel type, $I^{(k)}$ the matrix with 1 diagonal matrices containing ones at the positions corresponding to the channels contained in each channel group.
+
+We used $\varepsilon_k = 0.1$.
 
 % \subsection{CSP : Variance vs Second order moment}
 % \subsection{CSP Solving}
@@ -102,7 +111,10 @@ Moreover, in neuroscience, interpretability is much preferred to performance. An
 
 % \subsubsection{Possiblité de mettre un des frequences et des crop non uniformes}
 
-\subsubsection{choosing the t-value threshold}
+\subsubsection{Choosing the t-value threshold}
+
+The fact that you can choose the size of the clusters simply by adjusting the threshold of the t-value is disturbing at first sight. But in reality it is a good sign. We only tested two different t-values (0.01 and 0.05) and the fact that we get two different cluster sizes simply means that our 0.05 cluster has a significant difference as well as our 0.01 cluster which is also significant. One does not exclude the other.
+
 Choosing a t-value threshold of $0.01$ we obtain the figure \ref{permutation_statistics_results}, with a cluster having a p-value of $10^{-3.6}$. I chose this restrictive threshold of 0.01 for my final image in order to limit the area of my cluster and to limit it to the most significant areas. But it is possible by choosing a threshold of $0.05$ to obtain a figure with a cluster going through the whole alpha band from 0 to 5 seconds.
 
 However the obtained cluster has no physical reality and could be extended to the whole image if we had more subjects. We must therefore take a cluster of reasonable size in order to maximize the signal to noise ratio when moving to the analysis of sources.
@@ -111,47 +123,38 @@ However the obtained cluster has no physical reality and could be extended to th
 
 \subsection{t-values calculation}
 
-Les t-valeur est un test parametrique qui suppose la gaussianité des valuer sours jacentes caluclé. Cette hypothése de gaussianité n'es past tojours vrifiée dpour des données venant d'imagerie cerebrale en raison des nombreux filtres préliminaires. Mais dans notre cas, on calucle les t-valeur à partir de la différence entre le roc-auc score et le niveau de chance moyen ce qui permet de rétablir l'hypothese de gaussianité.
+This test rejects the null hypothesis that the mean of a population of independent observations is equal to a value $M$.
 
-Le calcul des p-valeurs se fait pour chaque time-frequency bin de manière indépendante.
+\paragraph{Hypothesis}
 
-On considère la liste des différences $(X_i)_{i \in [\text{Nb Subjects}]}$ pour tous les sujets entre le roc-auc et le chance level $c=0.5$ pour une time frequency bin.
+The t-test is a parametric test that assumes the Gaussianity of the underlying values. This assumption of Gaussianity is not always true for data from brain imaging because of the many preliminary filters. But in our case, we compute t-values from the difference between the roc-au score and the average chance level, which allows us to restore the Gaussianity assumption.
 
-On soustrait alors toutes ces cartes au chance level d'une roc-auc à savoir $0.5$. On obtient alors la différence entre le roc-auc et le chance level.
+\paragraph{Intuition}
 
-Il suffit alors de Calculate the T-test for the mean of ONE group of scores.
+The calculation of p-values is done for each time frequency bin independently.
 
-This is a test for the null hypothesis that the expected value (mean) of a sample of independent observations a is equal to the given population mean, popmean.
+We consider the list of differences $(X_i)_{i \in [\text{Nb Subjects}]}$ for all subjects between the rock-auc and the chance level $M=0.5$ for a bin of temporal frequency. We obtain the set of differences between the roc-haw and the chance level. A normal distribution of these differences is made. If the normal distribution is sufficiently to the right of 0, then we reject the null hypothesis.
 
-Ce test permet de rejeter l'hypothese nulle sous laquelle la moyenne d'une population d'observation independantes est egal à $0$.
+\paragraph{Algorithm}
 
-Formellement,
-On veut comparer la moyenne $\mu$ d'une population de loi normale et d’écart type $\sigma$ non connu à $0$. Pour ce faire, on calcule la moyenne empirique $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}x_i$ et l'estimateur  sans biais $S^{\ast ^2}_n$ de sa variance $\sigma^2$
-:$S^{\ast ^2}_n = \frac{1}{n-1}\sum\limits_{i=1}^n (X_i - \overline X_n )^2$.
+We want to compare the mean $\mu$ of a population with a normal distribution and an unknown standard deviation $\sigma$ to $0$. To do this, we compute the empirical mean $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}x_i$ and the unbiased estimator $S^{\ast ^2}_n$ of variance $\sigma^2$
 
-Selon l’hypothese nulle, la distribution d’échantillonnage de cette moyenne se distribue elle aussi normalement avec un écart type $\frac{\sigma}{\sqrt{n}}$.
+$S^{\ast ^2}_n = \frac{1}{n-1}\sum\limits_{i=1}^n (X_i - \overline X_n )^2$.
 
-La statistique de test:
+According to the null hypothesis, the sampling distribution of this mean is also normally distributed with a standard deviation $\frac{\sigma}{\sqrt{n}}$.
+
+The test statistic:
 
 $ Z = \sqrt{n}\frac{\overline{X} - \mu_0}{S^{\ast}_n}$
-suit alors une [[loi de Student]] à $n-1$ degrés de liberté sous l'hypothèse nulle (c'est le théorème de Cochran).
+then follows a Student's law of $n-1$ degrees of freedom under the null hypothesis.
 
-On choisit un risque $\alpha$, généralement $0.05$ ou $0.01$ et l'on calcule la réalisation de la statistique de test :
+We choose a risk $\alpha$, generally $0.05$ or $0.01$ and we calculate the realization of the test statistic :
 
-:$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ où $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
+$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ où $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
 
-% Si l'on veut tester H0 : μ ≥ μ0 :
-% Si z est inférieur au quantile d'ordre α de la loi de Student à n – 1 degrés de liberté alors on rejette l'hypothèse nulle.
+\subsection{Choosing the number of time-frequency bin}
 
-% Implémentation se fait à l'aide la fonction scipy.stats.ttest_1samp.
-
-
-\subsection{Limites algorithmiques}
-[annex]
-
-- Choix du nombre de Bin est quelque peu aritraire. Il fut juste respecter quelques conditions telle que Nyquist, plus le fait d'avoir assez de point pour estimer la matrice de covariance. Mais ici, ce n'est pas gracve d'ête arbitraire sur le nombre de point étant donné que le résultat du snesor space n'est utilisé que pour cibler le travail en allant dans le source step.
-- Le fait de pouvoir choisir la taille des cluster simplement en ajustant le threshold de la t-value est perturant à première vue. Mais en réalité c'est plutot un bon signe. Nous n'avons testé que deux t-velur différentes (0.01 er 0.05) et le fait d'obtenir deux cluster de taille différentes signiifie simplement que notre cluster associé à 0.05 présente une différence significative tout comme notre cluster à 0.01 qui est assui significative. L'un n'exclue par l'autre.
-
+Choosing the number of Bin is somewhat arbitrary. One just has to respect some conditions such as Nyquist, plus the fact of having enough points to estimate the covariance matrix. But here, it is not serious to choose arbitrary the number of points since the result of the sensor space is only used to increase the signal to noise ratio when going into the source space.
 
 \chapter{Source}
 
