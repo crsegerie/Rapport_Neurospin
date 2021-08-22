@@ -85,7 +85,7 @@ The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. 
 \end{figure}
 
 
-An important point is the order in which the data is rejected. Indeed, a major difficulty with raw data coming from cortical signals is the fact that these signals are extremely small. Although the data is recorded in a shielded chamber, the slightest noise can totally overwhelm the signal. Figure \ref{noise_order_of_magnitude} shows the scale of orders of magnitude, which makes it clear that the external noise is of an order of magnitude immeasurably larger than the neurological signals of interest.
+An important point during the preprocessing is the order in which the data is rejected. Indeed, a major difficulty with raw data coming from cortical signals is the fact that these signals are extremely small. Although the data is recorded in a shielded chamber, the slightest noise can totally overwhelm the signal. Figure \ref{noise_order_of_magnitude} shows the scale of orders of magnitude, which makes it clear that the external noise is of an order of magnitude immeasurably larger than the neurological signals of interest.
 
 Even after removing all the noise from the external environment, some of the so-called biological artifacts, such as heartbeats and blinks, must be removed by either discarding the contaminated time interval or separating the sources by using independent component analysis (ICA), which separates the heartbeat and blink sources from the rest of the signal.
 
@@ -107,7 +107,7 @@ Here are the details of the procedure:
     \item The ICA source separation does not work perfectly, so an additional step is required to reject the last artifacts using the "reject" parameter, which allows to filter the signals with a peak-to-peak amplitude 10 times higher than the nominal amplitude. The result is the preprocessed signal.
 \end{itemize}
 
-Even if the global pipeline rejection method was already established before my arrival, the experimental data revealed problems in the order of the filtering operations, and we thus improved a lot the automatic data preprocessing especially for difficult data that contains simulaneously biological and non-biological artifacts such as phase inversion fields. Figure \ref{fig:PR_ica} shows an example of ICA enhancement before and after our Pull request that changes the order of operations, in particular by filtering out non-biological signals before the ICA.
+Even if the global pipeline rejection method was already established before my arrival, the experimental data revealed problems in the order of the filtering operations, and we thus improved a lot the automatic data preprocessing especially for difficult data that contains simulaneously biological and non-biological artifacts such as phase inversion fields. Figure \ref{fig:PR_ica} shows an example of ICA enhancement before and after our pull request that changes the order of operations, in particular by filtering out non-biological signals before the ICA.
 
 
 \begin{figure}
@@ -124,7 +124,7 @@ Even if the global pipeline rejection method was already established before my a
         \caption{ICA correction after amelioration}
         \label{fig:after_ica_PR}
     \end{subfigure}
-    \caption{We can see that after amelioration, we no longer obtain a discontinuity, and the ICA is capable of reducing almsot by 4 the peak to peak amplitude of the ECG artifact.}
+    \caption{We can see that after our pull request, the ICA is capable of reducing almost by 4 the peak to peak amplitude of the ECG artifact.}
     \label{fig:PR_ica}
 \end{figure}
 
@@ -208,7 +208,7 @@ Even if the global pipeline rejection method was already established before my a
 At the beginning of my internship, the MNE-BIDS-Pipeline allowed us to quickly obtain figures such as \ref{fig:Evoked_data} and such as \ref{fig:decoding_initial}. These figures show that the preprocessing went well since the results are clean. But these two figures also present some limits in the framework of our paradigm.
 
 - The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items).
-When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak to exploit. 
+When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak that we could exploit. 
 
 - In the same way for the figure \ref{fig:decoding_initial}, even if we can see that the decoder used in the pipeline manages to decode the signals before $t=0$ in a very satisfactory way, especially at the location of the auditory stimuli, the performance of the decoders is null during the restitution phase.
 
@@ -224,25 +224,25 @@ Classically the sensor space is decomposed in the following steps:
     \item Computation of the group average results.
 \end{itemize}
 
-This order of operations is fine for most studies. But in the case of our study it is crucial to obtain results in the time-frequency space. We therefore need to combine the features of the "sliding estimator" script to study a contrast between two conditions and the "time frequency decomposition" script to study the signal in time and frequency space. It is to fill this gap that I implemented a new script in the pipeline allowing to visualize which are the time-frequency bin which present in the most salient way the working memory by studying the contrast between the sequences of an item and the sequences of 3 items. 
+This order of operations is fine for most studies. But in the case of our study it is crucial to obtain results in the time-frequency space. [expliquer on veut augmenter le signal to noise ratio] We therefore need to combine the features of the "sliding estimator" script to study a contrast between two conditions and the "time frequency decomposition" script to study the signal in time and frequency space. It is to fill this gap that I implemented a new script in the pipeline allowing to visualize which are the time-frequency bin which present in the most salient way the working memory by studying the contrast between the sequences of an item and the sequences of 3 items. 
 
-Indeed, 3\_items load the working memory much more than a single item. The reason for contrasting 3\_items with 1\_item and not 3\_item with 0\_item (rest) is that the contrast should not be based on a difference in the nature of the tasks, but rather a difference in load.
+Indeed, 3 items load the working memory much more than a single item. The reason for contrasting 3 items with 1 item and not 3 item with 0 item (rest) is that the contrast should not be based on a difference in the nature of the tasks, but rather a difference in load.
 
 My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions. There are two main steps in this script:
 \begin{enumerate}
-    \item Decoding: for each time-frequency bin: For each time-frequency bin, we use a csp classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
-    \item Permutation statistics at the group level: we try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
+    \item \textbf{Building the time-frequency map using CSP}: for each time-frequency bin, we use a CSP classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
+    \item \textbf{Permutation statistics at the group level}: we try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
 \end{enumerate}
 
 \subsection{Why using CSP?}
 
-CSP is based on a geometrical analysis of the brain response, which is called pattern-based. CSP is used to identify the most salient time-frequencies. CSP classifies between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
+CSP is based on a geometrical analysis of the brain response, which is called a \textit{pattern}. CSP is used to identify the most salient time-frequencies. CSP classifies between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
 
 We use CSP to identify the most salient times and frequencies for our task: we just have to look at which frequency interval and which time interval our classifier performs best. A good discrimination between the two conditions (1 itme vs. 3 items) is characterized by a roc-auc close to 1 while a roc-auc close to 0.5 means that the neural code that encodes the working memory is not detectable by high level geometric features.
 
 \subsection{Decoding with Common Spatial Patterns (CSP)}
 
-
+[wrong]
 The time-frequency decomposition is estimated by iterating over raw data that has been band-passed at different frequencies. This is used to compute a covariance matrix over each epoch or a rolling time-window and extract the CSP filtered signals. A linear discriminant classifier is then applied to these signals.
 
 CSP is a technique to analyze multichannel data based on recordings from two classes qui a été introduite dans le contexte des EEG par \cite{koles1990spatial}.
@@ -280,7 +280,7 @@ The main vector of the red' cloud is aligned on the absice axis, while the main 
 
 By this process, we maximize the variance ratio along the abscissa axis between the red' and the blue' clouds.
 
-In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e. apply the unmixing matrix as we will see later), and take the projection on the x axis of the new point cloud. We can then calculate the variance along the x axis and then train a linear classifier to discriminate among the different variances. By combining the csp algorithm, and for example a logistic regression, we can classify between the two conditions.
+In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e. apply the unmixing matrix as we will see later), and take the projection on the x axis of the new point cloud. We can then calculate the variance along the x axis and then train a linear classifier to discriminate among the different variances. By combining the CSP algorithm, and for example a logistic regression, we can classify between the two conditions.
 
 \subsubsection{Technical Description (to be skipped in a first reading)}
 

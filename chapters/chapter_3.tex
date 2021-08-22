@@ -32,7 +32,7 @@ Dans ce chapitre, nous présontons les résultats de la méthode exposée présc
 \end{figure}
 
 
-% [expliquer avant que le csp est appliqué pour différentes bins et que l'on compare par la suite le roc auc score pour différentess bins, ce qui permet de mettre les régions d'interet en ]
+% [expliquer avant que le CSP est appliqué pour différentes bins et que l'on compare par la suite le roc auc score pour différentess bins, ce qui permet de mettre les régions d'interet en ]
 
 In the figure \ref{fig:csp_results}, we observe the roc-auc score of the classifier composed of (CSP, logistic regression) for different frequencies distributed linearly between 5 Hz and 20 Hz as well as for times between $t=0$ and $t=5$ seconds (the figures \ref{fig:Evoked_data}, \ref{fig:decoding_initial} presented the times $t \leq 0$ only for pedagogical purposes). We can see that the CSP algorithm succeeded in highlighting the alpha frequency band between 8 and 12 Hz, and the results are consistent between the frequency map \ref{fig:csp_frequency} and the time-frequency map \ref{fig:csp_time_frequency}.
 
@@ -55,7 +55,7 @@ An AUC of 0.6 is not high in absolute terms but not bad in neuroscience on inter
 
 Our main cluster is centered on the alpha band. We will discuss the alpha band in more detail in section \ref{section:alpha_discussion}. But at first sight, the literature shows frequently significant results in the alpha band for working memory loadings \cite{obleser2012adverse} which is encouraging.
 
-A surprising phenomenon is that the algorithm can decode much more easily at the beginning of the restitution phase than at the end of the restitution phase. Given that the csp encodes a geometric information, this means that:
+A surprising phenomenon is that the algorithm can decode much more easily at the beginning of the restitution phase than at the end of the restitution phase. Given that the CSP encodes a geometric information, this means that:
 \begin{itemize}
     \item either the information in the working memory is transformed in the course of restitution into information disseminated in the brain in a non-geometrical way.
     \item Or, given the very large number of repetitions of the experiment, the subject gets tired after a while and forgets the sequence "instantly" after having repreated it in order to save mental energy.
@@ -109,9 +109,9 @@ A possible interpretation is that time is represented by the imagination of the 
 The regions close to the ears are deactivated while the cue is an auditory one. There are several interpretations:
 - To see an activation in the auditory zones one must place oneself at $t \leq 0$, as on the figures \ref{auditory_cortex}: After $t \geq 0$, the auditory cortex is no longer involved
 - The signal is abstracted from the auditory region to transform it into a purely rhythmic information, thus no longer restricted to the auditory areas.
-- The auditory region is activated, but we do not see it in this group figure. As a matter of fact, the auditory regions are visible in the csp components of the subjects as in the figure \ref{fig:csp_component_beta_band}. But there is a lot of inter-subject variability: After looking at the csp components for the different subjects, it appears that only subjects with a marked beta peak show activation in auditory cortex, and this peak is not restricted to $0 \leq t \leq 1$ but are spread across all subjects between $0s - 5s$. In order to see an auditory signal at the group level, one would have to align and average the first extracted components for each peak from each subject. But averaging the components presents mathematical difficulties [ref. Appendix], and could be a research topic in itself.
+- The auditory region is activated, but we do not see it in this group figure. As a matter of fact, the auditory regions are visible in the CSP components of the subjects as in the figure \ref{fig:csp_component_beta_band}. But there is a lot of inter-subject variability: After looking at the CSP components for the different subjects, it appears that only subjects with a marked beta peak show activation in auditory cortex, and this peak is not restricted to $0 \leq t \leq 1$ but are spread across all subjects between $0s - 5s$. In order to see an auditory signal at the group level, one would have to align and average the first extracted components for each peak from each subject. But averaging the components presents mathematical difficulties [ref. Appendix], and could be a research topic in itself.
 
-[Image beta et pour csp aussi.]
+[Image beta et pour CSP aussi.]
 
 % \section{Discussion}
 
