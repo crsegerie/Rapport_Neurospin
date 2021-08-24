@@ -119,6 +119,16 @@ Choosing a t-value threshold of $0.01$ we obtain the figure \ref{permutation_sta
 
 However the obtained cluster has no physical reality and could be extended to the whole image if we had more subjects. We must therefore take a cluster of reasonable size in order to maximize the signal to noise ratio when moving to the analysis of sources.
 
+
+\subsubsection{Difficulties concerning the calculation of an average of the CSP components}
+\label{section:csp_average_difficulty}
+
+We have thought about the feasibility of calculating the averages of the CSP components in order to obtain "average" components shared by all subjects. But some difficulties make these averages unfeasible:
+\begin{itemize}
+    \item Although the CSP components are ordered by decreasing eigenvalue, there is a great risk of mixing CSP components across different anatomical regions for different subjects. To mitigate this risk, one would have to do a csp decomposition for each brain area, which would complicate the operation.
+    \item Using the same csp components for everyone would necessarily lower the decoding results. Considering that our subjects probably use different memorization strategies, these different strategies would be "mixed" in a group decoding, and would harm the interpretability.
+\end{itemize}
+
 \section{Cluster permutations statistics algorithm}
 
 \subsection{t-values calculation}

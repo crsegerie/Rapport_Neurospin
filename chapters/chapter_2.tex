@@ -128,12 +128,9 @@ Even if the global pipeline rejection method was already established before my a
 \end{figure}
 
 
-
 % [put an example of a heart or EOG ? Example of preprocessing reports.].
 
 \section{Sensor Space: Finding the main time-frequency cluster}
-
-[rappeller le source space]
 
 \subsection{Insufficiency of the pipeline to analyze in a relevant way the MEG}
 
@@ -357,7 +354,7 @@ cluster tests on the time-frequency roc-auc map in order to check the significan
     {Overview of the permutation statistics pipeline.}
     \label{permutation_statistics_pipeline}
 \end{figure}
-[harmoniser les images]
+% [harmoniser les images]
 
 The figure \ref{permutation_statistics_pipeline} gives an overview of the cluster creation pipeline.
 \begin{enumerate}
@@ -366,10 +363,10 @@ The figure \ref{permutation_statistics_pipeline} gives an overview of the cluste
     \item Then, in order to find the location of the clusters, we use a threshold, for example corresponding to a chance level of $0.05$ or $0.01$. This threshold is not very important mathematically, but in practice, it allows to control the size of the clusters. Once the threshold is applied, we potentially get one or more clusters.
 \end{enumerate}
 
-In order to assign a p-value to each cluster, we have to use the permutation mechanism. The permutation mechanism consists in computing a metric on our clusters: which can be either the size of the cluster, or the maximum of t-values within the cluster, or the sum of t-values within the cluster. [us?] Then we compare this metric to the distribution of this metric simulated for the permutation:
+In order to assign a p-value to each cluster, we have to use the permutation mechanism. The permutation mechanism consists in computing a metric on our clusters: which can be either the size of the cluster, or the maximum of t-values within the cluster, or the sum of t-values within the cluster. In our case we have chosen to sum the t-values on the cluster because we are not interested in the spread of the cluster, but rather we want to target precisely a region located in the time-frequency map. Then we compare this metric to the distribution of this metric simulated for the permutation (simulation of the null hypothesis):
 We reverse the sign of the difference for each bin in each subject. We obtain the distribution of the metric in the null hypothesis where the distribution of spatial cluster sizes is independent of the sign of the data.
 
-[detailler]
+% [detailler]
 % going further : threshold free method
 % \subsection{Implementation}
 
@@ -404,5 +401,6 @@ The figure \ref{flow_source_contrasts} explains the procedure to obtain the cont
 \end{itemize}
 
 \subsection{Group average}
-Once we have the contrast for a subject, we need to average the 3D contrast for different subjects. But we cannot take the average between the different subjects immediately because the different subjects do not have the same head shape. Before taking the average of a subject, we morph all the head shapes to an average head shape, which we call \textit{fsaverage} (fs stands for freesurfer, the software that segments the fmri images, which allows to create the electromagnetic conductivity model of the brain tissue, and the boundary element model, see annex \ref{BEM_model_freeview_cropped}). We can then calculate the average contrast in the source space.
+Once we have the contrast for a subject, we need to average the 3D contrast for different subjects. But we cannot take the average between the different subjects immediately because the different subjects do not have the same head shape. Before taking the average of a subject, we morph all the head shapes to an average head shape, which we call \textit{fsaverage} (fs stands for freesurfer, the software that segments the fMRI images, which allows to create the electromagnetic conductivity model of the brain tissue, and the boundary element model, see annex \ref{BEM_model_freeview_cropped}). We can then calculate the average contrast in the source space.
 
+% [morphing figure]

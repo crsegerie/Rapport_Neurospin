@@ -18,23 +18,29 @@
  
 \section{The Time in Working Memory (TiWM) paradigm}
  
-This part presents the \textit{time in Working Memory} paradigm, which was exposed in the paper \cite{herbst2021abstracting}. My internship is a continuation of this paper. We take up the experimental paradigm proposed in the pilot study, but this time we collect the data using MEG.
+This part presents the \textit{Time in Working Memory} paradigm, which was exposed in the paper \cite{herbst2021abstracting}. My internship is a continuation of this paper. We take up the experimental paradigm proposed in the pilot study, but this time we collect the data using MEG.
  
 \subsection{Description of the Pilot Study}
  
-Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory.  The paper abstracting time in working memory proposes a new \textit{n-item delayed duration reproduction task} to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element.
+Planning for the future relies on the ability to remember the duration of events, but it is unknown how durations are stored in the brain's working memory. The working memory is often described as a short-term information system, limited in capacity, and is considered to be a core cognitive process that underpins a range of behaviors \cite{ma2014changing}. The paper \textit{abstracting time in working memory} proposes a new \textit{n-item delayed duration reproduction task} to assess whether elapsed time is stored in memory as a continuous feature or as an abstract element.
  
 % [present the clock models, but say that it is outside the spope of my internship. My training as a mathematician does not give me the tools to interpret the results, but simply through dialogue with the cognitive researchers, I propose mathematical methods].
- 
+
 The participants listened to sequences composed of empty time intervals that they had to reproduce as precisely as possible. For each sequence, one can manipulate the number of time intervals and the overall duration of the sequence to separate their effects on recall accuracy. The figure \ref{paradigm} presents the paradigm. Temporal reproduction accuracy decreased systematically with an increasing number of items. \textbf{These results suggested that the number of time intervals, not their duration, determines recall precision}. According to the brain clock models proposed by cognitive science, these results are interpreted as evidence of the existence of a symbolic representation of duration in working memory.
  
- 
-\begin{figure}[ht]
+
+\begin{figure}
    \centering
-   \includegraphics[width=10cm]{images_report/n-item delayed reproduction task.png}
-   \caption[n-item delayed reproduction task]%
-   {n-item delayed reproduction task, figure taken from \cite{herbst2021abstracting} - Panels a–c depict the individual items and sequences used in Experiment 1, 2, and 3, respectively. Black dots represent 1kHz tones. All numbers are durations in seconds. (a) The set of sequences used in Experiment 1, in which the number of items in a sequence and the full sequence duration covaried. A sequence was composed of 1, 2 or 3 items, and its duration varied from 0.3s to 6.3 s. \textbf{(b) In Experiment 2, the number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it.} (c) In Experiment 3, a sequence was composed of 1 to 5 items. Only two sequence durations were used (1.9 s and 4.5 s). (d) Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
- 
+   \includegraphics[width=0.5\linewidth]{images_report/paradigme_experiment_2.png}
+    \caption[List of possible sequences.]%
+    {n-item delayed reproduction task, figure taken from \cite{herbst2021abstracting}. The number of items and the sequence duration were orthogonalized. A sequence was composed of 1, 2 or 3 items with sequence duration fixed to 2 s, 3 s, or 4.5 s irrespective of the number of items composing it. Black dots represent 1kHz tones. All numbers are durations in seconds.}
+    \label{fig:experiment_2}
+\end{figure}
+
+\begin{figure}
+   \includegraphics[width=1.\linewidth]{images_report/encoding_retention_reproduction.png}
+   \caption[Example trial]%
+   {Example trial. In all experiments, each trial was composed of four phases: First, participants listened to a sequence of pure tones demarcating time intervals of varying duration. Following a retention interval, participants were asked to reproduce the temporal sequence as precisely as possible. In the example depicted here, the sequence was composed of two items. Following the reproduction (green), feedback was provided showing the relative temporal reproduction error for teach item in the sequence.}
    \label{paradigm}
 \end{figure}
  
@@ -52,7 +58,7 @@ Compared to the original study, we changed two main points:
  
 \begin{itemize}
    \item We did not repeat the 3 experiments using MEGs, but only Experiment 2, which orthogonalizes the number of items and the total sequence duration.
-   \item In the original Experiment 2, three sequences durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence. In our replication of this experiment, we use only sequences of either 1 or 3 items, which allows to maximize the effect size.
+   \item In the original Experiment 2, three sequences durations were tested (2 s, 3 s and 4.5 s) and the number of items was 1, 2 or 3 items for each sequence \ref{fig:experiment_2}. In our replication of this experiment, we use only sequences of either 1 or 3 items, which allows to maximize the effect size.
 \end{itemize}
  
 % [add what do we expect : alpha, hypocampus. Cite the other paper from the sujet de stage]
