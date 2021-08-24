@@ -97,14 +97,14 @@ The visualization of CSP patterns makes it one of the most interpretable algorit
 \subsection{Mathematical subtleties}
 
 \subsubsection{Why not aiming for the best classifier?}
-Mathematically, we are not looking here to create the best classifier, and to optimize the roc-auc score, we are only looking to obtain unbiased scores that can be used later in the permutation test. This is why it is not a problem to optimize the execution time.
+Mathematically, we are not looking here to create the best classifier, and to optimize the ROC-AUC score, we are only looking to obtain unbiased scores that can be used later in the permutation test. This is why it is not a problem to optimize the execution time.
 
 Moreover, in neuroscience, interpretability is much preferred to performance. And the CSP algorithm is ultra interpretable thanks to the visualization of patterns. Since our results are already significant with CSP, there is no need to struggle any further. The CSP algorithm is already one of the best compromise between interpretability and performance.
 
 
 % \subsubsection{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les CSP.}
 
-% By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the roc auc score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as roc auc and our cross validation is as legitimate as a group cross validation.
+% By thinking more about it, It feels to me that this group cross validation is not even necessary at all for mathematical rigor. Because here we just want to construct a statistic for each frequency bin. Here our statistic is the size of the cluster after thresholding the ROC-AUC score coming from a usual cross validation. But our statistic could really be anything. The permutation test is just here to confirm that "There is a difference", whatever the difference is. So it's perfectly valid to use any metric : accuracy is as legitimate as ROC-AUC and our cross validation is as legitimate as a group cross validation.
 % Another way to say it is that : we do not want to test the generalization ability of our classifier between different runs. We just want to say : Our classifier proves a difference exists between the two conditions.
 % So I think no need to worry because no need for group cross-validation.
 
@@ -137,13 +137,13 @@ This test rejects the null hypothesis that the mean of a population of independe
 
 \paragraph{Hypothesis}
 
-The t-test is a parametric test that assumes the Gaussianity of the underlying values. This assumption of Gaussianity is not always true for data from brain imaging because of the many preliminary filters. But in our case, we compute t-values from the difference between the roc-auc score and the average chance level, which allows us to restore the Gaussianity assumption.
+The t-test is a parametric test that assumes the Gaussianity of the underlying values. This assumption of Gaussianity is not always true for data from brain imaging because of the many preliminary filters. But in our case, we compute t-values from the difference between the ROC-AUC score and the average chance level, which allows us to restore the Gaussianity assumption.
 
 \paragraph{Intuition}
 
 The calculation of p-values is done for each time frequency bin independently.
 
-We consider the list of differences $(X_i)_{i \in [\text{Nb Subjects}]}$ for all subjects between the roc-auc and the chance level $M=0.5$ for a bin of temporal frequency. We obtain the set of differences between the roc-auc and the chance level. A normal distribution of these differences is made. If the normal distribution is sufficiently to the right of 0, then we reject the null hypothesis.
+We consider the list of differences $(X_i)_{i \in [\text{Nb Subjects}]}$ for all subjects between the ROC-AUC and the chance level $M=0.5$ for a bin of temporal frequency. We obtain the set of differences between the ROC-AUC and the chance level. A normal distribution of these differences is made. If the normal distribution is sufficiently to the right of 0, then we reject the null hypothesis.
 
 \paragraph{Algorithm}
 

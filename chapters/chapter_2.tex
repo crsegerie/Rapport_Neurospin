@@ -228,15 +228,15 @@ We remind you that our working hypothesis is that 3 items load the working memor
 
 My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} adds a new script to the pipeline, designed to analyze in the time-frequency domain a contrast between two conditions. There are two main steps in this script:
 \begin{enumerate}
-    \item \textbf{Building the time-frequency map using CSP}: for each time-frequency bin, we use a CSP classifier in order to distinguish between the two conditions. We compute the roc-auc score for each time-frequency bin.
-    \item \textbf{Permutation statistics at the group level}: we try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency roc-auc map.
+    \item \textbf{Building the time-frequency map using CSP}: for each time-frequency bin, we use a CSP classifier in order to distinguish between the two conditions. We compute the ROC-AUC score for each time-frequency bin.
+    \item \textbf{Permutation statistics at the group level}: we try to answer the following question: is the difference between the two conditions statistically significant? We use the classic permutations cluster tests on the time-frequency ROC-AUC map.
 \end{enumerate}
 
-\subsection{Building the time-frequency roc-auc map using CSP}
+\subsection{Building the time-frequency ROC-AUC map using CSP}
 
 Common Spatial Pattern transformation is based on a geometrical analysis of the brain response, which is called a \textit{pattern}. CSP is used to identify the most salient time-frequencies. We will use CSP to classify between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
 
-We use CSP to identify the most salient times and frequencies for our task: we just have to look at which frequency interval and which time interval our classifier performs best. A good discrimination between the two conditions (1 item vs. 3 items) is characterized by a roc-auc close to 1 while a roc-auc close to 0.5 means that the neural code that encodes the working memory is not detectable by high level geometric features.
+We use CSP to identify the most salient times and frequencies for our task: we just have to look at which frequency interval and which time interval our classifier performs best. A good discrimination between the two conditions (1 item vs. 3 items) is characterized by a ROC-AUC close to 1 while a ROC-AUC close to 0.5 means that the neural code that encodes the working memory is not detectable by high level geometric features.
 
 \subsection{Decoding with Common Spatial Patterns (CSP)}
 
@@ -342,7 +342,7 @@ And it is then enough to replace in \ref{eq:general_eigenvalue} then to multiply
 
 \subsection{Significance of time-frequency bins with Permutation statistics}
 
-We try to answer the following question: is the difference between the two conditions statistically significant? We use the cluster permutations tests on the time-frequency roc-auc map in order to check the significance of the activation.
+We try to answer the following question: is the difference between the two conditions statistically significant? We use the cluster permutations tests on the time-frequency ROC-AUC map in order to check the significance of the activation.
 
 \subsubsection{Overview of the cluster permutation statistics method}
 
@@ -357,7 +357,7 @@ We try to answer the following question: is the difference between the two condi
 
 The figure \ref{permutation_statistics_pipeline} gives an overview of the cluster creation pipeline.
 \begin{enumerate}
-    \item We start by collecting all the time-frequency roc-auc maps of all the subjects.
+    \item We start by collecting all the time-frequency ROC-AUC maps of all the subjects.
     \item For each time-frequency bin, we compute a t-value, independently for each bin (the details of the computations can be found in the Appendix). We then obtain the t-value map.
     \item Then, in order to find the location of the clusters, we use a threshold, for example corresponding to a chance level of $0.05$ or $0.01$. This threshold is not very important mathematically, but in practice, it allows to control the size of the clusters. Once the threshold is applied, we potentially get one or more clusters.
 \end{enumerate}
