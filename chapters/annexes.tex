@@ -16,7 +16,7 @@ A great deal of research and engineering effort was then put into reducing the c
 
 \paragraph{Classic software engineering techniques}
 
-Classic software engineering techniques have been key to massively reduce computation times: factoring of all steps, use of tools such as the line-profiler - which allows to visualize the execution time of each line -  use of multi-processing. On the other hand, even if mathematically some operations are commutative, in practice, the choice of the order of the operations allows to save computation time: for example even if the operations (time crop, frequency filter) are commutative, it is better to start by cropping the data and then filtering, because the filtering operation is very expensive.
+Classic software engineering techniques have been key to massively reduce computation times: factoring of all steps, use of tools such as the line-profiler — which allows to visualize the execution time of each line —  use of multi-processing. On the other hand, even if mathematically some operations are commutative, in practice, the choice of the order of the operations allows saving computation time: for example even if the operations (time crop, frequency filter) are commutative, it is better to start by cropping the data and then filtering, because the filtering operation is very expensive.
 
 \paragraph{Dimensionality reduction}
 
@@ -26,19 +26,19 @@ Once all the software improvements have been made, we can also make improvements
     \centering
     \includegraphics[width=5cm]{images_report/sensor/sensors_elekta.png}
     \caption[MEG Sensors]%
-    {MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{ELekta documentation}]}
+    {MEG Sensors [\href{https://www.elekta.com/dam/jcr:ed6d88e7-cd3e-478e-9c4a-3f89ef90ec92/Elekta-Neuromag-TRIUX-Brochure.pdf}{Elekta documentation}]}
     \label{sensors_elekta}
 \end{figure}
 
 \begin{itemize}
-    \item Reduction of dimensionality by selection of the channel type: The MEG data comes from 102 sensors, which are distributed as shown in the figure \ref{sensors_elekta}. Each sensor consists of 2 gradiometers measuring the gradiometric field (Tesla/meter) in the direction tangent to the sensor plane, and a magnetometer measuring the electric field in the direction normal to the sensor plane. Magnetometers are robust to external noise, while magnetometers are more exposed. But magnetometers have two crucial advantages: 1. they record localized spatial information, which is perfectly suited to the CSP algorithm, which subsequently favors the interpretability of patterns from the CSP. 2. The magnetometers are half as numerous as the gradiometers.Thus, by selecting only the magnetometers, the number of channels is divided by three.  The CSP algorithm being limited by an SVD whose complexity in $\mathcal{O}(T n^2)$ evolves as a function of the square of the number $n$ of channels \cite{dhillonalan}, we thus accelerate the algorithm by a factor 9. (T is the number of time point, in our case bigger than the number of channels. The complexity of the SVD internal to the CSP is in square of the minimum between $T$ and $n$).
-    \item The following point applies only to data from a MEG, but not to EEGs. Indeed, EEGs have only one channel tyepe. We can therefore reduce the dimensionality using a simple PCA.
+    \item Reduction of dimensionality by selection of the channel type: The MEG data comes from 102 sensors, which are distributed as shown in the figure \ref{sensors_elekta}. Each sensor consists of 2 gradiometers measuring the gradiometric field (Tesla/meter) in the direction tangent to the sensor plane, and a magnetometer measuring the electric field in the direction normal to the sensor plane. Magnetometers are robust to external noise, while magnetometers are more exposed. But magnetometers have two crucial advantages: 1. they record localized spatial information, which is perfectly suited to the CSP algorithm, which subsequently favors the interpretability of patterns from the CSP. 2. The magnetometers are half as numerous as the gradiometers.Thus, by selecting only the magnetometers, the number of channels is divided by three.  The CSP algorithm being limited by an SVD whose complexity in $\mathcal{O}(T n^2)$ evolves as a function of the square of the number $n$ of channels \cite{dhillonalan}, we thus accelerate the algorithm by a factor 9. (T is the number of time point, in our case bigger than the number of channels. The complexity of the SVD internal to the CSP is in the square of the minimum between $T$ and $n$).
+    \item The following point applies only to data from a MEG, but not to EEGs. Indeed, EEGs have only one channel type. We can therefore reduce the dimensionality using a simple PCA.
 \end{itemize}
 
 
 \paragraph{Sampling}
 
-The last way to accelerate the computation time is to use sampling, i. e. to reduce the sampling frequency. This is also called decimation. For example $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods, presented in section \ref{CSP_regularization}.
+The last way to accelerate the computation time is to use sampling, i.e. to reduce the sampling frequency. This is also called decimation. For example, $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods, presented in section \ref{CSP_regularization}.
 
 [Nyquist]
 
@@ -58,7 +58,7 @@ The choice of the order of commutativity, the reduction of the dimensionality an
 
 \subsection{CSP Regularization}
 \label{CSP_regularization}
-In order to regularize the estimation of the covariance matrix, many strategies exist, notably based on riemanian geometry. But in our case, it is enough to use a regularization of diagonal elements of the covariance matrix, in order to obtain strictly positive eigenvalues. Thus it is sufficient to replace the empirical estimate $C$ of the covariance matrix by :
+In order to regularize the estimation of the covariance matrix, many strategies exist, notably based on Riemannian geometry. But in our case, it is enough to use a regularization of diagonal elements of the covariance matrix, in order to obtain strictly positive eigenvalues. Thus, it is sufficient to replace the empirical estimate $C$ of the covariance matrix by :
 
 \begin{equation}
     C' = C + \sum_k {\varepsilon_k \bar{\sigma_k}^2 I^{(k)}}\ ,
@@ -71,7 +71,7 @@ We used $\varepsilon_k = 0.1$.
 % \subsection{CSP : Variance vs Second order moment}
 % \subsection{CSP Solving}
 
-\subsubsection{topographic map, right hand rule}
+\subsubsection{topographic map, right-hand rule}
 
 \begin{figure}
     \centering
@@ -92,14 +92,14 @@ We used $\varepsilon_k = 0.1$.
     \label{example_csp_component}
 \end{figure}
 
-The visualization of CSP patterns makes it one of the most interpretable algorithms. But in the context of MEGs, one must keep in mind that the activations are done by magnetic dipole. Thus in the CP0 of the figure, by using the right hand rule, we deduce that the magnetic field enters inside the right ear.
+The visualization of CSP patterns makes it one of the most interpretable algorithms. But in the context of MEGs, one must keep in mind that the activations are done by magnetic dipole. Thus, in the CP0 of the figure, by using the right-hand rule, we deduce that the magnetic field enters inside the right ear.
 
 \subsection{Mathematical subtleties}
 
 \subsubsection{Why not aiming for the best classifier?}
-Mathematically, we are not looking here to create the best classifier, and to optimize the rocauc score, we are only looking to obtain unbiased scores that can be used later in the permutation test. This is why it is not a problem to optimize the execution time.
+Mathematically, we are not looking here to create the best classifier, and to optimize the roc-auc score, we are only looking to obtain unbiased scores that can be used later in the permutation test. This is why it is not a problem to optimize the execution time.
 
-Moreover, in neuroscience, interpretability is much preferred to performance. And the CSP algorithm is ultra interpretable thanks to the visualization of patterns. Since our results are already significant with CSP, there is no need to struggle any further. The CSP algorithm is already one of the best compromise between intepretability and performance.
+Moreover, in neuroscience, interpretability is much preferred to performance. And the CSP algorithm is ultra interpretable thanks to the visualization of patterns. Since our results are already significant with CSP, there is no need to struggle any further. The CSP algorithm is already one of the best compromise between interpretability and performance.
 
 
 % \subsubsection{philosophie de pourquoi c'est ok de réduire un peu les performances, Pourquoi ne pas se battre pour les performances avec les CSP.}
@@ -113,11 +113,11 @@ Moreover, in neuroscience, interpretability is much preferred to performance. An
 
 \subsubsection{Choosing the t-value threshold}
 
-The fact that you can choose the size of the clusters simply by adjusting the threshold of the t-value is disturbing at first sight. But in reality it is a good sign. We only tested two different t-values (0.01 and 0.05) and the fact that we get two different cluster sizes simply means that our 0.05 cluster has a significant difference as well as our 0.01 cluster which is also significant. One does not exclude the other.
+The fact that you can choose the size of the clusters simply by adjusting the threshold of the t-value is disturbing at first sight. But in reality, it is a good sign. We only tested two different t-values (0.01 and 0.05) and the fact that we get two different cluster sizes simply means that our 0.05 cluster has a significant difference as well as our 0.01 cluster, which is also significant. One does not exclude the other.
 
 Choosing a t-value threshold of $0.01$ we obtain the figure \ref{permutation_statistics_results}, with a cluster having a p-value of $10^{-3.6}$. I chose this restrictive threshold of 0.01 for my final image in order to limit the area of my cluster and to limit it to the most significant areas. But it is possible by choosing a threshold of $0.05$ to obtain a figure with a cluster going through the whole alpha band from 0 to 5 seconds.
 
-However the obtained cluster has no physical reality and could be extended to the whole image if we had more subjects. We must therefore take a cluster of reasonable size in order to maximize the signal to noise ratio when moving to the analysis of sources.
+However, the obtained cluster has no physical reality and could be extended to the whole image if we had more subjects. We must therefore take a cluster of reasonable size in order to maximize the signal-to-noise ratio when moving to the analysis of sources.
 
 
 \subsubsection{Difficulties concerning the calculation of an average of the CSP components}
@@ -125,8 +125,8 @@ However the obtained cluster has no physical reality and could be extended to th
 
 We have thought about the feasibility of calculating the averages of the CSP components in order to obtain "average" components shared by all subjects. But some difficulties make these averages unfeasible:
 \begin{itemize}
-    \item Although the CSP components are ordered by decreasing eigenvalue, there is a great risk of mixing CSP components across different anatomical regions for different subjects. To mitigate this risk, one would have to do a csp decomposition for each brain area, which would complicate the operation.
-    \item Using the same csp components for everyone would necessarily lower the decoding results. Considering that our subjects probably use different memorization strategies, these different strategies would be "mixed" in a group decoding, and would harm the interpretability.
+    \item Although the CSP components are ordered by decreasing eigenvalue, there is a great risk of mixing CSP components across different anatomical regions for different subjects. To mitigate this risk, one would have to do a CSP decomposition for each brain area, which would complicate the operation.
+    \item Using the same CSP components for everyone would necessarily lower the decoding results. Considering that our subjects probably use different memorization strategies, these different strategies would be "mixed" in a group decoding, and would harm the interpretability.
 \end{itemize}
 
 \section{Cluster permutations statistics algorithm}
@@ -137,13 +137,13 @@ This test rejects the null hypothesis that the mean of a population of independe
 
 \paragraph{Hypothesis}
 
-The t-test is a parametric test that assumes the Gaussianity of the underlying values. This assumption of Gaussianity is not always true for data from brain imaging because of the many preliminary filters. But in our case, we compute t-values from the difference between the roc-au score and the average chance level, which allows us to restore the Gaussianity assumption.
+The t-test is a parametric test that assumes the Gaussianity of the underlying values. This assumption of Gaussianity is not always true for data from brain imaging because of the many preliminary filters. But in our case, we compute t-values from the difference between the roc-auc score and the average chance level, which allows us to restore the Gaussianity assumption.
 
 \paragraph{Intuition}
 
 The calculation of p-values is done for each time frequency bin independently.
 
-We consider the list of differences $(X_i)_{i \in [\text{Nb Subjects}]}$ for all subjects between the rock-auc and the chance level $M=0.5$ for a bin of temporal frequency. We obtain the set of differences between the roc-haw and the chance level. A normal distribution of these differences is made. If the normal distribution is sufficiently to the right of 0, then we reject the null hypothesis.
+We consider the list of differences $(X_i)_{i \in [\text{Nb Subjects}]}$ for all subjects between the roc-auc and the chance level $M=0.5$ for a bin of temporal frequency. We obtain the set of differences between the roc-auc and the chance level. A normal distribution of these differences is made. If the normal distribution is sufficiently to the right of 0, then we reject the null hypothesis.
 
 \paragraph{Algorithm}
 
@@ -160,11 +160,11 @@ then follows a Student's law of $n-1$ degrees of freedom under the null hypothes
 
 We choose a risk $\alpha$, generally $0.05$ or $0.01$ and we calculate the realization of the test statistic :
 
-$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ où $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
+$z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ where $s^{\ast}_n =\sqrt{\frac{1}{n-1}\sum\limits_{i=1}^n (x_i - \overline x_n )^2} $
 
 \subsection{Choosing the number of time-frequency bin}
 
-Choosing the number of Bin is somewhat arbitrary. One just has to respect some conditions such as Nyquist, plus the fact of having enough points to estimate the covariance matrix. But here, it is not serious to choose arbitrary the number of points since the result of the sensor space is only used to increase the signal to noise ratio when going into the source space.
+Choosing the number of Bin is somewhat arbitrary. One just has to respect some conditions such as Nyquist, plus the fact of having enough points to estimate the covariance matrix. But here, it is not serious to choose arbitrary the number of points, since the result of the sensor space is only used to increase the signal-to-noise ratio when going into the source space.
 
 \chapter{Source annex}
 
@@ -198,6 +198,6 @@ In order to calculate the source estimate by dSPM, we need to choose a covarianc
 
 Figure \ref{BEM_model_freeview_cropped} presents the boundary element model used to model one of our subject's heads. Our participants were recorded by MRI before their MEG recording in order to obtain T1 anatomical images. These T1 images are used to create a 3D model of the brain and to model each area of the brain with different electromagnetic conductivity. This model is then used to calculate the inverse operator to find the location in the brain of the electromagnetic sources from the MEG recording.
 
-We can see on the figure \ref{BEM_model_freeview_cropped} that the face of the person has been cut in order to anonymize the data.  We can see on the figure the result of the segmentation between the white matter and the grey matter. The results of the algorithm although satisfactory, are not perfect. But this is of little importance because MEG is a relatively robust technique with respect to the imperfections of eletromagnetic conductivity modeling. For example, for EEG we use generaly 3 layers (inner skull, outer skull, and skin) while for MEG 1 layer (inner skull) is enough: The MEG is said to be "transparent".
+We can see on the figure \ref{BEM_model_freeview_cropped} that the face of the person has been cut in order to anonymize the data.  We can see on the figure the result of the segmentation between the white matter and the gray matter. The results of the algorithm, although satisfactory, are not perfect. But this is of little importance because MEG is a relatively robust technique with respect to the imperfections of electromagnetic conductivity modeling. For example, for EEG we use generally 3 layers (inner skull, outer skull, and skin) while for MEG 1 layer (inner skull) is enough: The MEG is said to be "transparent".
 
 

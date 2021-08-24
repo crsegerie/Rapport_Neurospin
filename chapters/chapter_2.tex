@@ -12,7 +12,7 @@ Our exploration of the MEG data for the paradigm follows the classical steps of 
     \item Pre-Processing of the data. Our study started with the verification and cleaning of the data.
     \item Analysis in the sensor space. In this step we visualized the Evoked response of the different conditions. In order to find out when and how often the information is stored at the time of retrieval, we implemented a new procedure, based on Common Spatial Patterns (CSP). After determining the most salient time and frequency, we check the statistical significance of the response using cluster permutation tests.
           % \item [report visualization. CSP to see the patterns and see the frequencies and moments. Why at the beginning not at the end. We should have separated between the different length of sequence ??? Visualization of filters and paterns. Difficulties with the patterns. Should have taken just the first pattern].
-    \item Source analysis. After having determined the frequency and the moment of maximum activation of the Working memory, we visualize the 3D response.
+    \item Source analysis. After having determined the frequency and the moment of maximum activation of the working memory, we visualize the 3D response.
 \end{itemize}
 
 In order to pre-process the data, and to analyze the data in the sensor and source space, I based myself on the \href{https://github.com/mne-tools/mne-bids-pipeline}{MNE-BIDS-Pipeline}, which is still under development. As I wanted to use it for the time in working memory paradigm, I had to help implement the missing features I needed. The list of features to which I contributed is presented in the table \ref{Tab:PR}.
@@ -55,12 +55,12 @@ The different phases of the data preprocessing are as follows:
     \item Finding bad channels: some channels of MEG recordings may be noisy or flat. They need to be identified and marked as bad so they are not taking into account during the analysis.
     \item Applying Maxwell filter: help to remove part of the sensors noise.
     \item Frequency filter: to remove non desired frequency bands.
-    \item Creating epochs: epochs are data structures to represent equal-duration chuncks of MEG signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and overlapping frames of the MEG signal.
+    \item Creating epochs: epochs are data structures to represent equal-duration chunks of MEG signals. When the recording session includes stimuli, epochs are often defined from 0.2 seconds before the stimulus to 0.5 seconds after. Otherwise, like in rest session, epochs are fixed and overlapping frames of the MEG signal.
     \item Computing evoked data: they are created by averaging MEG signal over several epochs. It is useful to study stimulus-evoked brain activity.
 \end{itemize}
 
 
-The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. At the beginning of my internship, I created this table in order to familiarize myself with the different scripts of the pipeline. Then, I added the main problems that occur in practice associated with each step as well as the main ideas of sanity checks to be performed after the execution of the pipeline.
+The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. At the beginning of my internship, I created this table in order to familiarize myself with the different scripts of the pipeline. Then, I added the main problems that occur in practice associated with each step, as well as the main ideas of sanity checks to be performed after the execution of the pipeline.
 
 \begin{figure}[ht]
     \centering
@@ -70,7 +70,7 @@ The figure \ref{cheat_sheet} summarizes the preprocessing step in the pipeline. 
     \label{cheat_sheet}
 \end{figure}
 
-\subsection{Highlight on the managment of artifacts}
+\subsection{Highlight on the management of artifacts}
 \label{preprocessing_of_artifacts}
 
 
@@ -99,13 +99,13 @@ The figure \ref{rejection_pipeline} allows to visualize the pipeline rejection o
 
 Here are the details of the procedure:
 \begin{itemize}
-    \item At the beginning the signal contains both biological artifacts (eye blink, heartbeat), and non biological artifacts. The latter are of an order of magnitude larger than the biological artifacts.
-    \item We can start by filtering the different epochs using rejecting the epochs whose peak-to-peak amplitude exceeds the amplitude specified by the "ica\_reject" parameter. This parameter allows to filter signals that are 50 times larger than the nominal amplitude and therefore allows to make a first screening.
-    \item The resulting signal does not contain any more redhibitory non-biological artifact, which allows to improve the convergence of the ICA (Independant Component Analysis), allowing to separate the sources for the ocular and cardiac artifacts.
+    \item At the beginning the signal contains both biological artifacts (eye blink, heartbeat), and non-biological artifacts. The latter are of an order of magnitude larger than the biological artifacts.
+    \item We can start by filtering the different epochs, rejecting the epochs whose peak-to-peak amplitude exceeds the amplitude specified by the "ica\_reject" parameter. This parameter allows filtering signals that are 50 times larger than the nominal amplitude and therefore allows to make a first screening.
+    \item The resulting signal does not contain any more redhibitory non-biological artifact, which allows to improve the convergence of the ICA (Independent Component Analysis), allowing to separate the sources for the ocular and cardiac artifacts.
     \item The ICA source separation does not work perfectly, so an additional step is required to reject the last artifacts using the "reject" parameter, which allows to filter the signals with a peak-to-peak amplitude 10 times higher than the nominal amplitude. The result is the preprocessed signal.
 \end{itemize}
 
-Even if the global pipeline rejection method was already established before my arrival, the experimental data revealed problems in the order of the filtering operations, and we thus improved a lot the automatic data preprocessing especially for difficult data that contains simulaneously biological and non-biological artifacts such as phase inversion fields. Figure \ref{fig:PR_ica} shows an example of ICA enhancement before and after our pull request that changes the order of operations, in particular by filtering out non-biological signals before the ICA.
+Even if the global pipeline rejection method was already established before my arrival, the experimental data revealed problems in the order of the filtering operations, and we thus improved a lot the automatic data preprocessing especially for difficult data that contains simultaneously biological and non-biological artifacts such as phase inversion fields. Figure \ref{fig:PR_ica} shows an example of ICA enhancement before and after our pull request that changes the order of operations, in particular by filtering out non-biological signals before the ICA.
 
 
 \begin{figure}
@@ -188,7 +188,7 @@ Even if the global pipeline rejection method was already established before my a
         \caption{Decoding between 3\_item\_short and 3\_item\_long.}
         \label{fig:decoding_3_item}
     \end{subfigure}
-    \caption{Decoding ititialement dans la pipeline.}
+    \caption{Decoding initially in the pipeline at the beginning of my internship. We can see that after $t geq 0$, the decoding is not performing well.}
     \label{fig:decoding_initial}
     % mettre seulement 1item vs 3 item ici
 \end{figure}
@@ -205,23 +205,23 @@ At the beginning of my internship, the MNE-BIDS-Pipeline allowed us to quickly o
 
 \begin{itemize}
     \item The figure \ref{fig:Evoked_data} presents the evoked data for each of our 6 different items. The three top figures are temporal sequences containing only one interval (1 item), while the three bottom figures contain sequences of 3 intervals (3 items).
-          When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e. the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak that we could exploit.
+          When there is only one item, we observe two very clear peaks before $t \leq 0$. These two peaks correspond to the pure tone, which give the beginning and the end of the interval. After $t \geq 0$ begins the restitution phase, i.e., the phase during which the participant must recall the sequence in his head as precisely as possible. We see that during this restitution phase, the evoked data does not present any particular phenomenon, there is no peak that we could exploit.
     \item In the same way for the figure \ref{fig:decoding_initial}, even if we can see that the decoder used in the pipeline manages to decode the signals before $t=0$ in a very satisfactory way, especially at the location of the auditory stimuli, the performance of the decoders is null during the restitution phase.
 \end{itemize}
 
 In this study, we are not interested in the auditory cortex, but in the working memory. We therefore do not concentrate on the listening phase before $t \leq 0$, but rather on the restitution phase after $t \geq 0$. This means that the algorithms that were currently in place in the pipeline were not sufficient at the beginning of my internship, and that we need to find an adequate method to study working memory.
 
-\subsection{Strategy: analysing the contrast in time-frequency space}
+\subsection{Strategy: analyzing the contrast in time-frequency space}
 
 Classically the sensor space is decomposed in the following steps:
 \begin{itemize}
-    \item Computation of the evoked data, by averaging different conditions (i.e. 1 item vs 3 item for us, see figure \ref{fig:Evoked_data} in the results section)
+    \item Computation of the evoked data, by averaging different conditions (i.e., 1 item vs 3 item for us, see figure \ref{fig:Evoked_data} in the results section)
     \item Using a sliding estimator with a logistic regression model for every time point (see figure \ref{fig:decoding_initial} in the results section).
     \item Time frequency decomposition: the epoched data is transformed to time-frequency domain.
     \item Computation of the group average results.
 \end{itemize}
 
-This order of operations is fine for most studies. But in the case of our study it is crucial to obtain results in the time-frequency space. We seek here to identify the most salient time-frequencies in order to increase the signal-to-noise ratio when analyzing the contrast in source space. To fill this gap, I implemented a new script in the pipeline to visualize which time-frequency ranges are the most informative with respect to working memory. Concretely, we train a classifier to distinguish the sequences of one item and the sequences of 3 items, and we look at its performance for different frequency ranges, and different time ranges.
+This order of operations is fine for most studies. But in the case of our study, it is crucial to obtain results in the time-frequency space. We seek here to identify the most salient time-frequencies in order to increase the signal-to-noise ratio when analyzing the contrast in source space. To fill this gap, I implemented a new script in the pipeline to visualize which time-frequency ranges are the most informative with respect to working memory. Concretely, we train a classifier to distinguish the sequences of one item and the sequences of 3 items, and we look at its performance for different frequency ranges, and different time ranges.
 
 We remind you that our working hypothesis is that 3 items load the working memory much more than a single item. The reason for contrasting 3 items with 1 item and not 3 item with 0 item (rest) is that the contrast should not be based on a difference in the nature of the tasks, but rather a difference in load.
 
@@ -233,7 +233,7 @@ My \href{https://github.com/mne-tools/mne-bids-pipeline/pull/414}{pull request} 
 
 \subsection{Building the time-frequency roc-auc map using CSP}
 
-Common Spatial Pattern is based on a geometrical analysis of the brain response, which is called a \textit{pattern}. CSP is used to identify the most salient time-frequencies. We will use CSP to classify between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
+Common Spatial Pattern transformation is based on a geometrical analysis of the brain response, which is called a \textit{pattern}. CSP is used to identify the most salient time-frequencies. We will use CSP to classify between 1-item events and 3-item events. To be able to classify between these two items is to be able to recognize a working memory with two different loads.
 
 We use CSP to identify the most salient times and frequencies for our task: we just have to look at which frequency interval and which time interval our classifier performs best. A good discrimination between the two conditions (1 item vs. 3 items) is characterized by a roc-auc close to 1 while a roc-auc close to 0.5 means that the neural code that encodes the working memory is not detectable by high level geometric features.
 
@@ -245,7 +245,7 @@ CSP is a technique to analyze multichannel data based on recordings from two cla
 
 % Why CSP better than ...
 
-I took the figure from \cite{blankertz2007optimizing} which also contains a conprehensive tutorial on CSP.
+I took the figure from \cite{blankertz2007optimizing} which also contains a comprehensive tutorial on CSP.
 
 \begin{figure}
     \centering
@@ -273,7 +273,7 @@ The main vector of the red' cloud is aligned on the x-axis, while the main vecto
 
 By this process, we maximize the variance ratio along the x-axis between the red' and the blue' clouds.
 
-In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e. apply the unmixing matrix as we will see later), and take the projection on the x-axis of the new point cloud. We can then calculate the variance along the x-axis and then train a linear classifier to discriminate among the different variances. By combining the CSP algorithm, and for example a logistic regression, we can classify between the two conditions.
+In our usage, a point cloud corresponds to an event, and each color corresponds to a different condition. Here, we do not try to classify points individually as in machine learning, but we classify a whole point cloud. If we try to guess the color/condition of a point cloud, we just have to transform the point cloud with the same transformation as before (i.e., apply the unmixing matrix as we will see later), and take the projection on the x-axis of the new point cloud. We can then calculate the variance along the x-axis and then train a linear classifier to discriminate among the different variances. By combining the CSP algorithm, and for example a logistic regression, we can classify between the two conditions.
 
 \subsubsection{Technical Description (to be skipped in a first reading)}
 
@@ -309,7 +309,7 @@ Where the two $\lambda$ are diagonal matrices whose entries are the eigenvalues 
     \label{eq:general_eigenvalue}
 \end{equation}
 
-Large entries in the diagonal matrix corresponds to a spatial filter which gives high variance in one class but low variance in the other. Thus, [en filtrant sur les première componantes] the filter facilitates discrimination between the two classes.
+Large entries in the diagonal matrix corresponds to a spatial filter which gives high variance in one class but low variance in the other. Thus, by projecting the cloud of points on the first components, the filter facilitates discrimination between the two classes.
 
 \paragraph{The unmixing matrix}
 
@@ -341,9 +341,7 @@ And it is then enough to replace in \ref{eq:general_eigenvalue} then to multiply
 
 \subsection{Significance of time-frequency bins with Permutation statistics}
 
-We try to answer the following question: is the difference between
-the two conditions statistically significant? We use the a permutations
-cluster tests on the time-frequency roc-auc map in order to check the significance of the activation.
+We try to answer the following question: is the difference between the two conditions statistically significant? We use the cluster permutations tests on the time-frequency roc-auc map in order to check the significance of the activation.
 
 \subsubsection{Overview of the cluster permutation statistics method}
 
@@ -363,8 +361,8 @@ The figure \ref{permutation_statistics_pipeline} gives an overview of the cluste
     \item Then, in order to find the location of the clusters, we use a threshold, for example corresponding to a chance level of $0.05$ or $0.01$. This threshold is not very important mathematically, but in practice, it allows to control the size of the clusters. Once the threshold is applied, we potentially get one or more clusters.
 \end{enumerate}
 
-In order to assign a p-value to each cluster, we have to use the permutation mechanism. The permutation mechanism consists in computing a metric on our clusters: which can be either the size of the cluster, or the maximum of t-values within the cluster, or the sum of t-values within the cluster. In our case we have chosen to sum the t-values on the cluster because we are not interested in the spread of the cluster, but rather we want to target precisely a region located in the time-frequency map. Then we compare this metric to the distribution of this metric simulated for the permutation (simulation of the null hypothesis):
-We reverse the sign of the difference for each bin in each subject. We obtain the distribution of the metric in the null hypothesis where the distribution of spatial cluster sizes is independent of the sign of the data.
+In order to assign a p-value to each cluster, we have to use the permutation mechanism. The permutation mechanism consists in computing a metric on our clusters: which can be either the size of the cluster, or the maximum of t-values within the cluster, or the sum of t-values within the cluster. In our case, we have chosen to sum the t-values on the cluster because we are not interested in the spread of the cluster, but rather we want to target precisely a region located in the time-frequency map. Then we compare this metric to the distribution of this metric simulated for the permutation (simulation of the null hypothesis):
+We reverse the sign of the difference for each bin in each subject. We obtain the distribution of the metric in the null hypothesis, where the distribution of spatial cluster sizes is independent of the sign of the data.
 
 % [detailler]
 % going further : threshold free method
@@ -386,14 +384,14 @@ Following the extraction of the most informative time and frequency ranges, we c
     \centering
     \includegraphics[width=15cm]{images_report/source/flow_source_contrasts.png}
     \caption[Shema of the procedure to visualize the contrast in source space.]%
-    {Shema of the procedure to visualize the contrast in source space.}
+    {Schema of the procedure to visualize the contrast in source space.}
     \label{flow_source_contrasts}
 \end{figure}
 
 
 The figure \ref{flow_source_contrasts} explains the procedure to obtain the contrast in the source space for one subject:
 \begin{itemize}
-    \item We start with two different conditions, i.e. the sequences of one item and three items.
+    \item We start with two different conditions, i.e., the sequences of one item and three items.
     \item We filter the data to keep only the most informative times and frequencies, in order to increase our signal-to-noise ratio.
     \item We compute the covariance matrix of each condition.
     \item We project the covariance matrix of each condition in the source space (see dSPM method, in section [?]). We then obtain a three-dimensional activation map called a \textit{source estimate}.
