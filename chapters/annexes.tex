@@ -40,7 +40,7 @@ Once all the software improvements have been made, we can also make improvements
 
 The last way to accelerate the computation time is to use sampling, i.e. to reduce the sampling frequency. This is also called decimation. For example, $decim = 5$ consists in taking only one point on 5. But sampling can introduce numerical instabilities. Indeed, the CSP algorithm must start by estimating the covariance matrix of the signal. However, the estimation of a covariance matrix of dimension $n$ requires at least approximately $n$ points. With a sampling frequency of 100 Hz, over a time window of 0.5 seconds, we have 50 points. It is therefore necessary to reduce the dimensions to at most 50 or to use covariance regularization methods, presented in section \ref{CSP_regularization}.
 
-[Nyquist]
+% [Nyquist]
 
 \paragraph{CSP running time optimization results}
 
@@ -164,7 +164,7 @@ $z = \sqrt{n}\frac{\overline{x}_n - \mu_0}{s^{\ast}_n},$ where $s^{\ast}_n =\sqr
 
 \subsection{Choosing the number of time-frequency bin}
 
-Choosing the number of Bin is somewhat arbitrary. One just has to respect some conditions such as Nyquist, plus the fact of having enough points to estimate the covariance matrix. But here, it is not serious to choose arbitrary the number of points, since the result of the sensor space is only used to increase the signal-to-noise ratio when going into the source space.
+Choosing the number of Bin is somewhat arbitrary. One just has to respect some conditions such as Nyquist, plus the fact of having enough points to estimate the covariance matrix. But here, it is not a problem to choose arbitrary the number of points, since the result of the sensor space is only used to increase the signal-to-noise ratio when going into the source space.
 
 \chapter{Source annex}
 
