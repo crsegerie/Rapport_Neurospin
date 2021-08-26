@@ -1,4 +1,4 @@
+The neuroanatomical signature of working memory.
+Charbel-Raphaël Segerie, Inria - Neurospin 2021.
 
-Latex template for report of long internship for the Ecole des Ponts.
-
-Traduction of this document :  https://docs.google.com/document/d/1O-HTKqwWyN_XyguCf74Kf10z8UdnjXhGJOIhu96OlFc/edit?usp=sharing
+MVA - Ecole des Ponts - research internship report.
